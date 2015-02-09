@@ -72,6 +72,7 @@ namespace FuckingAwesomeRiven
             draw.AddItem(new MenuItem("DW", "Draw W Range").SetValue(new Circle(false, System.Drawing.Color.White)));
             draw.AddItem(new MenuItem("DE", "Draw E Range").SetValue(new Circle(false, System.Drawing.Color.White)));
             draw.AddItem(new MenuItem("DR", "Draw R Range").SetValue(new Circle(false, System.Drawing.Color.White)));
+            draw.AddItem(new MenuItem("DBC", "Draw Burst Combo Range").SetValue(new Circle(false, System.Drawing.Color.White)));
             draw.AddItem(new MenuItem("DD", "Draw Damage [soon]").SetValue(new Circle(false, System.Drawing.Color.White)));
 
             var misc = Config.AddSubMenu(new Menu("Misc", "Misc"));

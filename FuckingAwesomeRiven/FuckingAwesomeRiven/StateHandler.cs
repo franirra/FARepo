@@ -355,7 +355,7 @@ namespace FuckingAwesomeRiven
 
             if (
                 SH._spells[SpellSlot.E].IsReady() && SH._spells[SpellSlot.W].IsReady() && SH._spells[SpellSlot.R].IsReady() && SH.SummonerDictionary[SpellHandler.summonerSpell.Flash].IsReady() &&
-                !CH.RState && Target.IsValidTarget(600)
+                !CH.RState && Target.IsValidTarget(400 + SH._spells[SpellSlot.E].Range)
                 
                 || startJump1.state)
             {

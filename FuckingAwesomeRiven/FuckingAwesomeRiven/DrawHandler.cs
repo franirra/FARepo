@@ -17,6 +17,7 @@ namespace FuckingAwesomeRiven
             var drawW = MenuHandler.Config.Item("DW").GetValue<Circle>();
             var drawE = MenuHandler.Config.Item("DE").GetValue<Circle>();
             var drawR = MenuHandler.Config.Item("DR").GetValue<Circle>();
+            var drawBC = MenuHandler.Config.Item("DBC").GetValue<Circle>();
             if (drawQ.Active)
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, SpellHandler.QRange, drawQ.Color);
@@ -32,6 +33,10 @@ namespace FuckingAwesomeRiven
             if (drawR.Active)
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, 900, drawR.Color);
+            }
+            if (drawBC.Active)
+            {
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, 400 + SpellHandler._spells[SpellSlot.E].Range, drawR.Color);
             }
 
             if (!MenuHandler.Config.Item("debug").GetValue<bool>())
