@@ -75,6 +75,7 @@ namespace FuckingAwesomeRiven
             draw.AddItem(new MenuItem("DD", "Draw Damage [soon]").SetValue(new Circle(false, System.Drawing.Color.White)));
 
             var misc = Config.AddSubMenu(new Menu("Misc", "Misc"));
+            misc.AddItem(new MenuItem("bonusCancelDelay", "Bonus Cancel Delay (ms)").SetValue(new Slider(0,0,500)));
             misc.AddItem(new MenuItem("keepQAlive", "Keep Q Alive").SetValue(true));
             misc.AddItem(new MenuItem("QFlee", "Q Flee").SetValue(true));
             misc.AddItem(new MenuItem("EFlee", "E Flee").SetValue(true));
@@ -93,7 +94,7 @@ namespace FuckingAwesomeRiven
             Info.AddItem(new MenuItem("Msdsadfdsd", "jayyeditsdude@gmail.com"));
             Info.AddItem(new MenuItem("debug", "Debug Mode")).SetValue(false);
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.2 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.3 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();

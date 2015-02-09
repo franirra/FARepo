@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using LeagueSharp.Common.Data;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -53,6 +54,7 @@ namespace FuckingAwesomeRiven
         {
             if (target.IsValidTarget(WRange))
             {
+                castItems(target);
                _spells[SpellSlot.W].Cast();
             }
             if (target == null)
@@ -66,7 +68,6 @@ namespace FuckingAwesomeRiven
             if (!_spells[SpellSlot.E].IsReady())
                 return;
             _spells[SpellSlot.E].Cast(pos);
-            CH.LastE = Environment.TickCount;
         }
 
         public static void CastR()
@@ -77,7 +78,7 @@ namespace FuckingAwesomeRiven
         public static void CastR2(Obj_AI_Hero target)
         {
             var r2 = new Spell(SpellSlot.R, 900);
-            r2.SetSkillshot(0, 45, 1200, false, SkillshotType.SkillshotCone);
+            r2.SetSkillshot(0.25f, 45, 1200, false, SkillshotType.SkillshotCone);
             r2.Cast(target);
         }
 
@@ -100,7 +101,7 @@ namespace FuckingAwesomeRiven
         {
             if (!target.IsValidTarget())
                 return;
-            if (target is Obj_AI_Minion && target.IsValidTarget(300))
+            if (!target.IsValid<Obj_AI_Hero>() && target.IsValidTarget(300))
             {
                 if (ItemData.Tiamat_Melee_Only.GetItem().IsReady())
                     ItemData.Tiamat_Melee_Only.GetItem().Cast();
@@ -135,20 +136,33 @@ namespace FuckingAwesomeRiven
 
         public static void Orbwalk(Obj_AI_Base target = null)
         {
+            if (MenuHandler.Config.Item("normalCombo").GetValue<KeyBind>().Active)
+            {
+
+                MenuHandler.Orbwalker.SetAttack(false);
+                MenuHandler.Orbwalker.SetMovement(false);
+            }
+            else
+            {
+                MenuHandler.Orbwalker.SetMovement(true);
+                MenuHandler.Orbwalker.SetAttack(true);
+            }
             if (CH.CanMove)
             {
                 Player.IssueOrder(GameObjectOrder.MoveTo, (target.IsValidTarget(600) && MenuHandler.Config.Item("magnet").GetValue<bool>() && !(target is Obj_AI_Minion) ? Player.Position.Extend(target.Position, Player.Distance(target) - 20) : Game.CursorPos));
+                MenuHandler.Orbwalker.SetMovement(true);
             }
 
-            if (target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CH.CanAA)
+            if (target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CH.CanAa)
             {
+                MenuHandler.Orbwalker.SetAttack(true);
                 CH.CanMove = false;
                 Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                 CH.CanQ = false;
                 CH.CanW = false;
                 CH.CanE = false;
-                CH.CanSR = false;
-                CH.LastAA = Environment.TickCount;
+                CH.CanSr = false;
+                CH.LastAa = Environment.TickCount;
             }
         }
     }

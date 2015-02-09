@@ -40,16 +40,16 @@ namespace FuckingAwesomeRiven
             Drawing.DrawText(100, 100 + (20 * 2), Color.White, "Can W" + ": " + CheckHandler.CanW);
             Drawing.DrawText(100, 100 + (20 * 3), Color.White, "Can E" + ": " + CheckHandler.CanE);
             Drawing.DrawText(100, 100 + (20 * 4), Color.White, "Can R" + ": " + CheckHandler.CanR);
-            Drawing.DrawText(100, 100 + (20 * 5), Color.White, "Can AA" + ": " + CheckHandler.CanAA);
+            Drawing.DrawText(100, 100 + (20 * 5), Color.White, "Can AA" + ": " + CheckHandler.CanAa);
             Drawing.DrawText(100, 100 + (20 * 6), Color.White, "Can Move" + ": " + CheckHandler.CanMove);
-            Drawing.DrawText(100, 100 + (20 * 7), Color.White, "Can SR" + ": " + CheckHandler.CanSR);
+            Drawing.DrawText(100, 100 + (20 * 7), Color.White, "Can SR" + ": " + CheckHandler.CanSr);
             Drawing.DrawText(100, 100 + (20 * 8), Color.White, "Mid Q" + ": " + CheckHandler.MidQ);
             Drawing.DrawText(100, 100 + (20 * 9), Color.White, "Mid W" + ": " + CheckHandler.MidW);
             Drawing.DrawText(100, 100 + (20 * 10), Color.White, "Mid E" + ": " + CheckHandler.MidE);
             Drawing.DrawText(100, 100 + (20 * 11), Color.White, "Mid AA" + ": " + CheckHandler.MidAa);
             Drawing.DrawText(100, 100 + (20 * 12), Color.White, "TickCount" + ": " + Environment.TickCount);
             Drawing.DrawText(100, 100 + (20 * 13), Color.White, "lastQ" + ": " + CheckHandler.LastQ);
-            Drawing.DrawText(100, 100 + (20 * 14), Color.White, "lastAA" + ": " + CheckHandler.LastAA);
+            Drawing.DrawText(100, 100 + (20 * 14), Color.White, "lastAA" + ": " + CheckHandler.LastAa);
             Drawing.DrawText(100, 100 + (20 * 15), Color.White, "lastE" + ": " + CheckHandler.LastE);
         }
     }

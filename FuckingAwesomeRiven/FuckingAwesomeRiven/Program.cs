@@ -39,14 +39,27 @@ namespace FuckingAwesomeRiven
         }
 
 
+
+
+
         static void Game_OnGameUpdate(EventArgs args)
         {
             CheckHandler.Checks();
             var Config = MenuHandler.Config;
 
+            if (MenuHandler.getMenuBool("keepQAlive") && SH._spells[SpellSlot.Q].IsReady() && CheckHandler.QCount >= 1 && Environment.TickCount - CheckHandler.LastQ > 3650 && !Player.IsRecalling())
+                {
+                    SH.CastQ();
+                }
+
             if (Config.Item("normalCombo").GetValue<KeyBind>().Active)
             {
                 StateHandler.mainCombo();
+            }
+            else
+            {
+                StateHandler.startedR2Combo.state = false;
+                StateHandler.startedRCombo.state = false;
             }
             if (Config.Item("burstCombo").GetValue<KeyBind>().Active)
             {
@@ -67,13 +80,6 @@ namespace FuckingAwesomeRiven
             if (Config.Item("flee").GetValue<KeyBind>().Active)
             {
                 StateHandler.flee();
-            }
-            else
-            {
-                if (MenuHandler.getMenuBool("keepQAlive") && SH._spells[SpellSlot.Q].IsReady() && CheckHandler.QCount >= 1 && Environment.TickCount - CheckHandler.LastQ > 3700 && !Player.IsRecalling())
-                {
-                    SH.CastQ();
-                }
             }
 
         }  
