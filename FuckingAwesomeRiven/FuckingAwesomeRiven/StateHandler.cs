@@ -162,7 +162,7 @@ namespace FuckingAwesomeRiven
                 return;
             }
 
-            if (CH.LastECancelSpell < Environment.TickCount)
+            if (CH.LastECancelSpell < Environment.TickCount && MenuHandler.getMenuBool("CE"))
             {
                 CH.LastECancelSpell = int.MaxValue;
                 SH.CastE(Target.Position);
@@ -295,7 +295,7 @@ namespace FuckingAwesomeRiven
 
             if (MenuHandler.getMenuBool("CE") && SH._spells[SpellSlot.E].IsReady() && CH.CanE)
             {
-                if (MenuHandler.getMenuBool("UseE-GC") && !MenuHandler.getMenuBool("UseE-AA"))
+                if (MenuHandler.getMenuBool("UseE-GC"))
                 {
                     if (!Target.IsValidTarget(SH._spells[SpellSlot.E].Range - BonusRange + 50) &&
                         Target.IsValidTarget(SH._spells[SpellSlot.E].Range + BonusRange))

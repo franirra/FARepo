@@ -46,10 +46,10 @@ namespace FuckingAwesomeRiven
             combo.AddItem(new MenuItem("CR2", "Use R2").SetValue(true));
             combo.AddItem(new MenuItem("magnet", "Magnet Target").SetValue(false));
             combo.AddItem(new MenuItem("bdsfdfffsf", ""));
-            combo.AddItem(new MenuItem("bdsfdsf", "-- Burst Combo"));
-            combo.AddItem(new MenuItem("BFl", "Use Flash").SetValue(false));
-            combo.AddItem(new MenuItem("bdsfdsff", "E - R - Flash - W - Q"));
-            combo.AddItem(new MenuItem("bdsfdsfddd", "E - R - W - Q"));
+            //combo.AddItem(new MenuItem("bdsfdsf", "-- Burst Combo"));
+            //combo.AddItem(new MenuItem("BFl", "Use Flash").SetValue(false));
+            //combo.AddItem(new MenuItem("bdsfdsff", "E - R - Flash - W - Q"));
+            //combo.AddItem(new MenuItem("bdsfdsfddd", "E - R - W - Q"));
 
             var farm = Config.AddSubMenu(new Menu("Farming", "Farming"));
             farm.AddItem(new MenuItem("fnjdsjkn", "          Last Hit"));

@@ -47,6 +47,10 @@ namespace FuckingAwesomeRiven
             CheckHandler.Checks();
             var Config = MenuHandler.Config;
 
+            if (Config.Item("jungleCombo").GetValue<KeyBind>().Active)
+            {
+                StateHandler.JungleFarm();
+            }
             if (MenuHandler.getMenuBool("keepQAlive") && SH._spells[SpellSlot.Q].IsReady() && CheckHandler.QCount >= 1 && Environment.TickCount - CheckHandler.LastQ > 3650 && !Player.IsRecalling())
                 {
                     SH.CastQ();
@@ -65,21 +69,22 @@ namespace FuckingAwesomeRiven
             {
                 StateHandler.burstCombo();
             }
-            if (Config.Item("jungleCombo").GetValue<KeyBind>().Active)
-            {
-                StateHandler.JungleFarm();
-            }
-            if (Config.Item("waveClear").GetValue<KeyBind>().Active)
+            else if (Config.Item("waveClear").GetValue<KeyBind>().Active)
             {
                 StateHandler.laneclear();
             }
-            if (Config.Item("lastHit").GetValue<KeyBind>().Active)
+            else if (Config.Item("lastHit").GetValue<KeyBind>().Active)
             {
                 StateHandler.lastHit();
             }
-            if (Config.Item("flee").GetValue<KeyBind>().Active)
+            else if (Config.Item("flee").GetValue<KeyBind>().Active)
             {
                 StateHandler.flee();
+            }
+            else
+            {
+                MenuHandler.Orbwalker.SetAttack(true);
+                MenuHandler.Orbwalker.SetMovement(true);
             }
 
         }  
