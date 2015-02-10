@@ -95,7 +95,7 @@ namespace FuckingAwesomeRiven
             Info.AddItem(new MenuItem("Msdsadfdsd", "jayyeditsdude@gmail.com"));
             Info.AddItem(new MenuItem("debug", "Debug Mode")).SetValue(false);
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.4-1 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.4-2 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();
