@@ -182,7 +182,7 @@ namespace FuckingAwesomeRiven
 
         public static void Checks()
         {
-            if (MidQ && Environment.TickCount - LastQ >= ObjectManager.Player.AttackCastDelay * 1000 + (Game.Ping / 2) + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)
+            if (MidQ && Environment.TickCount - LastQ >= (ObjectManager.Player.AttackCastDelay * 1000) - Game.Ping/2 - 200)
             {
                 MidQ = false;
                 CanMove = true;
@@ -226,7 +226,7 @@ namespace FuckingAwesomeRiven
                 RState = false;
             }
 
-            if (MidAa && Environment.TickCount + Game.Ping / 2 >= LastAa + ObjectManager.Player.AttackCastDelay * 1000)
+            if (MidAa && Environment.TickCount >= LastAa + ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping / 3 + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)
             {
                 CanMove = true;
                 CanQ = true;

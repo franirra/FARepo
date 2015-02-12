@@ -13,6 +13,7 @@ namespace FuckingAwesomeRiven
 
         public static Orbwalking.Orbwalker Orbwalker;
         public static Menu Config;
+        public static List<jumpPosition> j = new List<jumpPosition>();
 
         public static void initMenu()
         {
@@ -94,8 +95,13 @@ namespace FuckingAwesomeRiven
             Info.AddItem(new MenuItem("Msdsddsd", "you can do so by sending money to:"));
             Info.AddItem(new MenuItem("Msdsadfdsd", "jayyeditsdude@gmail.com"));
             Info.AddItem(new MenuItem("debug", "Debug Mode")).SetValue(false);
+            Info.AddItem(new MenuItem("logPos", "Log Position").SetValue(false));
+            Info.AddItem(new MenuItem("printPos", "Print Positions").SetValue(false));
+            Info.AddItem(new MenuItem("clearPrevious", "Clear Previous").SetValue(false));
+            Info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
+            Info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.4-2 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.5-1 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();

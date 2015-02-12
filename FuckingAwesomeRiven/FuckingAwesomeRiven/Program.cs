@@ -36,6 +36,7 @@ namespace FuckingAwesomeRiven
             Game.OnGameUpdate += eventArgs => StateHandler.tick();
             Obj_AI_Hero.OnProcessSpellCast += CheckHandler.Obj_AI_Hero_OnProcessSpellCast;
             Drawing.OnDraw += DrawHandler.Draw;
+            JumpHandler.load();
         }
 
 
@@ -44,6 +45,28 @@ namespace FuckingAwesomeRiven
 
         static void Game_OnGameUpdate(EventArgs args)
         {
+
+            if (MenuHandler.Config.Item("logPos").GetValue<bool>())
+            {
+                JumpHandler.addPos();
+                MenuHandler.Config.Item("logPos").SetValue(false);
+            }
+            if (MenuHandler.Config.Item("printPos").GetValue<bool>())
+            {
+                JumpHandler.printToConsole();
+                MenuHandler.Config.Item("printPos").SetValue(false);
+            }
+            if (MenuHandler.Config.Item("clearCurrent").GetValue<bool>())
+            {
+                JumpHandler.clearCurrent();
+                MenuHandler.Config.Item("clearCurrent").SetValue(false);
+            }
+            if (MenuHandler.Config.Item("clearPrevious").GetValue<bool>())
+            {
+                JumpHandler.clearPrevious();
+                MenuHandler.Config.Item("clearPrevious").SetValue(false);
+            }
+
             CheckHandler.Checks();
             var Config = MenuHandler.Config;
 

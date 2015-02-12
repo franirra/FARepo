@@ -57,6 +57,7 @@
     <Compile Include="CheckHandler.cs" />
     <Compile Include="DamageHandler.cs" />
     <Compile Include="DrawHandler.cs" />
+    <Compile Include="JumpHandler.cs" />
     <Compile Include="MenuHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

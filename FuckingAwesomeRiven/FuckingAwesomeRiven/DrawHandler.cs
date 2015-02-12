@@ -13,6 +13,11 @@ namespace FuckingAwesomeRiven
     {
         public static void Draw(EventArgs args)
         {
+            if (MenuHandler.Config.Item("drawCirclesforTest").GetValue<bool>())
+            {
+                JumpHandler.drawCircles();
+            }
+
             var drawQ = MenuHandler.Config.Item("DQ").GetValue<Circle>();
             var drawW = MenuHandler.Config.Item("DW").GetValue<Circle>();
             var drawE = MenuHandler.Config.Item("DE").GetValue<Circle>();

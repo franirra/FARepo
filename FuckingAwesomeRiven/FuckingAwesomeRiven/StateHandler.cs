@@ -42,6 +42,8 @@ namespace FuckingAwesomeRiven
         {
             Target = TargetSelector.GetTarget(800, TargetSelector.DamageType.Physical);
             Player = ObjectManager.Player;
+
+
             foreach (var a in resetChecks)
             {
                 if (!a.state && a.resetTick + a.resetDelay <= Environment.TickCount)
@@ -153,6 +155,7 @@ namespace FuckingAwesomeRiven
 
         public static void mainCombo()
         {
+
             SH.Orbwalk(Target);
 
             if (Target == null)
@@ -161,6 +164,9 @@ namespace FuckingAwesomeRiven
                 startedRCombo.state = false;
                 return;
             }
+
+            var comboRDmg = DamageHandler.getComboDmg(true, Target);
+            var comboNoR = DamageHandler.getComboDmg(false, Target);
 
             if (CH.LastECancelSpell < Environment.TickCount && MenuHandler.getMenuBool("CE"))
             {
@@ -176,10 +182,7 @@ namespace FuckingAwesomeRiven
             if (MenuHandler.getMenuBool("CR"))
             {
                 if (SH._spells[SpellSlot.E].IsReady() && SH._spells[SpellSlot.R].IsReady() &&
-                    SH._spells[SpellSlot.Q].IsReady() &&
-                    Player.Distance(Target) < SH._spells[SpellSlot.E].Range + SH.QRange &&
-                    (SH._spells[SpellSlot.Q].GetDamage(Target) * 3 + SH._spells[SpellSlot.W].GetDamage(Target) +
-                     Player.GetAutoAttackDamage(Target) * 3 + SH._spells[SpellSlot.R].GetDamage(Target) > Target.Health) ||
+                    SH._spells[SpellSlot.Q].IsReady() && comboNoR < Target.Health && comboRDmg > Target.Health ||
                     startedRCombo.state)
                 {
                     startedRCombo.state = true;
@@ -212,8 +215,7 @@ namespace FuckingAwesomeRiven
                     return;
                 }
 
-                if (SH._spells[SpellSlot.Q].GetDamage(Target) * 3 + SH._spells[SpellSlot.W].GetDamage(Target) +
-                    Player.GetAutoAttackDamage(Target) * 3 + SH._spells[SpellSlot.R].GetDamage(Target) > Target.Health && Target.Health > Target.MaxHealth/2)
+                if (comboNoR < Target.Health && comboRDmg > Target.Health && SH._spells[SpellSlot.R].IsReady() && SH._spells[SpellSlot.E].IsReady() && SH._spells[SpellSlot.W].IsReady())
                 {
                     if (SH._spells[SpellSlot.E].IsReady())
                     {

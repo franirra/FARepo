@@ -38,20 +38,22 @@ namespace FuckingAwesomeRiven
 
         public static void CastQ(Obj_AI_Base target = null)
         {
+            if (!_spells[SpellSlot.Q].IsReady()) return;
             if (target != null)
             {
                 _spells[SpellSlot.Q].Cast(target.Position, true);
-                Utility.DelayAction.Add(45, () => CheckHandler.ResetQ = true);
+                Utility.DelayAction.Add((int) (2*(Player.AttackCastDelay*1000 - Game.Ping)/3), () => CheckHandler.ResetQ = true);
             }
             else
             {
                 _spells[SpellSlot.Q].Cast(Game.CursorPos, true);
-                Utility.DelayAction.Add(48, () => CheckHandler.ResetQ = true);
+                Utility.DelayAction.Add((int)(2 * (Player.AttackCastDelay * 1000 - Game.Ping) / 3), () => CheckHandler.ResetQ = true);
             }
         }
 
         public static void CastW(Obj_AI_Hero target = null)
         {
+            if (!_spells[SpellSlot.W].IsReady()) return;
             if (target.IsValidTarget(WRange))
             {
                 castItems(target);
@@ -122,13 +124,13 @@ namespace FuckingAwesomeRiven
             }
         }
 
-        public static void animCancel(Obj_AI_Base target)
+        public static void animCancel(Obj_AI_Base target, bool manualMode = true)
         {
             if (CH.ResetQ)
             {
-                var pos1 = target.Position.Extend(Player.Position, target.Distance(Player) + 62);
-                var pos2 = target.Position.Extend(Player.Position, target.Distance(Player) - 62);
-                Player.IssueOrder(GameObjectOrder.MoveTo, target.IsValidTarget() ? pos1 : pos2);
+                var pos1 = Player.Position.Extend(target.Position, Player.BoundingRadius);
+                var pos2 = Player.Position.Extend(target.Position, Player.BoundingRadius);
+                Player.IssueOrder(GameObjectOrder.MoveTo, manualMode? Game.CursorPos: target.IsValidTarget() ? pos1 : pos2);
                 CH.ResetQ = false;
             }
         }

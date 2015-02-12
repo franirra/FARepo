@@ -12,27 +12,60 @@ namespace FuckingAwesomeRiven
     class DamageHandler
     {
 
-        public static double CalcPhysicalDamage(Obj_AI_Base source, Obj_AI_Base target, double amount)
+        public static double getComboDmg(bool useR, Obj_AI_Hero target)
         {
-            Game.PrintChat("@2");
-            double armorPenPercent = source.PercentArmorPenetrationMod;
-            double armorPenFlat = source.FlatArmorPenetrationMod;
-            Game.PrintChat("@1");
-            var armor = (target.Armor * armorPenPercent) - armorPenFlat;
-            Game.PrintChat("@");
-            double k;
-            if (armor < 0)
+            double dmg = 0;
+            double baseAD = ObjectManager.Player.BaseAttackDamage;
+            double bonusAD = ObjectManager.Player.FlatPhysicalDamageMod + (useR && !CheckHandler.RState && SpellHandler._spells[SpellSlot.R].IsReady()
+                ? 0.2*(ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod)
+                : 0);
+            int passiveCount = 0;
+
+
+            if (SpellHandler._spells[SpellSlot.Q].IsReady())
             {
-                k = 2 - 100 / (100 - armor);
-            }
-            else
-            {
-                k = 100 / (100 + armor);
+                dmg += (3 - CheckHandler.QCount) * (new double[] { 10, 30, 50, 70, 90 }[SpellHandler._spells[SpellSlot.Q].Level - 1] +
+                                ((baseAD + bonusAD) / 100) *
+                                new double[] { 40, 45, 50, 55, 60 }[SpellHandler._spells[SpellSlot.Q].Level -1]);
+                passiveCount += 3 - CheckHandler.QCount;
             }
 
-            Game.PrintChat("@@");
 
-            return k * amount;
+            if (SpellHandler._spells[SpellSlot.W].IsReady())
+            {
+                dmg += (new double[] {50, 80, 110, 140, 170}[SpellHandler._spells[SpellSlot.W].Level -1 ]) + 1 * bonusAD;
+                passiveCount++;
+            }
+
+
+            if (SpellHandler._spells[SpellSlot.E].IsReady())
+            {
+                passiveCount++;
+            }
+            if (SpellHandler._spells[SpellSlot.R].IsReady() && useR)
+            {
+                passiveCount++;
+            }
+
+
+            dmg += passiveCount*
+                   (5 +
+                    Math.Max(5*Math.Floor((double) ((ObjectManager.Player.Level + 2)/3)) + 10,
+                        10*Math.Floor((double) ((ObjectManager.Player.Level + 2)/3)) - 15)*(baseAD + bonusAD)/100);
+
+            dmg += (baseAD + bonusAD)*passiveCount;
+
+
+            if (useR && SpellHandler._spells[SpellSlot.R].IsReady())
+            {
+                var targethp = (target.MaxHealth - target.Health > 0) ? target.MaxHealth - target.Health : 1;
+                dmg += new double[] { 80, 120, 160 }[SpellHandler._spells[SpellSlot.R].Level - 1] + 0.6 * bonusAD
+                * ((targethp)/target.MaxHealth*2.67 + 1);
+            }
+
+            dmg += (baseAD + bonusAD);
+
+            return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, dmg);
         }
 
         public static double rBonus {get {return (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage) * 0.2;}}
