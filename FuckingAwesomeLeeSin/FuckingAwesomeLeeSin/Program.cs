@@ -425,8 +425,7 @@ namespace FuckingAwesomeLeeSin
                         }
                         break;
                     case InsecComboStepSelect.WGAPCLOSE:
-                        if (W.IsReady() && W.Instance.Name == "BlindMonkWOne" &&
-                            (paramBool("waitForQBuff") && (Q.Instance.Name == "BlindMonkQOne" || (!Q.IsReady() || Q.Instance.Name == "blindmonkqtwo") && q2Done)) || !paramBool("waitForQBuff"))
+                        if (FindBestWardItem() != null && W.IsReady() && W.Instance.Name == "BlindMonkWOne" && (paramBool("waitForQBuff") && (Q.Instance.Name == "BlindMonkQOne" || (!Q.IsReady() || Q.Instance.Name == "blindmonkqtwo") && q2Done)) || !paramBool("waitForQBuff"))
                         {
                             WardJump(getInsecPos(target), false, false, true);
                             wardJumped = true;
