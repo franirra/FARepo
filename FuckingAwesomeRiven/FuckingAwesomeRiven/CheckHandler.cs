@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using LeagueSharp.Common.Data;
+using SharpDX;
 using SH = FuckingAwesomeRiven.SpellHandler;
 
 namespace FuckingAwesomeRiven
@@ -70,6 +71,7 @@ namespace FuckingAwesomeRiven
 
             if (!MidQ && spell.Name.Contains("RivenBasicAttack"))
             {
+                Queuer.remove("AA");
                 LastAa = Environment.TickCount;
                 LastTiamatCancel = Environment.TickCount + (int)ObjectManager.Player.AttackCastDelay;
                 LastPassive = Environment.TickCount;
@@ -94,6 +96,7 @@ namespace FuckingAwesomeRiven
 
             if (spell.Name.Contains("RivenTriCleave"))
             {
+                Queuer.remove("Q");
                 LastQ = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
@@ -112,6 +115,7 @@ namespace FuckingAwesomeRiven
                     QCount = 0;
                 }
                 Utility.DelayAction.Add(350, Orbwalking.ResetAutoAttackTimer);
+                SH.animCancel(StateHandler.Target);
                 MidQ = true;
                 CanMove = false;
                 CanQ = false;
@@ -121,6 +125,7 @@ namespace FuckingAwesomeRiven
 
             if (spell.Name.Contains("RivenMartyr"))
             {
+                Queuer.remove("W");
                 LastW = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
@@ -137,6 +142,8 @@ namespace FuckingAwesomeRiven
 
             if (spell.Name.Contains("RivenFeint"))
             {
+                Queuer.remove("E");
+                Queuer.EPos = new Vector3();
                 LastE = Environment.TickCount;
                 PassiveStacks = Environment.TickCount;
                 LastTiamatCancel = Environment.TickCount + 50;
@@ -152,6 +159,7 @@ namespace FuckingAwesomeRiven
 
             if (spell.Name.Contains("RivenFengShuiEngine"))
             {
+                Queuer.remove("R");
                 LastFr = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
@@ -167,6 +175,8 @@ namespace FuckingAwesomeRiven
 
             if (spell.Name.Contains("rivenizunablade"))
             {
+                Queuer.remove("R2");
+                Queuer.R2Target = null;
                 LastPassive = Environment.TickCount;
 
                 if (PassiveStacks <= 2)

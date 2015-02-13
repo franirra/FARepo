@@ -42,12 +42,10 @@ namespace FuckingAwesomeRiven
             if (target != null)
             {
                 _spells[SpellSlot.Q].Cast(target.Position, true);
-                Utility.DelayAction.Add((int) (2*(Player.AttackCastDelay*1000 - Game.Ping)/3), () => CheckHandler.ResetQ = true);
             }
             else
             {
                 _spells[SpellSlot.Q].Cast(Game.CursorPos, true);
-                Utility.DelayAction.Add((int)(2 * (Player.AttackCastDelay * 1000 - Game.Ping) / 3), () => CheckHandler.ResetQ = true);
             }
         }
 
@@ -77,7 +75,7 @@ namespace FuckingAwesomeRiven
             _spells[SpellSlot.R].Cast();
         }
 
-        public static void CastR2(Obj_AI_Hero target)
+        public static void CastR2(Obj_AI_Base target)
         {
             var r2 = new Spell(SpellSlot.R, 900);
             r2.SetSkillshot(0.25f, 45, 1200, false, SkillshotType.SkillshotCone);
@@ -140,7 +138,6 @@ namespace FuckingAwesomeRiven
         {
             if (MenuHandler.Config.Item("normalCombo").GetValue<KeyBind>().Active)
             {
-
                 MenuHandler.Orbwalker.SetAttack(false);
                 MenuHandler.Orbwalker.SetMovement(false);
             }
