@@ -137,16 +137,14 @@ namespace FuckingAwesomeRiven
             {
                 CH.LastECancelSpell = int.MaxValue;
                 SH.CastE(Target.Position);
-                return;
             }
             if (CH.LastTiamatCancel < Environment.TickCount && MenuHandler.getMenuBool("autoCancelT"))
             {
                 CH.LastTiamatCancel = int.MaxValue;
                 SH.castItems(Target);
-                return;
             }
 
-            if (MenuHandler.getMenuBool("CR"))
+            if (MenuHandler.getMenuBool("CR") && Queuer.Queue.Contains("R"))
             {
                 if (SH._spells[SpellSlot.E].IsReady() && SH._spells[SpellSlot.R].IsReady() &&
                     SH._spells[SpellSlot.Q].IsReady() && (comboNoR < Target.Health && comboRDmg > Target.Health || Player.Position.CountEnemiesInRange(600) >= MenuHandler.Config.Item("CRNO").GetValue<Slider>().Value || MenuHandler.Config.Item("forcedR").GetValue<KeyBind>().Active))
@@ -155,50 +153,44 @@ namespace FuckingAwesomeRiven
                     Queuer.add("Hydra");
                     Queuer.add("R");
                     Queuer.add("Q");
-                    return;
                 }
                 if ((Player.Position.CountEnemiesInRange(600) >= MenuHandler.Config.Item("CRNO").GetValue<Slider>().Value || comboNoR < Target.Health && comboRDmg > Target.Health || MenuHandler.Config.Item("forcedR").GetValue<KeyBind>().Active) && SH._spells[SpellSlot.R].IsReady() && SH._spells[SpellSlot.E].IsReady())
                 {
                     Queuer.add("R");
                     Queuer.add("E", Target.Position);
-                    return;
                 }
                 if (Player.Position.CountEnemiesInRange(600) >= MenuHandler.Config.Item("CRNO").GetValue<Slider>().Value || comboNoR < Target.Health && comboRDmg > Target.Health || MenuHandler.Config.Item("forcedR").GetValue<KeyBind>().Active)
                 {
                     Queuer.add("R");
-                    return;
                 }
             }
 
-            if (CH.RState)
+            if (CH.RState && !Queuer.Queue.Contains("R2"))
             {
 
                 if (MenuHandler.getMenuBool("QWR2KS") && Target.IsValidTarget(SH.QRange) && SH._spells[SpellSlot.W].IsReady() && SH._spells[SpellSlot.Q].IsReady() &&
-                    SH._spells[SpellSlot.Q].GetDamage(Target) + (CH.RState && SH._spells[SpellSlot.R].IsReady() ? SH._spells[SpellSlot.R].GetDamage(Target) : 0) >
-                    Target.Health)
+                    SH._spells[SpellSlot.Q].GetDamage(Target) + SH._spells[SpellSlot.R].GetDamage(Target) > Target.Health)
                 {
                     Queuer.add("Q");
                     Queuer.add("W");
                     Queuer.add("R2", Target);
-
                     return;
                 }
                 if (MenuHandler.getMenuBool("QR2KS") && Target.IsValidTarget(SH.QRange) && SH._spells[SpellSlot.Q].IsReady() &&
-                         SH._spells[SpellSlot.Q].GetDamage(Target) + (CH.RState && SH._spells[SpellSlot.R].IsReady() ? SH._spells[SpellSlot.R].GetDamage(Target) : 0) > Target.Health)
+                         SH._spells[SpellSlot.Q].GetDamage(Target) + SH._spells[SpellSlot.R].GetDamage(Target)> Target.Health)
                 {
                     Queuer.add("Q");
                     Queuer.add("R2", Target);
                     return;
                 }
                 if (MenuHandler.getMenuBool("WR2KS") && Target.IsValidTarget(SH.WRange) && CH.CanW && SH._spells[SpellSlot.W].IsReady() &&
-                         SH._spells[SpellSlot.W].GetDamage(Target) + (CH.RState && SH._spells[SpellSlot.R].IsReady() ? SH._spells[SpellSlot.R].GetDamage(Target) : 0) > Target.Health)
+                         SH._spells[SpellSlot.W].GetDamage(Target) + SH._spells[SpellSlot.R].GetDamage(Target) > Target.Health)
                 {
                     Queuer.add("W");
                     Queuer.add("R2", Target);
                     return;
                 }
-                if (MenuHandler.getMenuBool("Use R2") && SpellHandler._spells[SpellSlot.
-                    R].GetDamage(Target) > Target.Health)
+                if (MenuHandler.getMenuBool("CR2") && SpellHandler._spells[SpellSlot.R].GetDamage(Target) > Target.Health)
                 {
                     Queuer.add("R2", Target);
                     return;
@@ -210,17 +202,14 @@ namespace FuckingAwesomeRiven
                 {
                     Queuer.add("Q");
                     Queuer.add("W");
-                    return;
                 }
                 if (MenuHandler.getMenuBool("QKS") && Target.IsValidTarget(SH.QRange) && SH._spells[SpellSlot.Q].IsReady() && SH._spells[SpellSlot.Q].GetDamage(Target) > Target.Health)
                 {
                     Queuer.add("Q");
-                    return;
                 }
                 if (MenuHandler.getMenuBool("WKS") && Target.IsValidTarget(SH.WRange) && SH._spells[SpellSlot.W].IsReady() && SH._spells[SpellSlot.W].GetDamage(Target) > Target.Health)
                 {
                     Queuer.add("W");
-                    return;
                 }
             }
 
@@ -228,7 +217,7 @@ namespace FuckingAwesomeRiven
 
             if (Target == null) return;
 
-            if (MenuHandler.getMenuBool("CE") && SH._spells[SpellSlot.E].IsReady() && !Queuer.Queue.Contains("E"))
+            if (MenuHandler.getMenuBool("CE") && SH._spells[SpellSlot.E].IsReady())
             {
                 if (MenuHandler.getMenuBool("UseE-GC"))
                 {
@@ -236,27 +225,23 @@ namespace FuckingAwesomeRiven
                         Target.IsValidTarget(SH._spells[SpellSlot.E].Range + BonusRange))
                     {
                         Queuer.add("E", Target.Position);
-                        return;
                     }
                     if (SH._spells[SpellSlot.Q].IsReady() &&
                              !Target.IsValidTarget(SH._spells[SpellSlot.E].Range + BonusRange) &&
                              Target.IsValidTarget(SH._spells[SpellSlot.E].Range + SH._spells[SpellSlot.Q].Range - 50))
                     {
                         Queuer.add("E", Target.Position);
-                        return;
                     }
                 }
                 else if (Vector3.Distance(Player.Position, Target.Position) > Orbwalking.GetRealAutoAttackRange(Player))
                 {
                     Queuer.add("E", Target.Position);
-                    return;
                 }
             }
 
-            if (MenuHandler.getMenuBool("CW") && SH._spells[SpellSlot.W].IsReady() && Environment.TickCount - CH.LastE >= 100 && Target.IsValidTarget(SH._spells[SpellSlot.W].Range) && !Queuer.Queue.Contains("E"))
+            if (MenuHandler.getMenuBool("CW") && SH._spells[SpellSlot.W].IsReady() && Environment.TickCount - CH.LastE >= 100 && Target.IsValidTarget(SH._spells[SpellSlot.W].Range))
             {
                 Queuer.add("W");
-                return;
             }
 
             if (SH._spells[SpellSlot.Q].IsReady() && Environment.TickCount - CH.LastE >= 100 && MenuHandler.getMenuBool("CQ") && !Queuer.Queue.Contains("Q"))
@@ -264,12 +249,10 @@ namespace FuckingAwesomeRiven
                 if (Target.IsValidTarget(SH.QRange) && CH.CanQ && MenuHandler.Config.Item("QAA").GetValue<StringList>().SelectedIndex == 0)
                 {
                     Queuer.add("Q");
-                    return;
                 }
                 if (!Target.IsValidTarget(SH.QRange + Orbwalking.GetRealAutoAttackRange(Player)) && !Orbwalking.InAutoAttackRange(Target) && MenuHandler.getMenuBool("UseQ-GC2"))
                 {
                     Queuer.add("Q");
-                    return;
                 }
             }
         }
