@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace FuckingAwesomeRiven
             var mainMenu = MenuHandler.Config.AddSubMenu(new Menu("Anti GapCloser", "Anti GapCloser"));
             var spellMenu = mainMenu.AddSubMenu(new Menu("Enabled Spells", "Enabled SpellsAnti GapCloser"));
             mainMenu.AddItem(new MenuItem("EnabledGC", "Enabled").SetValue(false));
+            mainMenu.AddItem(new MenuItem("Ward Mechanic", "Ward Mechanic").SetValue(false));
 
             var mainMenuinterrupter = MenuHandler.Config.AddSubMenu(new Menu("Interrupter", "Interrupter"));
             mainMenuinterrupter.AddItem(new MenuItem("EnabledInterrupter", "Enabled").SetValue(false));
@@ -41,15 +43,25 @@ namespace FuckingAwesomeRiven
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName()) == null)
+            if (MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName().ToLower()) == null)
                 return;
-            if (!MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName()).GetValue<bool>() || !gapcloser.Sender.IsValidTarget()) return;
-            if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.WRange)
+            if (!MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName().ToLower()).GetValue<bool>() || !gapcloser.Sender.IsValidTarget()) return;
+            if (CheckHandler.QCount == 2 && MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>() && MenuHandler.Config.Item("flee").GetValue<KeyBind>().Active && gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.QRange)
+            {
+                if (Queuer.Queue.Contains("Q") || Items.GetWardSlot() == null) return;
+                
+                ObjectManager.Player.Spellbook.CastSpell(Items.GetWardSlot().SpellSlot,
+                    ObjectManager.Player.Position.Extend(gapcloser.End, 50));
+                Queuer.Queue.Insert(0, "Q");
+                Utility.DelayAction.Add(200, () => ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos));
+                return;
+            }
+            if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.WRange && !MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>())
             {
                 Queuer.add("W");
                 return;
             }
-            if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.QRange && CheckHandler.QCount == 2)
+            if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.QRange && CheckHandler.QCount == 2 && !MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>())
             {
                 Queuer.add("Q");
             }

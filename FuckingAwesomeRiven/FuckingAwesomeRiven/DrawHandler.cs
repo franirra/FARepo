@@ -22,6 +22,11 @@ namespace FuckingAwesomeRiven
             var drawE = MenuHandler.Config.Item("DE").GetValue<Circle>();
             var drawR = MenuHandler.Config.Item("DR").GetValue<Circle>();
             var drawBC = MenuHandler.Config.Item("DBC").GetValue<Circle>();
+
+            var PlayerPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
+            var RBool = MenuHandler.Config.Item("forcedR").GetValue<KeyBind>().Active;
+            Drawing.DrawText(PlayerPos.X-70, PlayerPos.Y+40, (RBool ? Color.GreenYellow : Color.Red), "Forced R: {0}", (RBool ? "Enabled" : "Disabled"));
+
             if (drawQ.Active)
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, SpellHandler.QRange, drawQ.Color);

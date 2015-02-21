@@ -45,6 +45,8 @@ namespace FuckingAwesomeRiven
             combo.AddItem(new MenuItem("UseE-AA", "   Only E if out of AA range").SetValue(true));
             combo.AddItem(new MenuItem("UseE-GC", "   Use E to Gapclose").SetValue(true));
             combo.AddItem(new MenuItem("CR", "Use R").SetValue(true));
+            combo.AddItem(new MenuItem("CRNO", "Min Enemies for AOE R").SetValue(new Slider(2, 1, 5)));
+            combo.AddItem(new MenuItem("forcedR", "Forced R Enabled in Combo").SetValue(new KeyBind('T', KeyBindType.Toggle, false)));
             combo.AddItem(new MenuItem("CR2", "Use R2").SetValue(true));
             combo.AddItem(new MenuItem("magnet", "Magnet Target").SetValue(false));
             combo.AddItem(new MenuItem("bdsfdfffsf", ""));
@@ -111,7 +113,7 @@ namespace FuckingAwesomeRiven
             Info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
             Info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.6 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.6-1 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();

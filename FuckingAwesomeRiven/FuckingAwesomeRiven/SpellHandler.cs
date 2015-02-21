@@ -124,7 +124,7 @@ namespace FuckingAwesomeRiven
 
         public static void animCancel(Obj_AI_Base target)
         {
-                if(!CheckHandler.CanMove) return;
+            if (!CheckHandler.CanMove || MenuHandler.Config.Item("flee").GetValue<KeyBind>().Active || MenuHandler.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None) return;
                 var pos2 = Player.Position.Extend(Game.CursorPos, 100);
                 if (target.IsValidTarget()) pos2 = Player.Position.Extend(target.Position, 100);
                 Player.IssueOrder(GameObjectOrder.MoveTo, pos2);

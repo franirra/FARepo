@@ -71,7 +71,7 @@ namespace FuckingAwesomeRiven
             if (!MidQ && spell.Name.Contains("RivenBasicAttack"))
             {
                 Queuer.remove("AA");
-                if (MenuHandler.Config.Item("QAA").GetValue<StringList>().SelectedIndex == 1 && MenuHandler.Config.Item("normalCombo").GetValue<KeyBind>().Active && SH._spells[SpellSlot.Q].IsReady() && MenuHandler.getMenuBool("CQ"))
+                if (MenuHandler.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None &&  MenuHandler.Config.Item("QAA").GetValue<StringList>().SelectedIndex == 1 && MenuHandler.Config.Item("normalCombo").GetValue<KeyBind>().Active && SH._spells[SpellSlot.Q].IsReady() && MenuHandler.getMenuBool("CQ"))
                 {
                     Queuer.add("Q");
                 }
