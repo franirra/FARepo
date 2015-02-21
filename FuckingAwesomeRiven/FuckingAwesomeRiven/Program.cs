@@ -35,17 +35,17 @@ namespace FuckingAwesomeRiven
             Game.OnGameUpdate += Game_OnGameUpdate;
             Game.OnGameUpdate += eventArgs => StateHandler.tick();
             Obj_AI_Hero.OnProcessSpellCast += CheckHandler.Obj_AI_Hero_OnProcessSpellCast;
+            Obj_AI_Hero.OnProcessSpellCast += EvadeUtils.AutoE.autoE;
             Drawing.OnDraw += DrawHandler.Draw;
             JumpHandler.load();
         }
 
-
-
-
-
         static void Game_OnGameUpdate(EventArgs args)
         {
-
+            if (Queuer.Queue.Count > 0)
+            {
+                Queuer.doQueue();
+            }
             if (MenuHandler.Config.Item("logPos").GetValue<bool>())
             {
                 JumpHandler.addPos();
@@ -82,11 +82,6 @@ namespace FuckingAwesomeRiven
             if (Config.Item("normalCombo").GetValue<KeyBind>().Active)
             {
                 StateHandler.mainCombo();
-            }
-            else
-            {
-                StateHandler.startedR2Combo.state = false;
-                StateHandler.startedRCombo.state = false;
             }
             if (Config.Item("burstCombo").GetValue<KeyBind>().Active)
             {

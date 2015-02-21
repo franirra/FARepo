@@ -37,7 +37,8 @@ namespace FuckingAwesomeRiven
             enabledCombos.AddItem(new MenuItem("WKS", "W").SetValue(true));
 
             combo.AddItem(new MenuItem("CQ", "Use Q").SetValue(true));
-            combo.AddItem(new MenuItem("UseQ-GC", "   Use Q for GapClose").SetValue(true));
+            combo.AddItem(new MenuItem("QAA", "Q AA Mode").SetValue(new StringList(new []{"Q -> AA", "AA -> Q"})));
+            combo.AddItem(new MenuItem("UseQ-GC2", "   Use Q for GapClose").SetValue(false));
             combo.AddItem(new MenuItem("Use R2", "Use R2").SetValue(true));
             combo.AddItem(new MenuItem("CW", "Use W").SetValue(true));
             combo.AddItem(new MenuItem("CE", "Use E").SetValue(true));
@@ -47,10 +48,10 @@ namespace FuckingAwesomeRiven
             combo.AddItem(new MenuItem("CR2", "Use R2").SetValue(true));
             combo.AddItem(new MenuItem("magnet", "Magnet Target").SetValue(false));
             combo.AddItem(new MenuItem("bdsfdfffsf", ""));
-            //combo.AddItem(new MenuItem("bdsfdsf", "-- Burst Combo"));
+            combo.AddItem(new MenuItem("bdsfdsf", "-- Burst Combo"));
             //combo.AddItem(new MenuItem("BFl", "Use Flash").SetValue(false));
-            //combo.AddItem(new MenuItem("bdsfdsff", "E - R - Flash - W - Q"));
-            //combo.AddItem(new MenuItem("bdsfdsfddd", "E - R - W - Q"));
+            combo.AddItem(new MenuItem("shyCombo", "ShyCombo").SetValue(true));
+            combo.AddItem(new MenuItem("kyzerCombo", "Kyzer Q3 Combo").SetValue(true));
 
             var farm = Config.AddSubMenu(new Menu("Farming", "Farming"));
             farm.AddItem(new MenuItem("fnjdsjkn", "          Last Hit"));
@@ -66,6 +67,11 @@ namespace FuckingAwesomeRiven
             farm.AddItem(new MenuItem("QWC-AA", "   Q -> AA").SetValue(true));
             farm.AddItem(new MenuItem("WWC", "Use W").SetValue(true));
 
+            var cancels = Config.AddSubMenu(new Menu("Auto Cancels", "autoCancels"));
+            cancels.AddItem(new MenuItem("autoCancelR1", "Auto Cancel R1").SetValue(false));
+            cancels.AddItem(new MenuItem("autoCancelR2", "Auto Cancel R2").SetValue(false));
+            cancels.AddItem(new MenuItem("autoCancelT", "Auto Cancel with Tiamat").SetValue(true));
+            cancels.AddItem(new MenuItem("autoCancelE", "Auto Cancel with E").SetValue(false));
 
             var draw = Config.AddSubMenu(new Menu("Draw", "Draw"));
 
@@ -90,6 +96,10 @@ namespace FuckingAwesomeRiven
             Keybindings.AddItem(new MenuItem("lastHit", "LastHit").SetValue(new KeyBind('X', KeyBindType.Press)));
             Keybindings.AddItem(new MenuItem("flee", "Flee").SetValue(new KeyBind('Z', KeyBindType.Press)));
 
+            EvadeUtils.AutoE.init();
+
+            Antispells.init();
+
             var Info = Config.AddSubMenu(new Menu("Information", "info"));
             Info.AddItem(new MenuItem("Msddsds", "if you would like to donate via paypal"));
             Info.AddItem(new MenuItem("Msdsddsd", "you can do so by sending money to:"));
@@ -101,7 +111,7 @@ namespace FuckingAwesomeRiven
             Info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
             Info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.5-2 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.6 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();

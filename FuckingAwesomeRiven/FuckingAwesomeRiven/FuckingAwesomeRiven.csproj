@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="clipper_library">
+      <HintPath>C:\Users\Joseph\Desktop\iMeh\\System\clipper_library.dll</HintPath>
+    </Reference>
     <Reference Include="LeagueSharp">
       <HintPath>C:\Users\Joseph\Desktop\iMeh\\System\LeagueSharp.dll</HintPath>
     </Reference>
@@ -54,9 +57,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Antispells.cs" />
     <Compile Include="CheckHandler.cs" />
     <Compile Include="DamageHandler.cs" />
     <Compile Include="DrawHandler.cs" />
+    <Compile Include="EvadeUtils\AutoE.cs" />
+    <Compile Include="EvadeUtils\Geometry.cs" />
+    <Compile Include="EvadeUtils\Skillshot.cs" />
+    <Compile Include="EvadeUtils\SpellData.cs" />
+    <Compile Include="EvadeUtils\SpellDatabase.cs" />
+    <Compile Include="EvadeUtils\TargetSpell.cs" />
+    <Compile Include="EvadeUtils\TargetSpellDatabase.cs" />
     <Compile Include="JumpHandler.cs" />
     <Compile Include="MenuHandler.cs" />
     <Compile Include="Program.cs" />

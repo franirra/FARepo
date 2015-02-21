@@ -122,15 +122,12 @@ namespace FuckingAwesomeRiven
             }
         }
 
-        public static void animCancel(Obj_AI_Base target, bool manualMode = true)
+        public static void animCancel(Obj_AI_Base target)
         {
-            if (CH.ResetQ)
-            {
-                var pos1 = Player.Position.Extend(target.Position, Player.BoundingRadius);
-                var pos2 = Player.Position.Extend(target.Position, Player.BoundingRadius);
-                Player.IssueOrder(GameObjectOrder.MoveTo, manualMode? Game.CursorPos: target.IsValidTarget() ? pos1 : pos2);
-                CH.ResetQ = false;
-            }
+                if(!CheckHandler.CanMove) return;
+                var pos2 = Player.Position.Extend(Game.CursorPos, 100);
+                if (target.IsValidTarget()) pos2 = Player.Position.Extend(target.Position, 100);
+                Player.IssueOrder(GameObjectOrder.MoveTo, pos2);
         }
 
 

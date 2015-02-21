@@ -14,6 +14,7 @@ namespace FuckingAwesomeRiven
 
         public static double getComboDmg(bool useR, Obj_AI_Hero target)
         {
+            if (!target.IsValidTarget()) return 0;
             double dmg = 0;
             double baseAD = ObjectManager.Player.BaseAttackDamage;
             double bonusAD = ObjectManager.Player.FlatPhysicalDamageMod + (useR && !CheckHandler.RState && SpellHandler._spells[SpellSlot.R].IsReady()

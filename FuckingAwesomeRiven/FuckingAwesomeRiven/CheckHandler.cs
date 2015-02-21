@@ -28,8 +28,7 @@ namespace FuckingAwesomeRiven
             MidE,
             MidAa,
             RState,
-            BurstFinished,
-            ResetQ;
+            BurstFinished;
         public static int PassiveStacks, QCount, FullComboState;
 
         public static void init()
@@ -72,6 +71,10 @@ namespace FuckingAwesomeRiven
             if (!MidQ && spell.Name.Contains("RivenBasicAttack"))
             {
                 Queuer.remove("AA");
+                if (MenuHandler.Config.Item("QAA").GetValue<StringList>().SelectedIndex == 1 && MenuHandler.Config.Item("normalCombo").GetValue<KeyBind>().Active && SH._spells[SpellSlot.Q].IsReady() && MenuHandler.getMenuBool("CQ"))
+                {
+                    Queuer.add("Q");
+                }
                 LastAa = Environment.TickCount;
                 LastTiamatCancel = Environment.TickCount + (int)ObjectManager.Player.AttackCastDelay;
                 LastPassive = Environment.TickCount;
@@ -82,16 +85,6 @@ namespace FuckingAwesomeRiven
                 MidAa = true;
                 CanMove = false;
                 CanAa = false;
-                if (StateHandler.startJump1.state)
-                {
-                    Utility.DelayAction.Add((int) ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping/2 + 50, () =>
-                    {
-                        if (ItemData.Tiamat_Melee_Only.GetItem().IsReady())
-                            ItemData.Tiamat_Melee_Only.GetItem().Cast();
-                        if (ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsReady())
-                            ItemData.Ravenous_Hydra_Melee_Only.GetItem().Cast();
-                    });
-                }
             }
 
             if (spell.Name.Contains("RivenTriCleave"))
@@ -115,7 +108,8 @@ namespace FuckingAwesomeRiven
                     QCount = 0;
                 }
                 Utility.DelayAction.Add(350, Orbwalking.ResetAutoAttackTimer);
-                SH.animCancel(StateHandler.Target);
+                Utility.DelayAction.Add(40, () => SH.animCancel(StateHandler.Target));
+                
                 MidQ = true;
                 CanMove = false;
                 CanQ = false;
@@ -126,6 +120,7 @@ namespace FuckingAwesomeRiven
             if (spell.Name.Contains("RivenMartyr"))
             {
                 Queuer.remove("W");
+                Utility.DelayAction.Add(40, () => SH.animCancel(StateHandler.Target));
                 LastW = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
@@ -134,7 +129,6 @@ namespace FuckingAwesomeRiven
                 {
                     PassiveStacks = PassiveStacks + 1;
                 }
-
                 MidW = true;
                 CanW = false;
                 FullComboState = 2;
@@ -160,6 +154,7 @@ namespace FuckingAwesomeRiven
             if (spell.Name.Contains("RivenFengShuiEngine"))
             {
                 Queuer.remove("R");
+                if (MenuHandler.Config.Item("autoCancelR1").GetValue<bool>()) Queuer.add("E", Game.CursorPos);
                 LastFr = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
@@ -176,6 +171,7 @@ namespace FuckingAwesomeRiven
             if (spell.Name.Contains("rivenizunablade"))
             {
                 Queuer.remove("R2");
+                if (MenuHandler.Config.Item("autoCancelR1").GetValue<bool>()) Queuer.add("Q");
                 Queuer.R2Target = null;
                 LastPassive = Environment.TickCount;
 
