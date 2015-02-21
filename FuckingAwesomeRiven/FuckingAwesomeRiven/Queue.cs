@@ -93,7 +93,7 @@ namespace FuckingAwesomeRiven
             }
             if (S._spells[SpellSlot.Q].IsReady())
             {
-                S.CastQ();
+                S.CastQ(StateHandler.Target);
             }
         }
         public static void qW()
@@ -109,7 +109,7 @@ namespace FuckingAwesomeRiven
             }
             if (S._spells[SpellSlot.W].IsReady())
             {
-                S.CastW();
+                S.CastW(StateHandler.Target);
             }
         }
         public static void qE()
