@@ -254,7 +254,7 @@ namespace FuckingAwesomeRiven
             if (!Target.IsValidTarget()) return;
 
             //kyzer 3rd q combo
-            if (MenuHandler.getMenuBool("shyCombo") && Target.IsValidTarget(600) && SH._spells[SpellSlot.Q].IsReady() && SH._spells[SpellSlot.W].IsReady() && SH._spells[SpellSlot.E].IsReady() && SH._spells[SpellSlot.R].IsReady() && CH.QCount == 2 && Queuer.Queue.Count == 0))
+            if (MenuHandler.getMenuBool("shyCombo") && Target.IsValidTarget(600) && SH._spells[SpellSlot.Q].IsReady() && SH._spells[SpellSlot.W].IsReady() && SH._spells[SpellSlot.E].IsReady() && SH._spells[SpellSlot.R].IsReady() && CH.QCount == 2 && Queuer.Queue.Count == 0)
             {
                 Queuer.add("E", Target.Position);
                 Queuer.add("R");
