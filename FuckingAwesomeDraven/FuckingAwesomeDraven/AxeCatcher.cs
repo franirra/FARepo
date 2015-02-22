@@ -159,7 +159,7 @@ namespace FuckingAwesomeDraven
             }
             else if (CanMove && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
             {
-                if (Game.CursorPos.Distance(Player.Position) > Program.Config.Item("HoldPosRadius").GetValue<Slider>().Value)
+                if (Game.CursorPos.Distance(Player.Position) < Program.Config.Item("HoldPosRadius").GetValue<Slider>().Value)
                 {
                     Player.IssueOrder(GameObjectOrder.HoldPosition, Player.Position);
                     return;
