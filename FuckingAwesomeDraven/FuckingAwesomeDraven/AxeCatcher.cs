@@ -298,7 +298,6 @@ namespace FuckingAwesomeDraven
 
         private static bool ShouldWait()
         {
-            Game.PrintChat(Program.Config.Item("FarmDelay").GetValue<Slider>().Value.ToString());
             return
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Any(
