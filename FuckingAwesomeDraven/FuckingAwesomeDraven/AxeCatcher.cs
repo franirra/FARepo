@@ -211,10 +211,9 @@ namespace FuckingAwesomeDraven
                 {
                     Orbwalker.SetAttack(true);
                     Orbwalker.SetMovement(true);
+                    return;
                 }
             }
-            else if (CanMove)
-            {
                 if (Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() &&
                     selectedAxe.AxeObj.Position.Distance(Player.Position) >
                     ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed)) &&
@@ -226,10 +225,10 @@ namespace FuckingAwesomeDraven
                     Program.spells[Spells.W].Cast();
                     Orbwalker.SetMovement(true);
                     Orbwalker.SetOrbwalkingPoint(selectedAxe.AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 95));
+                    return;
                 }
                 Orbwalker.SetMovement(true);
                 Orbwalker.SetOrbwalkingPoint(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
-            }
         }
 
 
