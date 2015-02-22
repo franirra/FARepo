@@ -199,6 +199,7 @@ namespace FuckingAwesomeDraven
                     Player.GetAutoAttackDamage(GetTarget() as Obj_AI_Base) * 2 > GetTarget().Health ||
                     !Program.Config.Item("catching").GetValue<KeyBind>().Active || !InCatchRadius(selectedAxe))
                 {
+                    Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                     Orbwalker.SetAttack(true);
                     Orbwalker.SetMovement(true);
                     return;
@@ -209,6 +210,7 @@ namespace FuckingAwesomeDraven
                      GetTarget().IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CanAa ||
                      Player.Distance(selectedAxe.AxeObj.Position) <= 120))
                 {
+                    Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                     Orbwalker.SetAttack(true);
                     Orbwalker.SetMovement(true);
                     return;
