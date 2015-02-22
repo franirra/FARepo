@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
+using LeagueSharp.Common.Data;
 
 namespace FuckingAwesomeDraven
 {       enum Spells
@@ -34,6 +35,7 @@ namespace FuckingAwesomeDraven
             if (ObjectManager.Player.ChampionName != "Draven")
             {
                 Notifications.AddNotification(new Notification("Not Draven? Draaaaaaaaaven.", 5));
+                return;
             }
 
             Config = new Menu("FuckingAwesomeDraven", "FuckingAwesomeDraven", true);
@@ -47,7 +49,9 @@ namespace FuckingAwesomeDraven
             ComboMenu.AddItem(new MenuItem("UQC", "Use Q").SetValue(true));
             ComboMenu.AddItem(new MenuItem("UWC", "Use W").SetValue(true));
             ComboMenu.AddItem(new MenuItem("UEC", "Use E").SetValue(true));
-            ComboMenu.AddItem(new MenuItem("URC", "Use R to exceute").SetValue(true));
+            ComboMenu.AddItem(new MenuItem("URC", "Use R").SetValue(true));
+            ComboMenu.AddItem(new MenuItem("URCM", "R Mode").SetValue(new StringList(new []{"Out of Range", "Execute", "Both"}, 1)));
+            ComboMenu.AddItem(new MenuItem("forceR", "Force R on Target").SetValue(new KeyBind('T', KeyBindType.Press)));
 
             var HarassMenu = Config.AddSubMenu(new Menu("Harass", "Harass"));
 
@@ -73,6 +77,7 @@ namespace FuckingAwesomeDraven
                 new MenuItem("catchRadiusMode", "Catch Radius Mode").SetValue(
                     new StringList(new[] {"Mouse Mode", "Target Mode {DONT ENABLE}"})));
             axe.AddItem(new MenuItem("catchRadius", "Catch Radius").SetValue(new Slider(600, 300, 1500)));
+            axe.AddItem(new MenuItem("ignoreTowerReticle", "Ignore Tower Reticle").SetValue(true));
             axe.AddItem(new MenuItem("clickRemoveAxes", "Remove Axes With Click").SetValue(true));
 
             Antispells.init();
@@ -85,6 +90,7 @@ namespace FuckingAwesomeDraven
             draw.AddItem(new MenuItem("DCA", "Draw Current Axes").SetValue(new Circle(false, System.Drawing.Color.White)));
             draw.AddItem(new MenuItem("DCR", "Draw Catch Radius").SetValue(new Circle(true, System.Drawing.Color.White)));
             draw.AddItem(new MenuItem("DAR", "Draw Axe Spots").SetValue(new Circle(true, System.Drawing.Color.White)));
+            draw.AddItem(new MenuItem("DKM", "Draw Killable Minion").SetValue(new Circle(true, System.Drawing.Color.White)));
 
             var Info = Config.AddSubMenu(new Menu("Information", "info"));
             Info.AddItem(new MenuItem("Msddsds", "if you would like to donate via paypal"));
@@ -115,7 +121,10 @@ namespace FuckingAwesomeDraven
 
         static void Game_OnGameUpdate(EventArgs args)
         {
+            if (TargetSelector.GetTarget(3000, TargetSelector.DamageType.Physical).IsValidTarget() && Config.Item("forceR").GetValue<KeyBind>().Active) spells[Spells.R].Cast(TargetSelector.GetTarget(3000, TargetSelector.DamageType.Physical));
+
             AxeCatcher.catchAxes();
+
             switch (Orbwalker.ActiveMode)
             {
                     case Orbwalking.OrbwalkingMode.Combo:
@@ -142,6 +151,12 @@ namespace FuckingAwesomeDraven
             if (!t.IsValidTarget() || !t.IsValid<Obj_AI_Hero>()) return;
             var Target = (Obj_AI_Hero) t;
 
+            if (Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 200))
+            {
+                if (ItemData.Youmuus_Ghostblade.GetItem().IsReady())
+                    ItemData.Youmuus_Ghostblade.GetItem().Cast();
+            }
+
             if (Q && AxeCatcher.LastAa + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
                 AxeCatcher.AxeSpots.Count + AxeCatcher.CurrentAxes < 2 && Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
             {
@@ -156,9 +171,21 @@ namespace FuckingAwesomeDraven
             {
                 spells[Spells.E].Cast(Target);
             }
-            if (R && spells[Spells.R].IsReady() && Target.IsValidTarget(spells[Spells.R].Range) && getRCalc(Target))
+            var t2 = TargetSelector.GetTarget(3000, TargetSelector.DamageType.Physical);
+            if (R && spells[Spells.R].IsReady() && t2.IsValidTarget(spells[Spells.R].Range))
             {
-                spells[Spells.R].Cast( Target);
+                switch (Config.Item("URCM").GetValue<StringList>().SelectedIndex)
+                {
+                    case 2:
+                        if (getRCalc(t2) || t2.Distance(Player) > 800) spells[Spells.R].Cast(t2);
+                        break;
+                    case 1:
+                        if (getRCalc(t2)) spells[Spells.R].Cast(t2);
+                        break;
+                    case 0:
+                        if (t2.Distance(Player) > 800) spells[Spells.R].Cast(t2);
+                        break;
+                }
             }
         }
 

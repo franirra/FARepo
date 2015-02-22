@@ -58,7 +58,8 @@ namespace FuckingAwesomeDraven
 
             for (var i = 0; i < AxeSpots.Count; i++)
             {
-                if (AxeSpots[i].AxeObj.Position.Distance(Game.CursorPos) < 120)
+                var turret = ObjectManager.Get<Obj_Turret>().FirstOrDefault(t => t.IsEnemy && t.Position.Distance(Player.Position) < 2000 && t.Health > 0);
+                if (turret != null && (AxeSpots[i].AxeObj.Position.Distance(Game.CursorPos) < 120 || (Program.Config.Item("ignoreTowerReticle").GetValue<bool>() && AxeSpots[i].AxeObj.Position.Distance(turret.Position) < 1400)))
                 {
                     AxeSpots.RemoveAt(i);
                     Notifications.AddNotification(new Notification("Removed Axe", 1));
@@ -68,14 +69,28 @@ namespace FuckingAwesomeDraven
 
         public static void Draw()
         {
+
+            if (Program.Config.Item("DKM").GetValue<Circle>().Active)
+            {
+                var a =
+                    MinionManager.GetMinions(
+                        Player.Position, 800, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth)
+                        .Where(minion => minion.Health <= RealAutoAttack(minion)).ToArray();
+                for (int i = 0; i < (a.Count() < 10 ? a.Count() : 10); i++)
+                {
+                    Render.Circle.DrawCircle(Player.Position, a[i].BoundingRadius + 20, Program.Config.Item("DKM").GetValue<Circle>().Color);
+                }
+            }
+
+
             if (Program.Config.Item("DE").GetValue<Circle>().Active)
             {
-                Render.Circle.DrawCircle(Player.Position, Program.spells[Spells.E].Range, Color.White);
+                Render.Circle.DrawCircle(Player.Position, Program.spells[Spells.E].Range, Program.Config.Item("DE").GetValue<Circle>().Color);
             }
 
             if (Program.Config.Item("DR").GetValue<Circle>().Active)
             {
-                Render.Circle.DrawCircle(Player.Position, Program.spells[Spells.R].Range, Color.White);
+                Render.Circle.DrawCircle(Player.Position, Program.spells[Spells.R].Range, Program.Config.Item("DR").GetValue<Circle>().Color);
             }
 
             if (Program.Config.Item("DCR").GetValue<Circle>().Active)
@@ -89,11 +104,11 @@ namespace FuckingAwesomeDraven
                         if (!target.IsValidTarget())
                             break;
                         Render.Circle.DrawCircle(
-                            target.Position, Program.Config.Item("catchRadius").GetValue<Slider>().Value, Color.White);
+                            target.Position, Program.Config.Item("catchRadius").GetValue<Slider>().Value, Program.Config.Item("DCR").GetValue<Circle>().Color);
                         break;
                     default:
                         Render.Circle.DrawCircle(
-                            Game.CursorPos, Program.Config.Item("catchRadius").GetValue<Slider>().Value, Color.White);
+                            Game.CursorPos, Program.Config.Item("catchRadius").GetValue<Slider>().Value, Program.Config.Item("DCR").GetValue<Circle>().Color);
                         break;
 
                 }
@@ -103,7 +118,7 @@ namespace FuckingAwesomeDraven
             {
                 foreach (var axe in AxeSpots)
                 {
-                    Render.Circle.DrawCircle(axe.AxeObj.Position, 120, Color.White);
+                    Render.Circle.DrawCircle(axe.AxeObj.Position, 120, Program.Config.Item("DAR").GetValue<Circle>().Color);
                 }
             }
 
@@ -111,14 +126,14 @@ namespace FuckingAwesomeDraven
             {
                 Drawing.DrawText(
                     Drawing.WorldToScreen(Player.Position).X - 70, Drawing.WorldToScreen(Player.Position).Y + 60,
-                    Color.White, "Current Axes: " + CurrentAxes);
+                    Program.Config.Item("DCA").GetValue<Circle>().Color, "Current Axes: " + CurrentAxes);
             }
 
             if (Program.Config.Item("DCS").GetValue<Circle>().Active)
             {
                 Drawing.DrawText(
                     Drawing.WorldToScreen(Player.Position).X - 70, Drawing.WorldToScreen(Player.Position).Y + 40,
-                    Color.White, "Catching Active:  " + Program.Config.Item("catching").GetValue<KeyBind>().Active);
+                    Program.Config.Item("DCS").GetValue<Circle>().Color, "Catching Active:  " + Program.Config.Item("catching").GetValue<KeyBind>().Active);
             }
         }
 
@@ -175,6 +190,11 @@ namespace FuckingAwesomeDraven
             var axeMinValue = int.MaxValue;
             Axe selectedAxe = null;
 
+            if (GetTarget() != null && GetTarget().IsValidTarget())
+            {
+                Orbwalker.ForceTarget(GetTarget() as Obj_AI_Base);
+            }
+
             foreach (var axe in AxeSpots.Where(a => a.AxeObj.IsValid))
             {
                 if (axeMinValue > axe.EndTick)
@@ -207,8 +227,7 @@ namespace FuckingAwesomeDraven
                 if ((Player.AttackDelay +
                      ((Player.Distance(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 100)) / Player.MoveSpeed) *
                       1000) + Environment.TickCount < selectedAxe.EndTick &&
-                     GetTarget().IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CanAa ||
-                     Player.Distance(selectedAxe.AxeObj.Position) <= 120))
+                     GetTarget().IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CanAa || Player.Distance(selectedAxe.AxeObj.Position) <= 110))
                 {
                     Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                     Orbwalker.SetAttack(true);
@@ -216,7 +235,10 @@ namespace FuckingAwesomeDraven
                     return;
                 }
             }
-                if (Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() &&
+
+            if (selectedAxe == null) return;;
+
+            if (AxeSpots.Count == 2 && Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() &&
                     selectedAxe.AxeObj.Position.Distance(Player.Position) >
                     ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed)) &&
                     (selectedAxe.AxeObj.Position.Distance(Player.Position) <
@@ -226,7 +248,7 @@ namespace FuckingAwesomeDraven
                 {
                     Program.spells[Spells.W].Cast();
                     Orbwalker.SetMovement(true);
-                    Orbwalker.SetOrbwalkingPoint(selectedAxe.AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 95));
+                    Orbwalker.SetOrbwalkingPoint(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
                     return;
                 }
                 Orbwalker.SetMovement(true);
