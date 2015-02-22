@@ -192,21 +192,34 @@ namespace FuckingAwesomeDraven
                     return;
                 }
             }
-
-            if (selectedAxe == null || AxeSpots.Count == 0 || Player.Distance(selectedAxe.AxeObj.Position) <= 110 || GetTarget().IsValid<Obj_AI_Hero>() && Player.GetAutoAttackDamage(GetTarget() as Obj_AI_Base) * 2 > GetTarget().Health || !Program.Config.Item("catching").GetValue<KeyBind>().Active || !InCatchRadius(selectedAxe))
+            if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
             {
-                Orbwalk(Game.CursorPos);
-                return;
-            }
-            if ((Player.AttackDelay + ((Player.Distance(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 100))/Player.MoveSpeed)*1000) +
-                Environment.TickCount < selectedAxe.EndTick && GetTarget().IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CanAa || Player.Distance(selectedAxe.AxeObj.Position) <= 120))
-            {
-                Orbwalk(Game.CursorPos);
+                if (selectedAxe == null || AxeSpots.Count == 0 || Player.Distance(selectedAxe.AxeObj.Position) <= 110 ||
+                    GetTarget().IsValid<Obj_AI_Hero>() &&
+                    Player.GetAutoAttackDamage(GetTarget() as Obj_AI_Base) * 2 > GetTarget().Health ||
+                    !Program.Config.Item("catching").GetValue<KeyBind>().Active || !InCatchRadius(selectedAxe))
+                {
+                    Orbwalk(Game.CursorPos);
+                    return;
+                }
+                if ((Player.AttackDelay +
+                     ((Player.Distance(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 100)) / Player.MoveSpeed) *
+                      1000) + Environment.TickCount < selectedAxe.EndTick &&
+                     GetTarget().IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CanAa ||
+                     Player.Distance(selectedAxe.AxeObj.Position) <= 120))
+                {
+                    Orbwalk(Game.CursorPos);
+                }
             }
             else if (CanMove)
             {
-                if (Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() && selectedAxe.AxeObj.Position.Distance(Player.Position) > ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed)) &&
-                    (selectedAxe.AxeObj.Position.Distance(Player.Position) < ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed * new[] { 1.40f, 1.45f, 1.50f, 1.55f, 1.60f }[Program.spells[Spells.W].Level - 1]))))
+                if (Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() &&
+                    selectedAxe.AxeObj.Position.Distance(Player.Position) >
+                    ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed)) &&
+                    (selectedAxe.AxeObj.Position.Distance(Player.Position) <
+                     ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) *
+                      (Player.MoveSpeed *
+                       new[] { 1.40f, 1.45f, 1.50f, 1.55f, 1.60f }[Program.spells[Spells.W].Level - 1]))))
                 {
                     Program.spells[Spells.W].Cast();
                     Orbwalk(selectedAxe.AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 95), true);

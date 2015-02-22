@@ -115,7 +115,7 @@ namespace FuckingAwesomeDraven
 
         static void Game_OnGameUpdate(EventArgs args)
         {
-            if(Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None) AxeCatcher.catchAxes();
+            AxeCatcher.catchAxes();
             switch (Orbwalker.ActiveMode)
             {
                     case Orbwalking.OrbwalkingMode.Combo:
