@@ -86,6 +86,14 @@ namespace FuckingAwesomeDraven
             draw.AddItem(new MenuItem("DCR", "Draw Catch Radius").SetValue(new Circle(true, System.Drawing.Color.White)));
             draw.AddItem(new MenuItem("DAR", "Draw Axe Spots").SetValue(new Circle(true, System.Drawing.Color.White)));
 
+            var Info = Config.AddSubMenu(new Menu("Information", "info"));
+            Info.AddItem(new MenuItem("Msddsds", "if you would like to donate via paypal"));
+            Info.AddItem(new MenuItem("Msdsddsd", "you can do so by sending money to:"));
+            Info.AddItem(new MenuItem("Msdsadfdsd", "jayyeditsdude@gmail.com"));
+
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.2-1"));
+            Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
+
             Config.AddToMainMenu();
 
             Notifications.AddNotification(new Notification("Fucking Awesome Draven - Loaded", 5));
