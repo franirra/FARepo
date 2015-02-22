@@ -128,7 +128,7 @@ namespace FuckingAwesomeDraven
 
         public static bool hasQBuff {get{ return Player.Buffs.Any(a => a.DisplayName.ToLower().Contains("spinning"));}}
 
-        public static bool canAA { get { return Environment.TickCount >= LastAA + Player.AttackDelay * 1000 + (Game.Ping / 2); } }
+        public static bool canAA { get { return Environment.TickCount >= LastAA + Player.AttackDelay * 1000 + + (Game.Ping / 2); } }
 
         public static bool isCatching { get { return AxeSpots.Count > 0; } }
 
@@ -169,6 +169,7 @@ namespace FuckingAwesomeDraven
                 if (AxeSpots[i].EndTick < Environment.TickCount)
                 {
                     AxeSpots.RemoveAt(i);
+                    return;
                 }
             }
 
@@ -185,22 +186,19 @@ namespace FuckingAwesomeDraven
                 }
                 return;
             }
-            return;
             if ((Player.AttackCastDelay + ((Player.Distance(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 100))/Player.MoveSpeed)*1000) +
                 Environment.TickCount < selectedAxe.EndTick && GetTarget().IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && canAA || Player.Distance(selectedAxe.AxeObj.Position) <= 120))
             {
                 if (GetTarget() == null) return;
                 Player.IssueOrder(GameObjectOrder.AttackUnit, GetTarget());
-                return;
             }
-            if ((LastAA + Player.AttackCastDelay*1000 + (Game.Ping*0.5) + Program.Config.Item("ExtraWindup").GetValue<Slider>().Value < Environment.TickCount))
+            else if ((LastAA + Player.AttackCastDelay*1000 + (Game.Ping*0.5) + Program.Config.Item("ExtraWindup").GetValue<Slider>().Value < Environment.TickCount))
             {
                 if (Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() && selectedAxe.AxeObj.Position.Distance(Player.Position) > ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed)) &&
                     (selectedAxe.AxeObj.Position.Distance(Player.Position) < ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed * new[] { 1.40f, 1.45f, 1.50f, 1.55f, 1.60f }[Program.spells[Spells.W].Level - 1]))))
                 {
                     Program.spells[Spells.W].Cast();
                     Player.IssueOrder(GameObjectOrder.MoveTo, AxeSpots[0].AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 100));
-                    return;
                 }
 
                 if (AxeSpots.Count == 2)
@@ -208,6 +206,7 @@ namespace FuckingAwesomeDraven
                     Player.IssueOrder(GameObjectOrder.MoveTo, AxeSpots[0].AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 100));
                     return;
                 }
+
                 Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 100));
             }
         }
@@ -294,7 +293,6 @@ namespace FuckingAwesomeDraven
 
         private static bool ShouldWait()
         {
-            return false;
             return
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Any(
