@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
 using Color = System.Drawing.Color;
 
 namespace FuckingAwesomeDraven
@@ -147,6 +148,26 @@ namespace FuckingAwesomeDraven
                            Program.Config.Item("catchRadius").GetValue<Slider>().Value;
         }
 
+        public static void Orbwalk(Vector3 pos, bool moveOnly = false)
+        {
+            if (!pos.IsValid())
+                pos = Game.CursorPos;
+
+            if (CanAa && GetTarget() != null)
+            {
+                Player.IssueOrder(GameObjectOrder.AttackUnit, GetTarget());
+            }
+            else if (CanMove && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+            {
+                if (Player.Distance(pos) < 10 || Game.CursorPos.Distance(Player.Position) > Program.Config.Item("HoldPosRadius").GetValue<Slider>().Value)
+                {
+                    Player.IssueOrder(GameObjectOrder.HoldPosition, Player.Position);
+                    return;
+                }
+                Player.IssueOrder(GameObjectOrder.MoveTo, pos);
+            }
+        }
+
         public static void catchAxes()
         {
             Orbwalker.SetAttack(false);
@@ -172,24 +193,15 @@ namespace FuckingAwesomeDraven
                 }
             }
 
-            if (selectedAxe == null || AxeSpots.Count == 0 || Player.Distance(selectedAxe.AxeObj.Position) < 110 || GetTarget().IsValid<Obj_AI_Hero>() && Player.GetAutoAttackDamage(GetTarget() as Obj_AI_Base) * 2 > GetTarget().Health || !Program.Config.Item("catching").GetValue<KeyBind>().Active || !InCatchRadius(selectedAxe))
+            if (selectedAxe == null || AxeSpots.Count == 0 || Player.Distance(selectedAxe.AxeObj.Position) <= 110 || GetTarget().IsValid<Obj_AI_Hero>() && Player.GetAutoAttackDamage(GetTarget() as Obj_AI_Base) * 2 > GetTarget().Health || !Program.Config.Item("catching").GetValue<KeyBind>().Active || !InCatchRadius(selectedAxe))
             {
-                if (CanAa && GetTarget() != null)
-                {
-                    Player.IssueOrder(GameObjectOrder.AttackUnit, GetTarget());
-                    return;
-                }
-                if (CanMove && Game.CursorPos.Distance(Player.Position) > Program.Config.Item("HoldPosRadius").GetValue<Slider>().Value && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
-                {
-                    Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-                }
+                Orbwalk(Game.CursorPos);
                 return;
             }
             if ((Player.AttackDelay + ((Player.Distance(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 100))/Player.MoveSpeed)*1000) +
                 Environment.TickCount < selectedAxe.EndTick && GetTarget().IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CanAa || Player.Distance(selectedAxe.AxeObj.Position) <= 120))
             {
-                if (GetTarget() == null) return;
-                Player.IssueOrder(GameObjectOrder.AttackUnit, GetTarget());
+                Orbwalk(Game.CursorPos);
             }
             else if (CanMove)
             {
@@ -197,15 +209,10 @@ namespace FuckingAwesomeDraven
                     (selectedAxe.AxeObj.Position.Distance(Player.Position) < ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed * new[] { 1.40f, 1.45f, 1.50f, 1.55f, 1.60f }[Program.spells[Spells.W].Level - 1]))))
                 {
                     Program.spells[Spells.W].Cast();
-                    Player.IssueOrder(GameObjectOrder.MoveTo, AxeSpots[0].AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 100));
+                    Orbwalk(selectedAxe.AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 95), true);
                 }
 
-                if (AxeSpots.Count == 2)
-                {
-                    Player.IssueOrder(GameObjectOrder.MoveTo, AxeSpots[0].AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 100));
-                    return;
-                }
-                Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 100));
+                Orbwalk(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95), true);
             }
         }
 
