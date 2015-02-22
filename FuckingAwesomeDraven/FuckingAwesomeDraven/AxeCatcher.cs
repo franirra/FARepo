@@ -199,7 +199,8 @@ namespace FuckingAwesomeDraven
                     Player.GetAutoAttackDamage(GetTarget() as Obj_AI_Base) * 2 > GetTarget().Health ||
                     !Program.Config.Item("catching").GetValue<KeyBind>().Active || !InCatchRadius(selectedAxe))
                 {
-                    Orbwalk(Game.CursorPos);
+                    Orbwalker.SetAttack(true);
+                    Orbwalker.SetMovement(true);
                     return;
                 }
                 if ((Player.AttackDelay +
@@ -208,7 +209,8 @@ namespace FuckingAwesomeDraven
                      GetTarget().IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CanAa ||
                      Player.Distance(selectedAxe.AxeObj.Position) <= 120))
                 {
-                    Orbwalk(Game.CursorPos);
+                    Orbwalker.SetAttack(true);
+                    Orbwalker.SetMovement(true);
                 }
             }
             else if (CanMove)
@@ -222,10 +224,11 @@ namespace FuckingAwesomeDraven
                        new[] { 1.40f, 1.45f, 1.50f, 1.55f, 1.60f }[Program.spells[Spells.W].Level - 1]))))
                 {
                     Program.spells[Spells.W].Cast();
-                    Orbwalk(selectedAxe.AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 95), true);
+                    Orbwalker.SetMovement(true);
+                    Orbwalker.SetOrbwalkingPoint(selectedAxe.AxeObj.Position.Extend(AxeSpots[1].AxeObj.Position, 95));
                 }
-
-                Orbwalk(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95), true);
+                Orbwalker.SetMovement(true);
+                Orbwalker.SetOrbwalkingPoint(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
             }
         }
 
