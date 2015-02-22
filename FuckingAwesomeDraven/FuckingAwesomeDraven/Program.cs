@@ -25,6 +25,7 @@ namespace FuckingAwesomeDraven
         };
 
         public static Orbwalking.Orbwalker Orbwalker;
+
         public static Menu Config;
         public static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
@@ -33,7 +34,6 @@ namespace FuckingAwesomeDraven
             if (ObjectManager.Player.ChampionName != "Draven")
             {
                 Notifications.AddNotification(new Notification("Not Draven? Draaaaaaaaaven.", 5));
-                return;
             }
 
             Config = new Menu("FuckingAwesomeDraven", "FuckingAwesomeDraven", true);
@@ -94,6 +94,9 @@ namespace FuckingAwesomeDraven
             spells[Spells.E].SetSkillshot(250f, 130f, 1400f, false, SkillshotType.SkillshotLine);
             spells[Spells.R].SetSkillshot(400f, 160f, 2000f, false, SkillshotType.SkillshotLine);
 
+            Orbwalker.SetAttack(false);
+            Orbwalker.SetMovement(false);
+
             GameObject.OnCreate += AxeCatcher.OnCreate;
             GameObject.OnDelete += AxeCatcher.OnDelete;
             Obj_AI_Hero.OnProcessSpellCast += AxeCatcher.Obj_AI_Hero_OnProcessSpellCast;
@@ -104,7 +107,7 @@ namespace FuckingAwesomeDraven
 
         static void Game_OnGameUpdate(EventArgs args)
         {
-            AxeCatcher.catchAxes();
+            if(Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None) AxeCatcher.catchAxes();
             switch (Orbwalker.ActiveMode)
             {
                     case Orbwalking.OrbwalkingMode.Combo:
