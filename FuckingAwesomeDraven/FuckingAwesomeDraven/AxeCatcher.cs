@@ -180,7 +180,7 @@ namespace FuckingAwesomeDraven
                     Player.IssueOrder(GameObjectOrder.AttackUnit, GetTarget());
                     return;
                 }
-                if ((LastAA + (Player.AttackCastDelay*1000) + (Game.Ping*0.5) + Program.Config.Item("ExtraWindup").GetValue<Slider>().Value < Environment.TickCount) && Game.CursorPos.Distance(Player.Position) > Program.Config.Item("HoldPosRadius").GetValue<Slider>().Value && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+                if ((LastAA + (Player.AttackCastDelay*1000) + (Game.Ping*0.5) + 500 + Program.Config.Item("ExtraWindup").GetValue<Slider>().Value < Environment.TickCount) && Game.CursorPos.Distance(Player.Position) > Program.Config.Item("HoldPosRadius").GetValue<Slider>().Value && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                 {
                     Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 }
@@ -192,7 +192,7 @@ namespace FuckingAwesomeDraven
                 if (GetTarget() == null) return;
                 Player.IssueOrder(GameObjectOrder.AttackUnit, GetTarget());
             }
-            else if ((LastAA + Player.AttackCastDelay*1000 + (Game.Ping*0.5) + Program.Config.Item("ExtraWindup").GetValue<Slider>().Value < Environment.TickCount))
+            else if ((LastAA + Player.AttackCastDelay*1000 + (Game.Ping*0.5) + 500 + Program.Config.Item("ExtraWindup").GetValue<Slider>().Value < Environment.TickCount))
             {
                 if (Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() && selectedAxe.AxeObj.Position.Distance(Player.Position) > ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed)) &&
                     (selectedAxe.AxeObj.Position.Distance(Player.Position) < ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed * new[] { 1.40f, 1.45f, 1.50f, 1.55f, 1.60f }[Program.spells[Spells.W].Level - 1]))))
