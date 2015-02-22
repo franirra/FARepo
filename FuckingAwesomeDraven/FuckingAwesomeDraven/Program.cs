@@ -134,7 +134,7 @@ namespace FuckingAwesomeDraven
             if (!t.IsValidTarget() || !t.IsValid<Obj_AI_Hero>()) return;
             var Target = (Obj_AI_Hero) t;
 
-            if (Q && AxeCatcher.LastAA + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
+            if (Q && AxeCatcher.LastAa + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
                 AxeCatcher.AxeSpots.Count + AxeCatcher.CurrentAxes < 2 && Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
             {
                 spells[Spells.Q].Cast();
@@ -164,7 +164,7 @@ namespace FuckingAwesomeDraven
             if (!t.IsValidTarget() || !t.IsValid<Obj_AI_Hero>()) return;
             var Target = (Obj_AI_Hero) t;
 
-            if (Q && AxeCatcher.LastAA + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
+            if (Q && AxeCatcher.LastAa + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
                 AxeCatcher.AxeSpots.Count + AxeCatcher.CurrentAxes < 2 && Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
             {
                 spells[Spells.Q].Cast();
@@ -189,7 +189,7 @@ namespace FuckingAwesomeDraven
             var Target = MinionManager.GetMinions(
                 Player.Position, 700, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (Q && AxeCatcher.LastAA + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
+            if (Q && AxeCatcher.LastAa + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
                 AxeCatcher.AxeSpots.Count + AxeCatcher.CurrentAxes < 2 && Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
             {
                 spells[Spells.Q].Cast();
@@ -211,7 +211,7 @@ namespace FuckingAwesomeDraven
             var Target = MinionManager.GetMinions(
                 Player.Position, 700, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(a => !a.Name.ToLower().Contains("ward"));
 
-            if (Q && AxeCatcher.LastAA + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
+            if (Q && AxeCatcher.LastAa + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
                 AxeCatcher.AxeSpots.Count + AxeCatcher.CurrentAxes < 2 && Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
             {
                 spells[Spells.Q].Cast();
