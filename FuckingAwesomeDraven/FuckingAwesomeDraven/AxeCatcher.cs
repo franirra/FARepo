@@ -293,6 +293,7 @@ namespace FuckingAwesomeDraven
 
         private static bool ShouldWait()
         {
+            return false;
             return
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Any(
