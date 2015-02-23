@@ -50,7 +50,7 @@ namespace FuckingAwesomeDraven
             ComboMenu.AddItem(new MenuItem("UWC", "Use W").SetValue(true));
             ComboMenu.AddItem(new MenuItem("UEC", "Use E").SetValue(true));
             ComboMenu.AddItem(new MenuItem("URC", "Use R").SetValue(true));
-            ComboMenu.AddItem(new MenuItem("URCM", "R Mode").SetValue(new StringList(new []{"Out of Range", "Execute", "Both"}, 1)));
+            ComboMenu.AddItem(new MenuItem("URCM", "R Mode").SetValue(new StringList(new []{"Out of Range KS", "KS (any time)"}, 0)));
             ComboMenu.AddItem(new MenuItem("forceR", "Force R on Target").SetValue(new KeyBind('T', KeyBindType.Press)));
 
             var HarassMenu = Config.AddSubMenu(new Menu("Harass", "Harass"));
@@ -67,6 +67,7 @@ namespace FuckingAwesomeDraven
             JungleMenu.AddItem(new MenuItem("UEJ", "Use E").SetValue(true));
             JungleMenu.AddItem(new MenuItem("sdffdsdf", "Wave Clear"));
             JungleMenu.AddItem(new MenuItem("UQWC", "Use Q").SetValue(true));
+            JungleMenu.AddItem(new MenuItem("WCM", "Min Mana for Waveclear (%)").SetValue(new Slider(20, 0, 100)));
 
             // Axe Menu
             var axe = Config.AddSubMenu(new Menu("Axe Catching", "Axe Catching"));
@@ -83,7 +84,7 @@ namespace FuckingAwesomeDraven
             Antispells.init();
 
             var draw = Config.AddSubMenu(new Menu("Draw", "Draw"));
-
+            draw.AddItem(new MenuItem("DABR", "Disable All Drawings but Reticle").SetValue(false));
             draw.AddItem(new MenuItem("DE", "Draw E Range").SetValue(new Circle(false, System.Drawing.Color.White)));
             draw.AddItem(new MenuItem("DR", "Draw R Range").SetValue(new Circle(false, System.Drawing.Color.White)));
             draw.AddItem(new MenuItem("DCS", "Draw Catching State").SetValue(new Circle(true, System.Drawing.Color.White)));
@@ -97,7 +98,7 @@ namespace FuckingAwesomeDraven
             Info.AddItem(new MenuItem("Msdsddsd", "you can do so by sending money to:"));
             Info.AddItem(new MenuItem("Msdsadfdsd", "jayyeditsdude@gmail.com"));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.3-1"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.4-0"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();
@@ -176,14 +177,11 @@ namespace FuckingAwesomeDraven
             {
                 switch (Config.Item("URCM").GetValue<StringList>().SelectedIndex)
                 {
-                    case 2:
-                        if (getRCalc(t2) || t2.Distance(Player) > 800) spells[Spells.R].Cast(t2);
-                        break;
                     case 1:
                         if (getRCalc(t2)) spells[Spells.R].Cast(t2);
                         break;
-                    case 0:
-                        if (t2.Distance(Player) > 800) spells[Spells.R].Cast(t2);
+                    case 0: 
+                        if (getRCalc(t2) && t2.Distance(Player) > 800) spells[Spells.R].Cast(t2);
                         break;
                 }
             }
@@ -245,7 +243,8 @@ namespace FuckingAwesomeDraven
             var Q = Config.Item("UQWC").GetValue<bool>();
             var Target = MinionManager.GetMinions(
                 Player.Position, 700, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(a => !a.Name.ToLower().Contains("ward"));
-
+            if (Config.Item("WCM").GetValue<Slider>().Value > (Player.Mana / Player.MaxMana * 100))
+                return;
             if (Q && AxeCatcher.LastAa + 300 < Environment.TickCount && spells[Spells.Q].IsReady() &&
                 AxeCatcher.AxeSpots.Count + AxeCatcher.CurrentAxes < 2 && Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
             {
