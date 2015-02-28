@@ -250,6 +250,7 @@ namespace FuckingAwesomeRiven
                     addQAA(true);
                     return;
                 }
+
                 if (MenuHandler.getMenuBool("CR2W") && SH._spells[SpellSlot.W].IsReady() &&
                     SpellHandler._spells[SpellSlot.R].GetDamage(Target) +
                     SpellHandler._spells[SpellSlot.W].GetDamage(Target) > Target.Health)
@@ -258,6 +259,7 @@ namespace FuckingAwesomeRiven
                     Queuer.add("W");
                     return;
                 }
+
                 if (MenuHandler.getMenuBool("CR2Q") && SH._spells[SpellSlot.Q].IsReady() &&
                     SpellHandler._spells[SpellSlot.R].GetDamage(Target) +
                     SpellHandler._spells[SpellSlot.Q].GetDamage(Target) > Target.Health)
@@ -266,6 +268,7 @@ namespace FuckingAwesomeRiven
                     addQAA(true);
                     return;
                 }
+
                 if (MenuHandler.getMenuBool("CR2CC") &&
                     SpellHandler._spells[SpellSlot.R].GetDamage(Target) > Target.Health)
                 {
@@ -358,11 +361,12 @@ namespace FuckingAwesomeRiven
             {
                 Queuer.add("E", Target.Position);
                 Queuer.add("R");
+                Queuer.add("Q");
                 Queuer.add("W");
                 Queuer.add("Hydra");
                 Queuer.add("AA");
-                Queuer.add("R2", Target);
                 Queuer.add("Q");
+                Queuer.add("R2", Target);
                 return;
             }
 
