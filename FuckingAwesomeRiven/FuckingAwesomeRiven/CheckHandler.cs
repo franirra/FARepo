@@ -137,11 +137,8 @@ namespace FuckingAwesomeRiven
 
             if (spell.Name.Contains("RivenFengShuiEngine"))
             {
+                RState = true;
                 Queuer.remove("R");
-                if (MenuHandler.Config.Item("autoCancelR1").GetValue<bool>())
-                {
-                    Queuer.add("E", Game.CursorPos);
-                }
                 LastFr = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
@@ -150,18 +147,13 @@ namespace FuckingAwesomeRiven
                 {
                     PassiveStacks = PassiveStacks + 1;
                 }
-
-                RState = true;
                 FullComboState = 1;
             }
 
             if (spell.Name.Contains("rivenizunablade"))
             {
+                RState = false;
                 Queuer.remove("R2");
-                if (MenuHandler.Config.Item("autoCancelR1").GetValue<bool>())
-                {
-                    Queuer.add("Q");
-                }
                 Queuer.R2Target = null;
                 LastPassive = Environment.TickCount;
 
@@ -170,7 +162,6 @@ namespace FuckingAwesomeRiven
                     PassiveStacks = PassiveStacks + 1;
                 }
                 LastR2 = Environment.TickCount;
-                RState = false;
                 CanSr = false;
                 FullComboState = 3;
             }

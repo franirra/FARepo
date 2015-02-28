@@ -181,10 +181,10 @@ namespace FuckingAwesomeRiven
             var comboRDmg = DamageHandler.getComboDmg(true, Target);
             var comboNoR = DamageHandler.getComboDmg(false, Target);
 
-            if (MenuHandler.getMenuBool("CR") &&
+            if (SH._spells[SpellSlot.R].IsReady() &&
+                !CH.RState && MenuHandler.getMenuBool("CR") &&
                 (MenuHandler.Config.Item("forcedR").GetValue<KeyBind>().Active ||
-                 comboNoR < Target.Health && comboRDmg > Target.Health) && SH._spells[SpellSlot.R].IsReady() &&
-                !CH.RState)
+                 comboNoR < Target.Health && comboRDmg > Target.Health))
             {
                 if (MenuHandler.getMenuBool("CREWHQ") && SH._spells[SpellSlot.Q].IsReady() &&
                     SH._spells[SpellSlot.W].IsReady() && SH._spells[SpellSlot.E].IsReady() &&
