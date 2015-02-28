@@ -16,7 +16,7 @@
 
 #region
 
-using LeagueSharp;
+
 
 #endregion
 
@@ -28,7 +28,7 @@ namespace FuckingAwesomeRiven.EvadeUtils
         public bool CanBeRemoved = false;
         public bool Centered;
         public string ChampionName;
-        public CollisionObjectTypes[] CollisionObjects = { };
+        public CollisionObjectTypes[] CollisionObjects = {};
         public int DangerValue;
         public int Delay;
         public bool DisableFowDetection = false;
@@ -36,13 +36,13 @@ namespace FuckingAwesomeRiven.EvadeUtils
         public bool DontCross = false;
         public bool DontRemove = false;
         public int ExtraDuration;
-        public string[] ExtraMissileNames = { };
+        public string[] ExtraMissileNames = {};
         public int ExtraRange = -1;
-        public string[] ExtraSpellNames = { };
+        public string[] ExtraSpellNames = {};
         public bool FixedRange;
         public bool ForceRemove = false;
-        public string FromObject = "";
-        public string[] FromObjects = { };
+        public string FromObject = string.Empty;
+        public string[] FromObjects = {};
         public int Id = -1;
         public bool Invert;
         public bool IsDangerous = false;
@@ -52,18 +52,18 @@ namespace FuckingAwesomeRiven.EvadeUtils
         public int MissileMaxSpeed;
         public int MissileMinSpeed;
         public int MissileSpeed;
-        public string MissileSpellName = "";
+        public string MissileSpellName = string.Empty;
         public float MultipleAngle;
         public int MultipleNumber = -1;
         public int RingRadius;
         public SpellSlot Slot;
         public string SpellName;
-        public string ToggleParticleName = "";
+        public string ToggleParticleName = string.Empty;
         public SkillShotType Type;
-        private int _radius;
-        private int _range;
 
-        public SpellData() { }
+        public SpellData()
+        {
+        }
 
         public SpellData(string championName,
             string spellName,
@@ -83,7 +83,7 @@ namespace FuckingAwesomeRiven.EvadeUtils
             Type = type;
             Delay = delay;
             Range = range;
-            _radius = radius;
+            Radius = radius;
             MissileSpeed = missileSpeed;
             AddHitbox = addHitbox;
             FixedRange = fixedRange;
@@ -95,26 +95,19 @@ namespace FuckingAwesomeRiven.EvadeUtils
             get { return ChampionName + " - " + SpellName; }
         }
 
-        public int Radius
-        {
-            get { return _radius; }
-            set { _radius = value; }
-        }
+        public int Radius { get; set; }
 
         public int RawRadius
         {
-            get { return _radius; }
+            get { return Radius; }
         }
 
-        public int RawRange
-        {
-            get { return _range; }
-        }
+        public int RawRange { get; private set; }
 
         public int Range
         {
-            get { return _range; }
-            set { _range = value; }
+            get { return RawRange; }
+            set { RawRange = value; }
         }
     }
 }

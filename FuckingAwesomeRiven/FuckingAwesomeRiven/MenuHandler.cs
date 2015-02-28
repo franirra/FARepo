@@ -10,9 +10,9 @@ namespace FuckingAwesomeRiven
     {
         public static Orbwalking.Orbwalker Orbwalker;
         public static Menu Config;
-        public static List<jumpPosition> j = new List<jumpPosition>();
+        public static List<JumpPosition> J = new List<JumpPosition>();
 
-        public static void initMenu()
+        public static void InitMenu()
         {
             Config = new Menu("FuckingAwesomeRiven", "KappaChino", true);
 
@@ -22,25 +22,25 @@ namespace FuckingAwesomeRiven
             var combo = Config.AddSubMenu(new Menu("Combo", "Combo"));
             combo.AddItem(new MenuItem("xdxdxdxd", "-- Normal Combo"));
 
-            combo.AddItem(new MenuItem("QAA", "Q AA Mode").SetValue(new StringList(new[] { "Q -> AA", "AA -> Q" })));
+            combo.AddItem(new MenuItem("QAA", "Q AA Mode").SetValue(new StringList(new[] {"Q -> AA", "AA -> Q"})));
             var gcM = combo.AddSubMenu(new Menu("Gapcloser Combos", "Gapcloser Combos"));
             gcM.AddItem(new MenuItem("CEWHQ", "E->W->Hy->Q").SetValue(true));
             gcM.AddItem(new MenuItem("CQWH", "Q->W->Hy").SetValue(true));
             gcM.AddItem(new MenuItem("CEHQ", "E->Hy->Q").SetValue(true));
             gcM.AddItem(new MenuItem("CEW", "E->W").SetValue(true));
 
-            var R1Combo = combo.AddSubMenu(new Menu("R1 Combos", "R1 Combos"));
-            R1Combo.AddItem(new MenuItem("CREWHQ", "R->E->W->Hy->Q").SetValue(true));
-            R1Combo.AddItem(new MenuItem("CREWH", "R->E->W->Hy").SetValue(true));
-            R1Combo.AddItem(new MenuItem("CREAAHQ", "R->E->AA->Hy->Q").SetValue(true));
-            R1Combo.AddItem(new MenuItem("CRWAAHQ", "R->W->AA->Hy-Q").SetValue(true));
-            R1Combo.AddItem(new MenuItem("CR1CC", "R").SetValue(true));
+            var r1Combo = combo.AddSubMenu(new Menu("R1 Combos", "R1 Combos"));
+            r1Combo.AddItem(new MenuItem("CREWHQ", "R->E->W->Hy->Q").SetValue(true));
+            r1Combo.AddItem(new MenuItem("CREWH", "R->E->W->Hy").SetValue(true));
+            r1Combo.AddItem(new MenuItem("CREAAHQ", "R->E->AA->Hy->Q").SetValue(true));
+            r1Combo.AddItem(new MenuItem("CRWAAHQ", "R->W->AA->Hy-Q").SetValue(true));
+            r1Combo.AddItem(new MenuItem("CR1CC", "R").SetValue(true));
 
-            var R2Combo = combo.AddSubMenu(new Menu("R2 Combos", "R2 Combos"));
-            R2Combo.AddItem(new MenuItem("CR2WQ", "R2->W->Q").SetValue(true));
-            R2Combo.AddItem(new MenuItem("CR2W", "R2->W").SetValue(true));
-            R2Combo.AddItem(new MenuItem("CR2Q", "R2->Q").SetValue(true));
-            R2Combo.AddItem(new MenuItem("CR2CC", "R2").SetValue(true));
+            var r2Combo = combo.AddSubMenu(new Menu("R2 Combos", "R2 Combos"));
+            r2Combo.AddItem(new MenuItem("CR2WQ", "R2->W->Q").SetValue(true));
+            r2Combo.AddItem(new MenuItem("CR2W", "R2->W").SetValue(true));
+            r2Combo.AddItem(new MenuItem("CR2Q", "R2->Q").SetValue(true));
+            r2Combo.AddItem(new MenuItem("CR2CC", "R2").SetValue(true));
 
             combo.AddItem(new MenuItem("CQ", "Use Q").SetValue(true));
             combo.AddItem(new MenuItem("CW", "Use W").SetValue(true));
@@ -89,35 +89,35 @@ namespace FuckingAwesomeRiven
             misc.AddItem(new MenuItem("QFlee", "Q Flee").SetValue(true));
             misc.AddItem(new MenuItem("EFlee", "E Flee").SetValue(true));
 
-            var Keybindings = Config.AddSubMenu(new Menu("Key Bindings", "KB"));
-            Keybindings.AddItem(
+            var keyBindings = Config.AddSubMenu(new Menu("Key Bindings", "KB"));
+            keyBindings.AddItem(
                 new MenuItem("normalCombo", "Normal Combo").SetValue(new KeyBind(32, KeyBindType.Press)));
-            Keybindings.AddItem(new MenuItem("burstCombo", "Burst Combo").SetValue(new KeyBind('M', KeyBindType.Press)));
-            Keybindings.AddItem(
+            keyBindings.AddItem(new MenuItem("burstCombo", "Burst Combo").SetValue(new KeyBind('M', KeyBindType.Press)));
+            keyBindings.AddItem(
                 new MenuItem("jungleCombo", "Jungle Clear").SetValue(new KeyBind('C', KeyBindType.Press)));
-            Keybindings.AddItem(new MenuItem("waveClear", "WaveClear").SetValue(new KeyBind('C', KeyBindType.Press)));
-            Keybindings.AddItem(new MenuItem("lastHit", "LastHit").SetValue(new KeyBind('X', KeyBindType.Press)));
-            Keybindings.AddItem(new MenuItem("flee", "Flee").SetValue(new KeyBind('Z', KeyBindType.Press)));
-            Keybindings.AddItem(
+            keyBindings.AddItem(new MenuItem("waveClear", "WaveClear").SetValue(new KeyBind('C', KeyBindType.Press)));
+            keyBindings.AddItem(new MenuItem("lastHit", "LastHit").SetValue(new KeyBind('X', KeyBindType.Press)));
+            keyBindings.AddItem(new MenuItem("flee", "Flee").SetValue(new KeyBind('Z', KeyBindType.Press)));
+            keyBindings.AddItem(
                 new MenuItem("forcedR", "Forced R Enabled in Combo").SetValue(
-                    new KeyBind('T', KeyBindType.Toggle, false)));
+                    new KeyBind('T', KeyBindType.Toggle)));
 
             Config.AddSubMenu(new Menu("Anti Spells", "Anti Spells"));
 
-            AutoE.init();
+            AutoE.Init();
 
             Antispells.Init();
 
-            var Info = Config.AddSubMenu(new Menu("Information", "info"));
-            Info.AddItem(new MenuItem("Msddsds", "if you would like to donate via paypal"));
-            Info.AddItem(new MenuItem("Msdsddsd", "you can do so by sending money to:"));
-            Info.AddItem(new MenuItem("Msdsadfdsd", "jayyeditsdude@gmail.com"));
-            Info.AddItem(new MenuItem("debug", "Debug Mode")).SetValue(false);
-            Info.AddItem(new MenuItem("logPos", "Log Position").SetValue(false));
-            Info.AddItem(new MenuItem("printPos", "Print Positions").SetValue(false));
-            Info.AddItem(new MenuItem("clearPrevious", "Clear Previous").SetValue(false));
-            Info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
-            Info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
+            var info = Config.AddSubMenu(new Menu("Information", "info"));
+            info.AddItem(new MenuItem("Msddsds", "if you would like to donate via paypal"));
+            info.AddItem(new MenuItem("Msdsddsd", "you can do so by sending money to:"));
+            info.AddItem(new MenuItem("Msdsadfdsd", "jayyeditsdude@gmail.com"));
+            info.AddItem(new MenuItem("debug", "Debug Mode")).SetValue(false);
+            info.AddItem(new MenuItem("logPos", "Log Position").SetValue(false));
+            info.AddItem(new MenuItem("printPos", "Print Positions").SetValue(false));
+            info.AddItem(new MenuItem("clearPrevious", "Clear Previous").SetValue(false));
+            info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
+            info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
 
             Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.7-2 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
@@ -125,7 +125,7 @@ namespace FuckingAwesomeRiven
             Config.AddToMainMenu();
         }
 
-        public static bool getMenuBool(String s)
+        public static bool GetMenuBool(String s)
         {
             return Config.Item(s).GetValue<bool>();
         }

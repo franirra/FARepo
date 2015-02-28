@@ -16,33 +16,34 @@ namespace FuckingAwesomeRiven
         public static Vector3 EPos;
         public static Vector3 FlashPos;
 
-        private static readonly int qDelay =
-            (int) (ObjectManager.Player.AttackCastDelay * 1000 - (Game.Ping * 0.5) - 25);
+        private static readonly int QDelay =
+            (int) (ObjectManager.Player.AttackCastDelay*1000 - (Game.Ping*0.5) - 25);
 
-        public static void doQueue()
+        public static void DoQueue()
         {
             if (Queue.Count == 0)
             {
                 return;
             }
+
             switch (Queue[0])
             {
                 case "AA":
                     break;
                 case "Q":
-                    qQ();
+                    Qq();
                     break;
                 case "W":
-                    qW();
+                    Qw();
                     break;
                 case "E":
-                    qE();
+                    Qe();
                     break;
                 case "R":
-                    qR();
+                    Qr();
                     break;
                 case "R2":
-                    qR2();
+                    Qr2();
                     break;
                 case "Flash":
                     Flash();
@@ -53,18 +54,18 @@ namespace FuckingAwesomeRiven
             }
         }
 
-        public static void add(String spell)
+        public static void Add(String spell)
         {
             Queue.Add(spell);
         }
 
-        public static void add(String spell, Obj_AI_Base Target)
+        public static void Add(String spell, Obj_AI_Base target)
         {
             Queue.Add(spell);
-            R2Target = Target;
+            R2Target = target;
         }
 
-        public static void add(String spell, Vector3 pos, bool isFlash = false)
+        public static void Add(String spell, Vector3 pos, bool isFlash = false)
         {
             Queue.Add(spell);
             if (isFlash)
@@ -72,152 +73,172 @@ namespace FuckingAwesomeRiven
                 FlashPos = pos;
                 return;
             }
+
             EPos = pos;
         }
 
-        public static void remove(String spell)
+        public static void Remove(String spell)
         {
             if (Queue.Count == 0 || Queue[0] != spell)
             {
                 return;
             }
+
             Queue.RemoveAt(0);
         }
 
-        public static void AA()
+        public static void Aa()
         {
             if (StateHandler.Target == null || !Orbwalking.InAutoAttackRange(StateHandler.Target))
             {
-                remove("AA");
+                Remove("AA");
             }
         }
 
-        public static void qQ()
+        public static void Qq()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+                  C.LastAa + QDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
             {
                 return;
             }
-            if (!S._spells[SpellSlot.Q].IsReady() && Environment.TickCount > C.LastQ + 300)
+
+            if (!S.Spells[SpellSlot.Q].IsReady() && Environment.TickCount > C.LastQ + 300)
             {
                 Queue.Remove("Q");
                 return;
             }
-            if (S._spells[SpellSlot.Q].IsReady())
+
+            if (S.Spells[SpellSlot.Q].IsReady())
             {
                 S.CastQ(StateHandler.Target);
             }
         }
 
-        public static void qW()
+        public static void Qw()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+                  C.LastAa + QDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
             {
                 return;
             }
-            if (!S._spells[SpellSlot.W].IsReady())
+
+            if (!S.Spells[SpellSlot.W].IsReady())
             {
                 Queue.Remove("W");
                 return;
             }
-            if (S._spells[SpellSlot.W].IsReady())
+
+            if (S.Spells[SpellSlot.W].IsReady())
             {
                 S.CastW(StateHandler.Target);
             }
         }
 
-        public static void qE()
+        public static void Qe()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+                  C.LastAa + QDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
             {
                 return;
             }
-            if (!S._spells[SpellSlot.E].IsReady() || !EPos.IsValid())
+
+            if (!S.Spells[SpellSlot.E].IsReady() || !EPos.IsValid())
             {
                 Queue.Remove("E");
                 return;
             }
-            if (S._spells[SpellSlot.E].IsReady())
+
+            if (S.Spells[SpellSlot.E].IsReady())
             {
                 S.CastE(StateHandler.Target.IsValidTarget() ? StateHandler.Target.Position : EPos);
             }
         }
 
-        public static void qR()
+        public static void Qr()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+                  C.LastAa + QDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
             {
                 return;
             }
-            if (!S._spells[SpellSlot.Q].IsReady() || C.RState)
+
+            if (!S.Spells[SpellSlot.Q].IsReady() || C.RState)
             {
                 Queue.Remove("R");
                 return;
             }
-            if (S._spells[SpellSlot.R].IsReady())
+
+            if (S.Spells[SpellSlot.R].IsReady())
             {
                 S.CastR();
             }
         }
 
-        public static void qR2()
+        public static void Qr2()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+                  C.LastAa + QDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
             {
                 return;
             }
-            if (!S._spells[SpellSlot.R].IsReady() || R2Target == null)
+
+            if (!S.Spells[SpellSlot.R].IsReady() || R2Target == null)
             {
                 Queue.Remove("R2");
                 return;
             }
-            if (S._spells[SpellSlot.R].IsReady() && C.RState && R2Target.IsValidTarget())
+
+            if (!S.Spells[SpellSlot.R].IsReady() || !C.RState || !R2Target.IsValidTarget())
             {
-                var r2 = new Spell(SpellSlot.R, 900);
-                r2.SetSkillshot(0.25f, 45, 1200, false, SkillshotType.SkillshotCone);
-                r2.Cast(R2Target);
+                return;
             }
+
+            var r2 = new Spell(SpellSlot.R, 900);
+            r2.SetSkillshot(0.25f, 45, 1200, false, SkillshotType.SkillshotCone);
+            r2.Cast(R2Target);
         }
 
         public static void Hydra()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+                  C.LastAa + QDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
             {
                 return;
             }
+
             if (!ItemData.Tiamat_Melee_Only.GetItem().IsReady() &&
                 !ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsReady())
             {
                 Queue.Remove("Hydra");
                 return;
             }
-            if (ItemData.Tiamat_Melee_Only.GetItem().IsReady() || ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsReady())
+
+            if (!ItemData.Tiamat_Melee_Only.GetItem().IsReady() &&
+                !ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsReady())
             {
-                ItemData.Tiamat_Melee_Only.GetItem().Cast();
-                ItemData.Ravenous_Hydra_Melee_Only.GetItem().Cast();
+                return;
             }
+
+            ItemData.Tiamat_Melee_Only.GetItem().Cast();
+            ItemData.Ravenous_Hydra_Melee_Only.GetItem().Cast();
         }
 
         public static void Flash()
         {
-            if (!S.SummonerDictionary[SpellHandler.summonerSpell.Flash].IsReady() || !FlashPos.IsValid())
+            if (!S.SummonerDictionary[SpellHandler.SummonerSpell.Flash].IsReady() || !FlashPos.IsValid())
             {
                 Queue.Remove("Flash");
                 return;
             }
-            SpellHandler.castFlash(FlashPos);
+
+            SpellHandler.CastFlash(FlashPos);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace FuckingAwesomeRiven
         public static bool CanQ, CanW, CanE, CanR, CanAa, CanMove, CanSr, MidQ, MidW, MidE, MidAa, RState, BurstFinished;
         public static int PassiveStacks, QCount, FullComboState;
 
-        public static void init()
+        public static void Init()
         {
             CanAa = true;
             CanMove = true;
@@ -45,7 +45,6 @@ namespace FuckingAwesomeRiven
         public static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             var spell = args.SData;
-
             if (!sender.IsMe)
             {
                 return;
@@ -58,7 +57,7 @@ namespace FuckingAwesomeRiven
 
             if (!MidQ && spell.Name.Contains("RivenBasicAttack"))
             {
-                Queuer.remove("AA");
+                Queuer.Remove("AA");
                 LastAa = Environment.TickCount;
                 LastTiamatCancel = Environment.TickCount + (int) ObjectManager.Player.AttackCastDelay;
                 LastPassive = Environment.TickCount;
@@ -66,6 +65,7 @@ namespace FuckingAwesomeRiven
                 {
                     PassiveStacks = PassiveStacks - 1;
                 }
+
                 MidAa = true;
                 CanMove = false;
                 CanAa = false;
@@ -73,7 +73,7 @@ namespace FuckingAwesomeRiven
 
             if (spell.Name.Contains("RivenTriCleave"))
             {
-                Queuer.remove("Q");
+                Queuer.Remove("Q");
                 LastQ = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
@@ -91,8 +91,9 @@ namespace FuckingAwesomeRiven
                 {
                     QCount = 0;
                 }
+
                 Utility.DelayAction.Add(350, Orbwalking.ResetAutoAttackTimer);
-                Utility.DelayAction.Add(40, () => SH.animCancel(StateHandler.Target));
+                Utility.DelayAction.Add(40, () => SH.AnimCancel(StateHandler.Target));
 
                 MidQ = true;
                 CanMove = false;
@@ -103,8 +104,8 @@ namespace FuckingAwesomeRiven
 
             if (spell.Name.Contains("RivenMartyr"))
             {
-                Queuer.remove("W");
-                Utility.DelayAction.Add(40, () => SH.animCancel(StateHandler.Target));
+                Queuer.Remove("W");
+                Utility.DelayAction.Add(40, () => SH.AnimCancel(StateHandler.Target));
                 LastW = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
@@ -113,6 +114,7 @@ namespace FuckingAwesomeRiven
                 {
                     PassiveStacks = PassiveStacks + 1;
                 }
+
                 MidW = true;
                 CanW = false;
                 FullComboState = 2;
@@ -120,12 +122,11 @@ namespace FuckingAwesomeRiven
 
             if (spell.Name.Contains("RivenFeint"))
             {
-                Queuer.remove("E");
+                Queuer.Remove("E");
                 Queuer.EPos = new Vector3();
                 LastE = Environment.TickCount;
                 PassiveStacks = Environment.TickCount;
                 LastTiamatCancel = Environment.TickCount + 50;
-
                 if (LastPassive <= 2)
                 {
                     PassiveStacks = PassiveStacks + 1;
@@ -138,29 +139,29 @@ namespace FuckingAwesomeRiven
             if (spell.Name.Contains("RivenFengShuiEngine"))
             {
                 RState = true;
-                Queuer.remove("R");
+                Queuer.Remove("R");
                 LastFr = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
-
                 if (PassiveStacks <= 2)
                 {
                     PassiveStacks = PassiveStacks + 1;
                 }
+
                 FullComboState = 1;
             }
 
             if (spell.Name.Contains("rivenizunablade"))
             {
                 RState = false;
-                Queuer.remove("R2");
+                Queuer.Remove("R2");
                 Queuer.R2Target = null;
                 LastPassive = Environment.TickCount;
-
                 if (PassiveStacks <= 2)
                 {
                     PassiveStacks = PassiveStacks + 1;
                 }
+
                 LastR2 = Environment.TickCount;
                 CanSr = false;
                 FullComboState = 3;
@@ -170,7 +171,7 @@ namespace FuckingAwesomeRiven
         public static void Checks()
         {
             if (MidQ &&
-                Environment.TickCount - LastQ >= (ObjectManager.Player.AttackCastDelay * 1000) - Game.Ping * 0.5 - 25)
+                Environment.TickCount - LastQ >= (ObjectManager.Player.AttackCastDelay*1000) - Game.Ping*0.5 - 25)
             {
                 MidQ = false;
                 CanMove = true;
@@ -199,12 +200,12 @@ namespace FuckingAwesomeRiven
                 QCount = 0;
             }
 
-            if (!CanW && !(MidAa || MidQ || MidE) && SH._spells[SpellSlot.W].IsReady())
+            if (!CanW && !(MidAa || MidQ || MidE) && SH.Spells[SpellSlot.W].IsReady())
             {
                 CanW = true;
             }
 
-            if (!CanE && !(MidAa || MidQ || MidW) && SH._spells[SpellSlot.E].IsReady())
+            if (!CanE && !(MidAa || MidQ || MidW) && SH.Spells[SpellSlot.E].IsReady())
             {
                 CanE = true;
             }
@@ -216,7 +217,7 @@ namespace FuckingAwesomeRiven
 
             if (MidAa &&
                 Environment.TickCount >=
-                LastAa + ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping / 3 +
+                LastAa + ObjectManager.Player.AttackCastDelay*1000 + Game.Ping/3 +
                 MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)
             {
                 CanMove = true;
@@ -226,14 +227,15 @@ namespace FuckingAwesomeRiven
                 CanSr = true;
                 MidAa = false;
             }
+
             if (!(MidAa || MidQ || MidE || MidW) &&
-                Environment.TickCount + Game.Ping / 2 >= LastAa + ObjectManager.Player.AttackCastDelay * 1000)
+                Environment.TickCount + Game.Ping/2 >= LastAa + ObjectManager.Player.AttackCastDelay*1000)
             {
                 CanMove = true;
             }
 
             if (!CanAa && !(MidQ || MidE || MidW) &&
-                Environment.TickCount + Game.Ping / 2 + 25 >= LastAa + ObjectManager.Player.AttackDelay * 1000)
+                Environment.TickCount + Game.Ping/2 + 25 >= LastAa + ObjectManager.Player.AttackDelay*1000)
             {
                 CanAa = true;
             }
