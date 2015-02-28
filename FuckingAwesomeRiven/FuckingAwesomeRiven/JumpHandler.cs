@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -7,40 +8,40 @@ using Color = System.Drawing.Color;
 
 namespace FuckingAwesomeRiven
 {
-    public class jumpPosition
+    public class JumpPosition
     {
-        public Vector3 directionPos;
-        public Vector3 jumpPos;
+        public Vector3 DirectionPos;
+        public Vector3 JumpPos;
 
-        public jumpPosition(Vector3 direction, Vector3 position)
+        public JumpPosition(Vector3 direction, Vector3 position)
         {
-            directionPos = direction;
-            jumpPos = position;
+            DirectionPos = direction;
+            JumpPos = position;
         }
     }
 
     internal class JumpHandler
     {
-        public static List<Vector3> jumpPositionsList2 = new List<Vector3>();
-        public static List<jumpPosition> allJumpPos = new List<jumpPosition>();
-        public static bool initJump;
-        public static bool jumping;
-        public static jumpPosition selectedPos;
+        public static List<Vector3> JumpPositionsList2 = new List<Vector3>();
+        public static List<JumpPosition> AllJumpPos = new List<JumpPosition>();
+        public static bool InitJump;
+        public static bool Jumping;
+        public static JumpPosition SelectedPos;
 
-        public static void load()
+        public static void Load()
         {
-            allJumpPos = new List<jumpPosition>
+            AllJumpPos = new List<JumpPosition>
             {
-                new jumpPosition(new Vector3(3900f, 1210f, 95.74805f), new Vector3(4142f, 1234f, 95.74805f)),
-                new jumpPosition(new Vector3(4490f, 1272f, 95.74807f), new Vector3(4444f, 1254f, 95.74805f)),
-                new jumpPosition(new Vector3(6666f, 1474f, 49.986f), new Vector3(6790f, 1482f, 49.59703f)),
-                new jumpPosition(new Vector3(7314f, 1486f, 49.4455f), new Vector3(7052f, 1486f, 49.44687f)),
-                new jumpPosition(new Vector3(7720f, 1604f, 49.44771f), new Vector3(7724f, 1722f, 49.4488f)),
-                new jumpPosition(new Vector3(7744f, 2220f, 51.14706f), new Vector3(7756f, 2072f, 51.1414f))
+                new JumpPosition(new Vector3(3900f, 1210f, 95.74805f), new Vector3(4142f, 1234f, 95.74805f)),
+                new JumpPosition(new Vector3(4490f, 1272f, 95.74807f), new Vector3(4444f, 1254f, 95.74805f)),
+                new JumpPosition(new Vector3(6666f, 1474f, 49.986f), new Vector3(6790f, 1482f, 49.59703f)),
+                new JumpPosition(new Vector3(7314f, 1486f, 49.4455f), new Vector3(7052f, 1486f, 49.44687f)),
+                new JumpPosition(new Vector3(7720f, 1604f, 49.44771f), new Vector3(7724f, 1722f, 49.4488f)),
+                new JumpPosition(new Vector3(7744f, 2220f, 51.14706f), new Vector3(7756f, 2072f, 51.1414f))
             };
         }
 
-        public static void jump()
+        public static void Jump()
         {
             if (CheckHandler.QCount != 2)
             {
@@ -48,118 +49,119 @@ namespace FuckingAwesomeRiven
                 return;
             }
 
-            if (initJump && selectedPos != null && !jumping)
+            if (InitJump && SelectedPos != null && !Jumping)
             {
-                jumping = true;
-                if (!SpellHandler._spells[SpellSlot.E].IsReady())
+                Jumping = true;
+                if (!SpellHandler.Spells[SpellSlot.E].IsReady())
                 {
-                    ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, selectedPos.directionPos);
+                    ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, SelectedPos.DirectionPos);
                     Utility.DelayAction.Add(
-                        100 + Game.Ping / 2,
-                        () => ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, selectedPos.jumpPos));
+                        100 + Game.Ping/2,
+                        () => ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, SelectedPos.JumpPos));
                     Utility.DelayAction.Add(
-                        300 + Game.Ping / 2, () =>
+                        300 + Game.Ping/2, () =>
                         {
                             SpellHandler.CastQ();
-                            jumping = false;
+                            Jumping = false;
                         });
                 }
                 else
                 {
-                    ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, selectedPos.directionPos);
-                    Utility.DelayAction.Add(100 + Game.Ping / 2, () => SpellHandler.CastE(selectedPos.jumpPos));
+                    ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, SelectedPos.DirectionPos);
+                    Utility.DelayAction.Add(100 + Game.Ping/2, () => SpellHandler.CastE(SelectedPos.JumpPos));
                     Utility.DelayAction.Add(
-                        200 + Game.Ping / 2, () =>
+                        200 + Game.Ping/2, () =>
                         {
                             SpellHandler.CastQ();
-                            jumping = false;
+                            Jumping = false;
                         });
                 }
-                initJump = false;
+
+                InitJump = false;
             }
 
-            if (initJump || jumping)
+            if (InitJump || Jumping)
             {
                 return;
             }
-            selectedPos = null;
-            foreach (var jumpPos in allJumpPos)
+
+            SelectedPos = null;
+            foreach (var jumpPos in AllJumpPos.Where(jumpPos => ObjectManager.Player.Distance(jumpPos.JumpPos) < 80))
             {
-                if (ObjectManager.Player.Distance(jumpPos.jumpPos) < 80)
-                {
-                    selectedPos = jumpPos;
-                    initJump = true;
-                    break;
-                }
+                SelectedPos = jumpPos;
+                InitJump = true;
+                break;
             }
         }
 
-        public static void onDraw()
+        public static void OnDraw()
         {
-            foreach (var pos in allJumpPos)
+            foreach (var pos in AllJumpPos)
             {
-                Render.Circle.DrawCircle(pos.directionPos, 30, Color.White);
+                Render.Circle.DrawCircle(pos.DirectionPos, 30, Color.White);
                 Drawing.DrawLine(
-                    Drawing.WorldToScreen(pos.directionPos), Drawing.WorldToScreen(pos.jumpPos), 2, Color.White);
-                Render.Circle.DrawCircle(pos.jumpPos, 30, Color.White);
+                    Drawing.WorldToScreen(pos.DirectionPos), Drawing.WorldToScreen(pos.JumpPos), 2, Color.White);
+                Render.Circle.DrawCircle(pos.JumpPos, 30, Color.White);
             }
         }
 
-        public static void drawCircles()
+        public static void DrawCircles()
         {
-            foreach (var pos in allJumpPos)
+            foreach (var pos in AllJumpPos)
             {
-                Render.Circle.DrawCircle(pos.directionPos, 30, Color.White);
+                Render.Circle.DrawCircle(pos.DirectionPos, 30, Color.White);
                 Drawing.DrawLine(
-                    Drawing.WorldToScreen(pos.directionPos), Drawing.WorldToScreen(pos.jumpPos), 2, Color.White);
-                Render.Circle.DrawCircle(pos.jumpPos, 30, Color.White);
+                    Drawing.WorldToScreen(pos.DirectionPos), Drawing.WorldToScreen(pos.JumpPos), 2, Color.White);
+                Render.Circle.DrawCircle(pos.JumpPos, 30, Color.White);
             }
-            for (var i = 0; i == jumpPositionsList2.Count - 1; i++)
+
+            for (var i = 0; i == JumpPositionsList2.Count - 1; i++)
             {
-                Render.Circle.DrawCircle(jumpPositionsList2[i], 30, Color.Blue);
+                Render.Circle.DrawCircle(JumpPositionsList2[i], 30, Color.Blue);
             }
         }
 
-        public static void addPos()
+        public static void AddPos()
         {
-            jumpPositionsList2.Add(ObjectManager.Player.Position);
-            if (jumpPositionsList2.Count == 2)
+            JumpPositionsList2.Add(ObjectManager.Player.Position);
+            if (JumpPositionsList2.Count == 2)
             {
-                allJumpPos.Add(new jumpPosition(jumpPositionsList2[0], jumpPositionsList2[1]));
-                jumpPositionsList2 = new List<Vector3>();
+                AllJumpPos.Add(new JumpPosition(JumpPositionsList2[0], JumpPositionsList2[1]));
+                JumpPositionsList2 = new List<Vector3>();
                 Game.PrintChat("Added new Jump Position {0} ", Game.Time);
             }
-            else if (jumpPositionsList2.Count > 2)
+            else if (JumpPositionsList2.Count > 2)
             {
-                jumpPositionsList2 = new List<Vector3>();
+                JumpPositionsList2 = new List<Vector3>();
                 Game.PrintChat("Error: recreate jump pos");
             }
         }
 
-        public static void clearPrevious()
+        public static void ClearPrevious()
         {
-            if (allJumpPos.Count == 0)
+            if (AllJumpPos.Count == 0)
             {
                 return;
             }
-            allJumpPos.Remove(allJumpPos[allJumpPos.Count - 1]);
+
+            AllJumpPos.Remove(AllJumpPos[AllJumpPos.Count - 1]);
             Game.PrintChat("Removed Previous");
         }
 
-        public static void clearCurrent()
+        public static void ClearCurrent()
         {
-            jumpPositionsList2 = new List<Vector3>();
+            JumpPositionsList2 = new List<Vector3>();
             Game.PrintChat("Cleared Current Position!");
         }
 
-        public static void printToConsole()
+        public static void PrintToConsole()
         {
             Console.Clear();
-            foreach (var j in allJumpPos)
+            foreach (var j in AllJumpPos)
             {
                 Console.WriteLine(
-                    "new jumpPosition(new Vector3({0}f, {1}f, {2}f), new Vector3({3}f, {4}f, {5}f)), ", j.directionPos.X,
-                    j.directionPos.Y, j.directionPos.Z, j.jumpPos.X, j.jumpPos.Y, j.jumpPos.Z);
+                    "new jumpPosition(new Vector3({0}f, {1}f, {2}f), new Vector3({3}f, {4}f, {5}f)), ", j.DirectionPos.X,
+                    j.DirectionPos.Y, j.DirectionPos.Z, j.JumpPos.X, j.JumpPos.Y, j.JumpPos.Z);
             }
         }
     }

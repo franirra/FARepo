@@ -36,7 +36,7 @@ namespace FuckingAwesomeRiven.EvadeUtils
 
         public int EndTick
         {
-            get { return (int)(StartTick + Spell.Delay + 1000 * (StartPosition.Distance(EndPosition) / Spell.Speed)); }
+            get { return (int) (StartTick + Spell.Delay + 1000*(StartPosition.Distance(EndPosition)/Spell.Speed)); }
         }
 
         public Vector2 EndPosition
@@ -82,18 +82,6 @@ namespace FuckingAwesomeRiven.EvadeUtils
 
     public class TargetSpellData
     {
-        public string ChampionName { get; set; }
-        public SpellSlot Spellslot { get; set; }
-        public SpellType Type { get; set; }
-        public CcType CcType { get; set; }
-        public string Name { get; set; }
-        public float Range { get; set; }
-        public double Delay { get; set; }
-        public double Speed { get; set; }
-        public bool Dangerous { get; set; }
-        public bool Stealth { get; set; }
-        public bool Wait { get; set; }
-
         public TargetSpellData(string champion, string name, SpellSlot slot, SpellType type, CcType cc, float range,
             float delay, float speed, bool dangerous = false, bool stealth = false, bool wait = false)
         {
@@ -109,6 +97,18 @@ namespace FuckingAwesomeRiven.EvadeUtils
             Stealth = stealth;
             Wait = wait;
         }
+
+        public string ChampionName { get; set; }
+        public SpellSlot Spellslot { get; set; }
+        public SpellType Type { get; set; }
+        public CcType CcType { get; set; }
+        public string Name { get; set; }
+        public float Range { get; set; }
+        public double Delay { get; set; }
+        public double Speed { get; set; }
+        public bool Dangerous { get; set; }
+        public bool Stealth { get; set; }
+        public bool Wait { get; set; }
     }
 
     public enum SpellType
@@ -128,7 +128,7 @@ namespace FuckingAwesomeRiven.EvadeUtils
         R = 3,
         Summoner1 = 4,
         Summoner2 = 5,
-        Recall = 13,
+        Recall = 13
     }
 
     public enum CcType

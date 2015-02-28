@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using FuckingAwesomeRiven.EvadeUtils;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -14,85 +15,96 @@ namespace FuckingAwesomeRiven
 
         private static void Main(string[] args)
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameStart;
+            CustomEvents.Game.OnGameLoad += delegate
+            {
+                // Loading the Assembly Async
+                var onGameStart = new Thread(Game_OnGameStart);
+                onGameStart.Start();
+            };
         }
 
-        private static void Game_OnGameStart(EventArgs args)
+        private static void Game_OnGameStart()
         {
             if (ObjectManager.Player.ChampionName != "Riven")
             {
                 return;
             }
-            MenuHandler.initMenu();
-            CheckHandler.init();
+
+            MenuHandler.InitMenu();
+            CheckHandler.Init();
             Player = ObjectManager.Player;
             Game.OnGameUpdate += Game_OnGameUpdate;
-            Game.OnGameUpdate += eventArgs => StateHandler.tick();
+            Game.OnGameUpdate += eventArgs => StateHandler.Tick();
             Obj_AI_Base.OnProcessSpellCast += CheckHandler.Obj_AI_Hero_OnProcessSpellCast;
             Obj_AI_Base.OnProcessSpellCast += AutoE.autoE;
             Drawing.OnDraw += DrawHandler.Draw;
-            JumpHandler.load();
+            JumpHandler.Load();
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
             if (Queuer.Queue.Count > 0)
             {
-                Queuer.doQueue();
+                Queuer.DoQueue();
             }
+
             if (MenuHandler.Config.Item("logPos").GetValue<bool>())
             {
-                JumpHandler.addPos();
+                JumpHandler.AddPos();
                 MenuHandler.Config.Item("logPos").SetValue(false);
             }
+
             if (MenuHandler.Config.Item("printPos").GetValue<bool>())
             {
-                JumpHandler.printToConsole();
+                JumpHandler.PrintToConsole();
                 MenuHandler.Config.Item("printPos").SetValue(false);
             }
+
             if (MenuHandler.Config.Item("clearCurrent").GetValue<bool>())
             {
-                JumpHandler.clearCurrent();
+                JumpHandler.ClearCurrent();
                 MenuHandler.Config.Item("clearCurrent").SetValue(false);
             }
+
             if (MenuHandler.Config.Item("clearPrevious").GetValue<bool>())
             {
-                JumpHandler.clearPrevious();
+                JumpHandler.ClearPrevious();
                 MenuHandler.Config.Item("clearPrevious").SetValue(false);
             }
 
             CheckHandler.Checks();
-            var Config = MenuHandler.Config;
-
-            if (Config.Item("jungleCombo").GetValue<KeyBind>().Active)
+            var config = MenuHandler.Config;
+            if (config.Item("jungleCombo").GetValue<KeyBind>().Active)
             {
                 StateHandler.JungleFarm();
             }
-            if (MenuHandler.getMenuBool("keepQAlive") && SH._spells[SpellSlot.Q].IsReady() && CheckHandler.QCount >= 1 &&
+
+            if (MenuHandler.GetMenuBool("keepQAlive") && SH.Spells[SpellSlot.Q].IsReady() && CheckHandler.QCount >= 1 &&
                 Environment.TickCount - CheckHandler.LastQ > 3650 && !Player.IsRecalling())
             {
                 SH.CastQ();
             }
 
-            if (Config.Item("normalCombo").GetValue<KeyBind>().Active)
+            if (config.Item("normalCombo").GetValue<KeyBind>().Active)
             {
-                StateHandler.mainCombo();
+                StateHandler.MainCombo();
             }
-            if (Config.Item("burstCombo").GetValue<KeyBind>().Active)
+
+            if (config.Item("burstCombo").GetValue<KeyBind>().Active)
             {
-                StateHandler.burstCombo();
+                StateHandler.BurstCombo();
             }
-            else if (Config.Item("waveClear").GetValue<KeyBind>().Active)
+            else if (config.Item("waveClear").GetValue<KeyBind>().Active)
             {
-                StateHandler.laneclear();
+                StateHandler.Laneclear();
             }
-            else if (Config.Item("lastHit").GetValue<KeyBind>().Active)
+            else if (config.Item("lastHit").GetValue<KeyBind>().Active)
             {
-                StateHandler.lastHit();
+                StateHandler.LastHit();
             }
-            else if (Config.Item("flee").GetValue<KeyBind>().Active)
+            else if (config.Item("flee").GetValue<KeyBind>().Active)
             {
-                StateHandler.flee();
+                StateHandler.Flee();
             }
             else
             {
@@ -102,12 +114,12 @@ namespace FuckingAwesomeRiven
                     2000, () =>
                     {
                         if (
-                            !(Config.Item("flee").GetValue<KeyBind>().Active ||
-                              Config.Item("lastHit").GetValue<KeyBind>().Active ||
-                              Config.Item("waveClear").GetValue<KeyBind>().Active ||
-                              Config.Item("burstCombo").GetValue<KeyBind>().Active ||
-                              Config.Item("normalCombo").GetValue<KeyBind>().Active ||
-                              Config.Item("jungleCombo").GetValue<KeyBind>().Active))
+                            !(config.Item("flee").GetValue<KeyBind>().Active ||
+                              config.Item("lastHit").GetValue<KeyBind>().Active ||
+                              config.Item("waveClear").GetValue<KeyBind>().Active ||
+                              config.Item("burstCombo").GetValue<KeyBind>().Active ||
+                              config.Item("normalCombo").GetValue<KeyBind>().Active ||
+                              config.Item("jungleCombo").GetValue<KeyBind>().Active))
                         {
                             Queuer.Queue = new List<string>();
                         }
