@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using FuckingAwesomeRiven.EvadeUtils;
 using LeagueSharp.Common;
-using SharpDX;
 
 namespace FuckingAwesomeRiven
 {
-    class MenuHandler
+    internal class MenuHandler
     {
-
         public static Orbwalking.Orbwalker Orbwalker;
         public static Menu Config;
         public static List<jumpPosition> j = new List<jumpPosition>();
@@ -25,35 +22,43 @@ namespace FuckingAwesomeRiven
             var combo = Config.AddSubMenu(new Menu("Combo", "Combo"));
             combo.AddItem(new MenuItem("xdxdxdxd", "-- Normal Combo"));
 
-            var enabledCombos = combo.AddSubMenu(new Menu("Killable Combos", "Killable Combos"));
-            enabledCombos.AddItem(new MenuItem("dfsjknfsj", "With R2"));
-            enabledCombos.AddItem(new MenuItem("QWR2KS", "Q - W - R2").SetValue(true));
-            enabledCombos.AddItem(new MenuItem("QR2KS", "Q - R2").SetValue(true));
-            enabledCombos.AddItem(new MenuItem("WR2KS", "W - R2").SetValue(true));
-            enabledCombos.AddItem(new MenuItem("dfdgdgdfggfdsj", ""));
-            enabledCombos.AddItem(new MenuItem("dfgdhnfdsf", "Without R2"));
-            enabledCombos.AddItem(new MenuItem("QWKS", "Q - W").SetValue(true));
-            enabledCombos.AddItem(new MenuItem("QKS", "Q").SetValue(true));
-            enabledCombos.AddItem(new MenuItem("WKS", "W").SetValue(true));
+            combo.AddItem(new MenuItem("QAA", "Q AA Mode").SetValue(new StringList(new[] { "Q -> AA", "AA -> Q" })));
+            var gcM = combo.AddSubMenu(new Menu("Gapcloser Combos", "Gapcloser Combos"));
+            gcM.AddItem(new MenuItem("CEWHQ", "E->W->Hy->Q").SetValue(true));
+            gcM.AddItem(new MenuItem("CQWH", "Q->W->Hy").SetValue(true));
+            gcM.AddItem(new MenuItem("CEHQ", "E->Hy->Q").SetValue(true));
+            gcM.AddItem(new MenuItem("CEW", "E->W").SetValue(true));
+
+            var R1Combo = combo.AddSubMenu(new Menu("R1 Combos", "R1 Combos"));
+            R1Combo.AddItem(new MenuItem("CREWHQ", "R->E->W->Hy->Q").SetValue(true));
+            R1Combo.AddItem(new MenuItem("CREWH", "R->E->W->Hy").SetValue(true));
+            R1Combo.AddItem(new MenuItem("CREAAHQ", "R->E->AA->Hy->Q").SetValue(true));
+            R1Combo.AddItem(new MenuItem("CRWAAHQ", "R->W->AA->Hy-Q").SetValue(true));
+            R1Combo.AddItem(new MenuItem("CR1CC", "R").SetValue(true));
+
+            var R2Combo = combo.AddSubMenu(new Menu("R2 Combos", "R2 Combos"));
+            R2Combo.AddItem(new MenuItem("CR2WQ", "R2->W->Q").SetValue(true));
+            R2Combo.AddItem(new MenuItem("CR2W", "R2->W").SetValue(true));
+            R2Combo.AddItem(new MenuItem("CR2Q", "R2->Q").SetValue(true));
+            R2Combo.AddItem(new MenuItem("CR2CC", "R2").SetValue(true));
 
             combo.AddItem(new MenuItem("CQ", "Use Q").SetValue(true));
-            combo.AddItem(new MenuItem("QAA", "Q AA Mode").SetValue(new StringList(new []{"Q -> AA", "AA -> Q"})));
-            combo.AddItem(new MenuItem("UseQ-GC2", "   Use Q for GapClose").SetValue(false));
-            combo.AddItem(new MenuItem("Use R2", "Use R2").SetValue(true));
             combo.AddItem(new MenuItem("CW", "Use W").SetValue(true));
             combo.AddItem(new MenuItem("CE", "Use E").SetValue(true));
-            combo.AddItem(new MenuItem("UseE-AA", "   Only E if out of AA range").SetValue(true));
-            combo.AddItem(new MenuItem("UseE-GC", "   Use E to Gapclose").SetValue(true));
+            combo.AddItem(new MenuItem("CRnote", "NOTE: Disable R/R2 will disable their combos"));
             combo.AddItem(new MenuItem("CR", "Use R").SetValue(true));
-            combo.AddItem(new MenuItem("CRNO", "Min Enemies for AOE R").SetValue(new Slider(2, 1, 5)));
-            combo.AddItem(new MenuItem("forcedR", "Forced R Enabled in Combo").SetValue(new KeyBind('T', KeyBindType.Toggle, false)));
             combo.AddItem(new MenuItem("CR2", "Use R2").SetValue(true));
-            combo.AddItem(new MenuItem("magnet", "Magnet Target").SetValue(false));
-            combo.AddItem(new MenuItem("bdsfdfffsf", ""));
-            combo.AddItem(new MenuItem("bdsfdsf", "-- Burst Combo"));
-            //combo.AddItem(new MenuItem("BFl", "Use Flash").SetValue(false));
-            combo.AddItem(new MenuItem("shyCombo", "ShyCombo").SetValue(true));
-            combo.AddItem(new MenuItem("kyzerCombo", "Kyzer Q3 Combo").SetValue(true));
+
+            var burst = Config.AddSubMenu(new Menu("Burst Combos", "Burst Combos"));
+            burst.AddItem(new MenuItem("shyCombo", "-- ShyCombo").SetValue(true));
+            burst.AddItem(new MenuItem("shyComboinfo1", "E->R->Flash->AA->Hydra->W->R2->Q3"));
+            burst.AddItem(new MenuItem("shyComboinfo2", "Hold Burst button on Q1/Q2"));
+            burst.AddItem(new MenuItem("kyzerCombo", "-- Kyzer Q3 Combo").SetValue(true));
+            burst.AddItem(new MenuItem("kyzerComboinfo1", "E->R->Flash->Q->AA->Hydra->W->R2->Q"));
+            burst.AddItem(new MenuItem("kyzerComboinfo2", "Hold Burst button on Q3"));
+            burst.AddItem(new MenuItem("flashlessBurst", "-- No Flash Burst").SetValue(true));
+            burst.AddItem(new MenuItem("flashlessBurst1", "E->R->W->Hydra->AA->R2->Q"));
+            burst.AddItem(new MenuItem("flashlessBurst2", "Hold Burst button on on any Q"));
 
             var farm = Config.AddSubMenu(new Menu("Farming", "Farming"));
             farm.AddItem(new MenuItem("fnjdsjkn", "          Last Hit"));
@@ -69,38 +74,39 @@ namespace FuckingAwesomeRiven
             farm.AddItem(new MenuItem("QWC-AA", "   Q -> AA").SetValue(true));
             farm.AddItem(new MenuItem("WWC", "Use W").SetValue(true));
 
-            var cancels = Config.AddSubMenu(new Menu("Auto Cancels", "autoCancels"));
-            cancels.AddItem(new MenuItem("autoCancelR1", "Auto Cancel R1").SetValue(false));
-            cancels.AddItem(new MenuItem("autoCancelR2", "Auto Cancel R2").SetValue(false));
-            cancels.AddItem(new MenuItem("autoCancelT", "Auto Cancel with Tiamat").SetValue(true));
-            cancels.AddItem(new MenuItem("autoCancelE", "Auto Cancel with E").SetValue(false));
-
             var draw = Config.AddSubMenu(new Menu("Draw", "Draw"));
 
-            draw.AddItem(new MenuItem("DQ", "Draw Q Range").SetValue(new Circle(false, System.Drawing.Color.White)));
-            draw.AddItem(new MenuItem("DW", "Draw W Range").SetValue(new Circle(false, System.Drawing.Color.White)));
-            draw.AddItem(new MenuItem("DE", "Draw E Range").SetValue(new Circle(false, System.Drawing.Color.White)));
-            draw.AddItem(new MenuItem("DR", "Draw R Range").SetValue(new Circle(false, System.Drawing.Color.White)));
-            draw.AddItem(new MenuItem("DBC", "Draw Burst Combo Range").SetValue(new Circle(false, System.Drawing.Color.White)));
-            draw.AddItem(new MenuItem("DD", "Draw Damage [soon]").SetValue(new Circle(false, System.Drawing.Color.White)));
+            draw.AddItem(new MenuItem("DQ", "Draw Q Range").SetValue(new Circle(false, Color.White)));
+            draw.AddItem(new MenuItem("DW", "Draw W Range").SetValue(new Circle(false, Color.White)));
+            draw.AddItem(new MenuItem("DE", "Draw E Range").SetValue(new Circle(false, Color.White)));
+            draw.AddItem(new MenuItem("DR", "Draw R Range").SetValue(new Circle(false, Color.White)));
+            draw.AddItem(new MenuItem("DBC", "Draw Burst Combo Range").SetValue(new Circle(false, Color.White)));
+            draw.AddItem(new MenuItem("DD", "Draw Damage [soon]").SetValue(new Circle(false, Color.White)));
 
             var misc = Config.AddSubMenu(new Menu("Misc", "Misc"));
-            misc.AddItem(new MenuItem("bonusCancelDelay", "Bonus Cancel Delay (ms)").SetValue(new Slider(0,0,500)));
+            misc.AddItem(new MenuItem("bonusCancelDelay", "Bonus Cancel Delay (ms)").SetValue(new Slider(0, 0, 500)));
             misc.AddItem(new MenuItem("keepQAlive", "Keep Q Alive").SetValue(true));
             misc.AddItem(new MenuItem("QFlee", "Q Flee").SetValue(true));
             misc.AddItem(new MenuItem("EFlee", "E Flee").SetValue(true));
 
             var Keybindings = Config.AddSubMenu(new Menu("Key Bindings", "KB"));
-            Keybindings.AddItem(new MenuItem("normalCombo", "Normal Combo").SetValue(new KeyBind(32, KeyBindType.Press)));
+            Keybindings.AddItem(
+                new MenuItem("normalCombo", "Normal Combo").SetValue(new KeyBind(32, KeyBindType.Press)));
             Keybindings.AddItem(new MenuItem("burstCombo", "Burst Combo").SetValue(new KeyBind('M', KeyBindType.Press)));
-            Keybindings.AddItem(new MenuItem("jungleCombo", "Jungle Clear").SetValue(new KeyBind('C', KeyBindType.Press)));
+            Keybindings.AddItem(
+                new MenuItem("jungleCombo", "Jungle Clear").SetValue(new KeyBind('C', KeyBindType.Press)));
             Keybindings.AddItem(new MenuItem("waveClear", "WaveClear").SetValue(new KeyBind('C', KeyBindType.Press)));
             Keybindings.AddItem(new MenuItem("lastHit", "LastHit").SetValue(new KeyBind('X', KeyBindType.Press)));
             Keybindings.AddItem(new MenuItem("flee", "Flee").SetValue(new KeyBind('Z', KeyBindType.Press)));
+            Keybindings.AddItem(
+                new MenuItem("forcedR", "Forced R Enabled in Combo").SetValue(
+                    new KeyBind('T', KeyBindType.Toggle, false)));
 
-            EvadeUtils.AutoE.init();
+            Config.AddSubMenu(new Menu("Anti Spells", "Anti Spells"));
 
-            Antispells.init();
+            AutoE.init();
+
+            Antispells.Init();
 
             var Info = Config.AddSubMenu(new Menu("Information", "info"));
             Info.AddItem(new MenuItem("Msddsds", "if you would like to donate via paypal"));
@@ -113,7 +119,7 @@ namespace FuckingAwesomeRiven
             Info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
             Info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.6-3 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.7-1 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();

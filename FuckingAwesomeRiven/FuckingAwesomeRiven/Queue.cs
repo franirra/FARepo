@@ -1,25 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using C = FuckingAwesomeRiven.CheckHandler;
-using S = FuckingAwesomeRiven.SpellHandler;
 using LeagueSharp;
 using LeagueSharp.Common;
 using LeagueSharp.Common.Data;
 using SharpDX;
+using C = FuckingAwesomeRiven.CheckHandler;
+using S = FuckingAwesomeRiven.SpellHandler;
 
 namespace FuckingAwesomeRiven
 {
-    class Queuer
+    internal class Queuer
     {
         public static List<String> Queue = new List<string>();
+        public static Obj_AI_Base R2Target;
+        public static Vector3 EPos;
+        public static Vector3 FlashPos;
+
+        private static readonly int qDelay =
+            (int) (ObjectManager.Player.AttackCastDelay * 1000 - (Game.Ping * 0.5) - 25);
 
         public static void doQueue()
         {
-            if (Queue.Count == 0) return;
+            if (Queue.Count == 0)
+            {
+                return;
+            }
             switch (Queue[0])
             {
                 case "AA":
@@ -48,10 +53,6 @@ namespace FuckingAwesomeRiven
             }
         }
 
-        public static Obj_AI_Base R2Target = null;
-        public static Vector3 EPos = new Vector3();
-        public static Vector3 FlashPos = new Vector3();
-
         public static void add(String spell)
         {
             Queue.Add(spell);
@@ -76,16 +77,29 @@ namespace FuckingAwesomeRiven
 
         public static void remove(String spell)
         {
-            if (Queue.Count == 0 || Queue[0] != spell) return;
+            if (Queue.Count == 0 || Queue[0] != spell)
+            {
+                return;
+            }
             Queue.RemoveAt(0);
+        }
+
+        public static void AA()
+        {
+            if (StateHandler.Target == null || !Orbwalking.InAutoAttackRange(StateHandler.Target))
+            {
+                remove("AA");
+            }
         }
 
         public static void qQ()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + ObjectManager.Player.AttackCastDelay*1000 + Game.Ping/3 +
-                  MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)) return;
+                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+            {
+                return;
+            }
             if (!S._spells[SpellSlot.Q].IsReady() && Environment.TickCount > C.LastQ + 300)
             {
                 Queue.Remove("Q");
@@ -96,12 +110,15 @@ namespace FuckingAwesomeRiven
                 S.CastQ(StateHandler.Target);
             }
         }
+
         public static void qW()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping / 3 +
-                  MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)) return;
+                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+            {
+                return;
+            }
             if (!S._spells[SpellSlot.W].IsReady())
             {
                 Queue.Remove("W");
@@ -112,12 +129,15 @@ namespace FuckingAwesomeRiven
                 S.CastW(StateHandler.Target);
             }
         }
+
         public static void qE()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping / 3 +
-                  MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)) return;
+                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+            {
+                return;
+            }
             if (!S._spells[SpellSlot.E].IsReady() || !EPos.IsValid())
             {
                 Queue.Remove("E");
@@ -128,12 +148,15 @@ namespace FuckingAwesomeRiven
                 S.CastE(StateHandler.Target.IsValidTarget() ? StateHandler.Target.Position : EPos);
             }
         }
+
         public static void qR()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping / 3 +
-                  MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)) return;
+                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+            {
+                return;
+            }
             if (!S._spells[SpellSlot.Q].IsReady() || C.RState)
             {
                 Queue.Remove("R");
@@ -144,12 +167,15 @@ namespace FuckingAwesomeRiven
                 S.CastR();
             }
         }
+
         public static void qR2()
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping / 3 +
-                  MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)) return;
+                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+            {
+                return;
+            }
             if (!S._spells[SpellSlot.R].IsReady() || R2Target == null)
             {
                 Queue.Remove("R2");
@@ -167,8 +193,10 @@ namespace FuckingAwesomeRiven
         {
             if (
                 !(Environment.TickCount >=
-                  C.LastAa + ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping / 3 +
-                  MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)) return;
+                  C.LastAa + qDelay + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value))
+            {
+                return;
+            }
             if (!ItemData.Tiamat_Melee_Only.GetItem().IsReady() &&
                 !ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsReady())
             {

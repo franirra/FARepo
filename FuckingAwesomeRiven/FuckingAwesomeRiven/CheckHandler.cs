@@ -1,34 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using LeagueSharp.Common.Data;
 using SharpDX;
 using SH = FuckingAwesomeRiven.SpellHandler;
 
 namespace FuckingAwesomeRiven
 {
-    class CheckHandler
+    internal class CheckHandler
     {
+        public static int LastQ,
+            LastQ2,
+            LastW,
+            LastE,
+            LastAa,
+            LastPassive,
+            LastFr,
+            LastTiamat,
+            LastR2,
+            LastECancelSpell,
+            LastTiamatCancel;
 
-        public static int LastQ, LastQ2, LastW, LastE, LastAa, LastPassive, LastFr, LastTiamat, LastR2, LastECancelSpell, LastTiamatCancel;
-
-        public static bool CanQ,
-            CanW,
-            CanE,
-            CanR,
-            CanAa,
-            CanMove,
-            CanSr,
-            MidQ,
-            MidW,
-            MidE,
-            MidAa,
-            RState,
-            BurstFinished;
+        public static bool CanQ, CanW, CanE, CanR, CanAa, CanMove, CanSr, MidQ, MidW, MidE, MidAa, RState, BurstFinished;
         public static int PassiveStacks, QCount, FullComboState;
 
         public static void init()
@@ -48,12 +40,6 @@ namespace FuckingAwesomeRiven
             LastAa = Environment.TickCount;
             LastPassive = Environment.TickCount;
             LastFr = Environment.TickCount;
-            GameObject.OnCreate += GameObject_OnCreate;
-        }
-
-        static void GameObject_OnCreate(GameObject sender, EventArgs args)
-        {
-            return;
         }
 
         public static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -61,7 +47,9 @@ namespace FuckingAwesomeRiven
             var spell = args.SData;
 
             if (!sender.IsMe)
+            {
                 return;
+            }
 
             if (spell.Name == "ItemTiamatCleave")
             {
@@ -71,12 +59,8 @@ namespace FuckingAwesomeRiven
             if (!MidQ && spell.Name.Contains("RivenBasicAttack"))
             {
                 Queuer.remove("AA");
-                if (MenuHandler.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None &&  MenuHandler.Config.Item("QAA").GetValue<StringList>().SelectedIndex == 1 && MenuHandler.Config.Item("normalCombo").GetValue<KeyBind>().Active && SH._spells[SpellSlot.Q].IsReady() && MenuHandler.getMenuBool("CQ"))
-                {
-                    Queuer.add("Q");
-                }
                 LastAa = Environment.TickCount;
-                LastTiamatCancel = Environment.TickCount + (int)ObjectManager.Player.AttackCastDelay;
+                LastTiamatCancel = Environment.TickCount + (int) ObjectManager.Player.AttackCastDelay;
                 LastPassive = Environment.TickCount;
                 if (PassiveStacks >= 1)
                 {
@@ -109,7 +93,7 @@ namespace FuckingAwesomeRiven
                 }
                 Utility.DelayAction.Add(350, Orbwalking.ResetAutoAttackTimer);
                 Utility.DelayAction.Add(40, () => SH.animCancel(StateHandler.Target));
-                
+
                 MidQ = true;
                 CanMove = false;
                 CanQ = false;
@@ -124,7 +108,7 @@ namespace FuckingAwesomeRiven
                 LastW = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
-                LastTiamatCancel = Environment.TickCount + (int)ObjectManager.Player.AttackCastDelay;
+                LastTiamatCancel = Environment.TickCount + (int) ObjectManager.Player.AttackCastDelay;
                 if (LastPassive <= 2)
                 {
                     PassiveStacks = PassiveStacks + 1;
@@ -154,7 +138,10 @@ namespace FuckingAwesomeRiven
             if (spell.Name.Contains("RivenFengShuiEngine"))
             {
                 Queuer.remove("R");
-                if (MenuHandler.Config.Item("autoCancelR1").GetValue<bool>()) Queuer.add("E", Game.CursorPos);
+                if (MenuHandler.Config.Item("autoCancelR1").GetValue<bool>())
+                {
+                    Queuer.add("E", Game.CursorPos);
+                }
                 LastFr = Environment.TickCount;
                 LastPassive = Environment.TickCount;
                 LastECancelSpell = Environment.TickCount + 50;
@@ -171,7 +158,10 @@ namespace FuckingAwesomeRiven
             if (spell.Name.Contains("rivenizunablade"))
             {
                 Queuer.remove("R2");
-                if (MenuHandler.Config.Item("autoCancelR1").GetValue<bool>()) Queuer.add("Q");
+                if (MenuHandler.Config.Item("autoCancelR1").GetValue<bool>())
+                {
+                    Queuer.add("Q");
+                }
                 Queuer.R2Target = null;
                 LastPassive = Environment.TickCount;
 
@@ -188,7 +178,8 @@ namespace FuckingAwesomeRiven
 
         public static void Checks()
         {
-            if (MidQ && Environment.TickCount - LastQ >= (ObjectManager.Player.AttackCastDelay * 1000) - Game.Ping/2 - 200)
+            if (MidQ &&
+                Environment.TickCount - LastQ >= (ObjectManager.Player.AttackCastDelay * 1000) - Game.Ping * 0.5 - 25)
             {
                 MidQ = false;
                 CanMove = true;
@@ -232,7 +223,10 @@ namespace FuckingAwesomeRiven
                 RState = false;
             }
 
-            if (MidAa && Environment.TickCount >= LastAa + ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping / 3 + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)
+            if (MidAa &&
+                Environment.TickCount >=
+                LastAa + ObjectManager.Player.AttackCastDelay * 1000 + Game.Ping / 3 +
+                MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)
             {
                 CanMove = true;
                 CanQ = true;
@@ -253,6 +247,5 @@ namespace FuckingAwesomeRiven
                 CanAa = true;
             }
         }
-
     }
 }

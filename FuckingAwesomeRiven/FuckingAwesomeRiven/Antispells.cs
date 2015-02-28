@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
 namespace FuckingAwesomeRiven
 {
-    class Antispells
+    internal class Antispells
     {
-        public static void init()
+        public static void Init()
         {
-            var mainMenu = MenuHandler.Config.AddSubMenu(new Menu("Anti GapCloser", "Anti GapCloser"));
+            var mainMenu2 = MenuHandler.Config.SubMenu("Anti Spells");
+            var mainMenu = mainMenu2.AddSubMenu(new Menu("Anti GapCloser", "Anti GapCloser"));
             var spellMenu = mainMenu.AddSubMenu(new Menu("Enabled Spells", "Enabled SpellsAnti GapCloser"));
             mainMenu.AddItem(new MenuItem("EnabledGC", "Enabled").SetValue(false));
             mainMenu.AddItem(new MenuItem("Ward Mechanic", "Ward Mechanic").SetValue(false));
 
-            var mainMenuinterrupter = MenuHandler.Config.AddSubMenu(new Menu("Interrupter", "Interrupter"));
+            var mainMenuinterrupter = mainMenu2.AddSubMenu(new Menu("Interrupter", "Interrupter"));
             mainMenuinterrupter.AddItem(new MenuItem("EnabledInterrupter", "Enabled").SetValue(false));
-            mainMenuinterrupter.AddItem(new MenuItem("minChannel", "Minimum Channel Priority").SetValue(new StringList(new [] {"HIGH", "MEDIUM", "LOW"})));
-            
+            mainMenuinterrupter.AddItem(
+                new MenuItem("minChannel", "Minimum Channel Priority").SetValue(
+                    new StringList(new[] { "HIGH", "MEDIUM", "LOW" })));
+
 
             foreach (var champ in ObjectManager.Get<Obj_AI_Hero>().Where(a => a.IsEnemy))
             {
@@ -41,35 +38,57 @@ namespace FuckingAwesomeRiven
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
         }
 
-        static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName().ToLower()) == null)
-                return;
-            if (!MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName().ToLower()).GetValue<bool>() || !gapcloser.Sender.IsValidTarget()) return;
-            if (CheckHandler.QCount == 2 && MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>() && MenuHandler.Config.Item("flee").GetValue<KeyBind>().Active && gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.QRange)
+            if (!MenuHandler.Config.Item("EnabledGC").GetValue<bool>())
             {
-                if (Queuer.Queue.Contains("Q") || Items.GetWardSlot() == null) return;
-                
-                ObjectManager.Player.Spellbook.CastSpell(Items.GetWardSlot().SpellSlot,
-                    ObjectManager.Player.Position.Extend(gapcloser.End, 50));
-                Queuer.Queue.Insert(0, "Q");
-                Utility.DelayAction.Add(200, () => ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos));
                 return;
             }
-            if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.WRange && !MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>())
+            if (MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName().ToLower()) == null)
+            {
+                return;
+            }
+            if (!MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName().ToLower()).GetValue<bool>() ||
+                !gapcloser.Sender.IsValidTarget())
+            {
+                return;
+            }
+            if (CheckHandler.QCount == 2 && MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>() &&
+                MenuHandler.Config.Item("flee").GetValue<KeyBind>().Active &&
+                gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.QRange)
+            {
+                if (Queuer.Queue.Contains("Q") || Items.GetWardSlot() == null)
+                {
+                    return;
+                }
+
+                ObjectManager.Player.Spellbook.CastSpell(
+                    Items.GetWardSlot().SpellSlot, ObjectManager.Player.Position.Extend(gapcloser.End, 50));
+                Queuer.Queue.Insert(0, "Q");
+                Utility.DelayAction.Add(
+                    200, () => ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos));
+                return;
+            }
+            if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.WRange &&
+                !MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>())
             {
                 Queuer.add("W");
                 return;
             }
-            if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.QRange && CheckHandler.QCount == 2 && !MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>())
+            if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.QRange && CheckHandler.QCount == 2 &&
+                !MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>())
             {
                 Queuer.add("Q");
             }
         }
 
-        static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
+        private static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender,
+            Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!MenuHandler.Config.Item("EnabledInterrupter").GetValue<bool>() || !sender.IsValidTarget()) return;
+            if (!MenuHandler.Config.Item("EnabledInterrupter").GetValue<bool>() || !sender.IsValidTarget())
+            {
+                return;
+            }
             Interrupter2.DangerLevel a;
             switch (MenuHandler.Config.Item("minChannel").GetValue<StringList>().SelectedValue)
             {

@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="clipper_library">
+      <HintPath>C:\Users\Joseph\Desktop\iMeh\\System\clipper_library.dll</HintPath>
+    </Reference>
     <Reference Include="LeagueSharp">
       <HintPath>C:\Users\Joseph\Desktop\iMeh\\System\LeagueSharp.dll</HintPath>
     </Reference>
@@ -57,6 +60,7 @@
   <ItemGroup>
     <Compile Include="AntiSpells.cs" />
     <Compile Include="AxeCatcher.cs" />
+    <Compile Include="Geometry.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -71,15 +71,11 @@ namespace FuckingAwesomeDraven
             if (Program.Config.Item("DCR").GetValue<Circle>().Active)
             {
                 var mode = Program.Config.Item("catchRadiusMode").GetValue<StringList>().SelectedIndex;
-                var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 
                 switch (mode)
                 {
                     case 1:
-                        if (!target.IsValidTarget())
-                            break;
-                        Render.Circle.DrawCircle(
-                            target.Position, Program.Config.Item("catchRadius").GetValue<Slider>().Value, Program.Config.Item("DCR").GetValue<Circle>().Color);
+                        new Geometry.Sector(Player.Position.To2D(), Game.CursorPos.To2D() - Player.Position.To2D() , Program.Config.Item("sectorAngle").GetValue<Slider>().Value * (float) Math.PI / 180, Program.Config.Item("catchRadius").GetValue<Slider>().Value).ToPolygon().Draw(Program.Config.Item("DCR").GetValue<Circle>().Color, 1);
                         break;
                     default:
                         Render.Circle.DrawCircle(
@@ -120,7 +116,7 @@ namespace FuckingAwesomeDraven
                 foreach (var axe in AxeSpots)
                 {
                     Drawing.DrawText(Drawing.WorldToScreen(axe.AxeObj.Position).X-32, Drawing.WorldToScreen(axe.AxeObj.Position).Y, Color.Aqua, (((float) (axe.EndTick - Environment.TickCount))) + " ms");
-                    Render.Circle.DrawCircle(axe.AxeObj.Position, 120, Program.Config.Item("DAR").GetValue<Circle>().Color);
+                    Render.Circle.DrawCircle(axe.AxeObj.Position, 120, InCatchRadius(axe) ? Program.Config.Item("DAR").GetValue<Circle>().Color : Color.DeepSkyBlue);
                 }
             }
 
@@ -150,19 +146,16 @@ namespace FuckingAwesomeDraven
         public static bool InCatchRadius(Axe a)
         {
             var mode = Program.Config.Item("catchRadiusMode").GetValue<StringList>().SelectedIndex;
-            var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
             switch (mode)
             {
                 case 1:
-                    if (!target.IsValidTarget()) break;
-                    return a.AxeObj.Position.Distance(target.Position) <
-                           Program.Config.Item("catchRadius").GetValue<Slider>().Value;
+                    var b = new Geometry.Sector(Player.Position.To2D(), Game.CursorPos.To2D() - Player.Position.To2D(), Program.Config.Item("sectorAngle").GetValue<Slider>().Value * (float)Math.PI / 180, Program.Config.Item("catchRadius").GetValue<Slider>().Value).ToPolygon()
+                        .IsOutside(a.AxeObj.Position.Extend(Game.CursorPos, 30).To2D());
+                    return !b;
                 default:
                     return a.AxeObj.Position.Distance(Game.CursorPos) <
                            Program.Config.Item("catchRadius").GetValue<Slider>().Value;
             }
-            return a.AxeObj.Position.Distance(Game.CursorPos) <
-                           Program.Config.Item("catchRadius").GetValue<Slider>().Value;
         }
 
         public static void Orbwalk(Vector3 pos, bool moveOnly = false)
@@ -204,7 +197,7 @@ namespace FuckingAwesomeDraven
             var turret = ObjectManager.Get<Obj_Turret>().FirstOrDefault(t => t.IsEnemy && t.Position.Distance(Player.Position) < 2000 && t.Health > 0);
             for (var i = 0; i < AxeSpots.Count; i++)
             {
-                if (AxeSpots[i].EndTick < Environment.TickCount || (Program.Config.Item("ignoreTowerReticle").GetValue<bool>() && (turret != null && AxeSpots[i].AxeObj.Position.Distance(turret.Position) < 1400)))
+                if (AxeSpots[i].EndTick < Environment.TickCount || (Program.Config.Item("ignoreTowerReticle").GetValue<bool>() && (turret != null && AxeSpots[i].AxeObj.Position.Distance(turret.Position) < 1000)))
                 {
                     AxeSpots.RemoveAt(i);
                     return;
@@ -215,7 +208,7 @@ namespace FuckingAwesomeDraven
             {
                 Orbwalker.ForceTarget(GetTarget() as Obj_AI_Base);
             }
-            else if(selectedAxe != null)
+            else if(selectedAxe != null && Player.Distance(selectedAxe.AxeObj.Position) < 100 && InCatchRadius(selectedAxe))
             {
                 Orbwalker.ForceTarget(null);
                  if (AxeSpots.Count == 2 && Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() &&
@@ -230,7 +223,7 @@ namespace FuckingAwesomeDraven
                     Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
                     return;
                 }
-                 Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
+                Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
                 return;
             }
 
@@ -243,6 +236,8 @@ namespace FuckingAwesomeDraven
                 {
                     Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                     Orbwalker.SetAttack(true);
+                    if (Player.Distance(selectedAxe.AxeObj.Position) < 100)
+                        return;
                     Orbwalker.SetMovement(true);
                     return;
                 }
@@ -253,12 +248,17 @@ namespace FuckingAwesomeDraven
                 {
                     Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                     Orbwalker.SetAttack(true);
+                    if (Player.Distance(selectedAxe.AxeObj.Position) < 100)
+                        return;
                     Orbwalker.SetMovement(true);
                     return;
                 }
             }
 
             if (selectedAxe == null) return;
+
+            if (Player.Distance(selectedAxe.AxeObj.Position) < 100 || !InCatchRadius(selectedAxe))
+                return;
 
             if (AxeSpots.Count == 2 && Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() &&
                     selectedAxe.AxeObj.Position.Distance(Player.Position) >
@@ -270,12 +270,12 @@ namespace FuckingAwesomeDraven
                 {
                     Program.spells[Spells.W].Cast();
                     Orbwalker.SetMovement(true);
-                    Orbwalker.SetOrbwalkingPoint(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
+                    Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
                     return;
                 }
 
-                Orbwalker.SetMovement(true);
-                Orbwalker.SetOrbwalkingPoint(selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
+            Orbwalker.SetMovement(true);
+            Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
         }
 
 

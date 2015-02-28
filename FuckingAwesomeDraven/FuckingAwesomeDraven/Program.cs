@@ -76,7 +76,8 @@ namespace FuckingAwesomeDraven
             axe.AddItem(new MenuItem("useWCatch", "Use W to Catch (smart)").SetValue(false));
             axe.AddItem(
                 new MenuItem("catchRadiusMode", "Catch Radius Mode").SetValue(
-                    new StringList(new[] {"Mouse Mode", "Target Mode {DONT ENABLE}"})));
+                    new StringList(new[] {"Mouse Mode", "Sector Mode"})));
+            axe.AddItem(new MenuItem("sectorAngle", "Sector Angle").SetValue(new Slider(177, 1, 360)));
             axe.AddItem(new MenuItem("catchRadius", "Catch Radius").SetValue(new Slider(600, 300, 1500)));
             axe.AddItem(new MenuItem("ignoreTowerReticle", "Ignore Tower Reticle").SetValue(true));
             axe.AddItem(new MenuItem("clickRemoveAxes", "Remove Axes With Click").SetValue(true));

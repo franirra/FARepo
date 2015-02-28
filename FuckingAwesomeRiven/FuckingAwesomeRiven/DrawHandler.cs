@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 
 namespace FuckingAwesomeRiven
 {
-    class DrawHandler
+    internal class DrawHandler
     {
         public static void Draw(EventArgs args)
         {
@@ -25,7 +21,9 @@ namespace FuckingAwesomeRiven
 
             var PlayerPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
             var RBool = MenuHandler.Config.Item("forcedR").GetValue<KeyBind>().Active;
-            Drawing.DrawText(PlayerPos.X-70, PlayerPos.Y+40, (RBool ? Color.GreenYellow : Color.Red), "Forced R: {0}", (RBool ? "Enabled" : "Disabled"));
+            Drawing.DrawText(
+                PlayerPos.X - 70, PlayerPos.Y + 40, (RBool ? Color.GreenYellow : Color.Red), "Forced R: {0}",
+                (RBool ? "Enabled" : "Disabled"));
 
             if (drawQ.Active)
             {
@@ -37,7 +35,8 @@ namespace FuckingAwesomeRiven
             }
             if (drawE.Active)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, SpellHandler._spells[SpellSlot.E].Range, drawE.Color);
+                Render.Circle.DrawCircle(
+                    ObjectManager.Player.Position, SpellHandler._spells[SpellSlot.E].Range, drawE.Color);
             }
             if (drawR.Active)
             {
@@ -45,11 +44,14 @@ namespace FuckingAwesomeRiven
             }
             if (drawBC.Active)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, 400 + SpellHandler._spells[SpellSlot.E].Range, drawR.Color);
+                Render.Circle.DrawCircle(
+                    ObjectManager.Player.Position, 400 + SpellHandler._spells[SpellSlot.E].Range, drawR.Color);
             }
 
             if (!MenuHandler.Config.Item("debug").GetValue<bool>())
+            {
                 return;
+            }
             Drawing.DrawText(100, 100 + (20 * 1), Color.White, "Can Q" + ": " + CheckHandler.CanQ);
             Drawing.DrawText(100, 100 + (20 * 2), Color.White, "Can W" + ": " + CheckHandler.CanW);
             Drawing.DrawText(100, 100 + (20 * 3), Color.White, "Can E" + ": " + CheckHandler.CanE);
@@ -65,6 +67,12 @@ namespace FuckingAwesomeRiven
             Drawing.DrawText(100, 100 + (20 * 13), Color.White, "lastQ" + ": " + CheckHandler.LastQ);
             Drawing.DrawText(100, 100 + (20 * 14), Color.White, "lastAA" + ": " + CheckHandler.LastAa);
             Drawing.DrawText(100, 100 + (20 * 15), Color.White, "lastE" + ": " + CheckHandler.LastE);
+            var text2 = "";
+            foreach (var q in Queuer.Queue)
+            {
+                text2 = text2 + q + "->";
+            }
+            Drawing.DrawText(100, 100 + (20 * 16), Color.White, "queue" + ": " + text2);
         }
     }
 }

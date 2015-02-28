@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
 
 namespace FuckingAwesomeRiven.EvadeUtils
 {
@@ -13,7 +9,8 @@ namespace FuckingAwesomeRiven.EvadeUtils
     {
         public static void init()
         {
-            var poop = MenuHandler.Config.AddSubMenu(new Menu("Auto E", "AutoE"));
+            var mainMenu2 = MenuHandler.Config.SubMenu("Anti Spells");
+            var poop = mainMenu2.AddSubMenu(new Menu("Auto E", "AutoE"));
             poop.AddItem(new MenuItem("EnabledautoE", "Enabled").SetValue(false));
             poop.AddItem(new MenuItem("donteCC", "Disable For CC").SetValue(true));
             foreach (var champions in ObjectManager.Get<Obj_AI_Hero>().Where(a => a.IsEnemy))
