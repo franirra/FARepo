@@ -259,7 +259,7 @@ namespace FuckingAwesomeDraven
                 spells[Spells.R].GetPrediction(target)
                     .CollisionObjects.Count(a => a.IsValidTarget());
             float distance = ObjectManager.Player.Distance(target);
-            var damageReduction = ((totalUnits > 7)) ? 0.4 : (totalUnits == 0) ? 1.0 : (1 - ((totalUnits) / 12.5));
+            var damageReduction = ((totalUnits > 7)) ? 0.4 : (totalUnits == 0) ? 1.0 : (1 - (((totalUnits) * 8)/100));
             return spells[Spells.R].GetDamage(target) * damageReduction >= (target.Health + (distance / 2000) * target.HPRegenRate);
         }
     }
