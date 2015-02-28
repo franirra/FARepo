@@ -18,19 +18,19 @@ namespace FuckingAwesomeRiven
             mainMenuinterrupter.AddItem(new MenuItem("EnabledInterrupter", "Enabled").SetValue(false));
             mainMenuinterrupter.AddItem(
                 new MenuItem("minChannel", "Minimum Channel Priority").SetValue(
-                    new StringList(new[] { "HIGH", "MEDIUM", "LOW" })));
+                    new StringList(new[] {"HIGH", "MEDIUM", "LOW"})));
 
 
             foreach (var champ in ObjectManager.Get<Obj_AI_Hero>().Where(a => a.IsEnemy))
             {
                 var champmenu = spellMenu.AddSubMenu(new Menu(champ.ChampionName, champ.ChampionName + "GC"));
-                foreach (var gcSpell in AntiGapcloser.Spells)
+                var foreachChamp = champ;
+                foreach (
+                    var gcSpell in
+                        AntiGapcloser.Spells.Where(gcSpell => gcSpell.ChampionName == foreachChamp.ChampionName))
                 {
-                    if (gcSpell.ChampionName == champ.ChampionName)
-                    {
-                        champmenu.AddItem(
-                            new MenuItem(gcSpell.SpellName, gcSpell.SpellName + "- " + gcSpell.Slot).SetValue(true));
-                    }
+                    champmenu.AddItem(
+                        new MenuItem(gcSpell.SpellName, gcSpell.SpellName + "- " + gcSpell.Slot).SetValue(true));
                 }
             }
 
@@ -44,15 +44,18 @@ namespace FuckingAwesomeRiven
             {
                 return;
             }
+
             if (MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName().ToLower()) == null)
             {
                 return;
             }
+
             if (!MenuHandler.Config.Item(gapcloser.Sender.LastCastedSpellName().ToLower()).GetValue<bool>() ||
                 !gapcloser.Sender.IsValidTarget())
             {
                 return;
             }
+
             if (CheckHandler.QCount == 2 && MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>() &&
                 MenuHandler.Config.Item("flee").GetValue<KeyBind>().Active &&
                 gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.QRange)
@@ -69,16 +72,18 @@ namespace FuckingAwesomeRiven
                     200, () => ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos));
                 return;
             }
+
             if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.WRange &&
                 !MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>())
             {
-                Queuer.add("W");
+                Queuer.Add("W");
                 return;
             }
+
             if (gapcloser.Sender.Distance(ObjectManager.Player) < SpellHandler.QRange && CheckHandler.QCount == 2 &&
                 !MenuHandler.Config.Item("Ward Mechanic").GetValue<bool>())
             {
-                Queuer.add("Q");
+                Queuer.Add("Q");
             }
         }
 
@@ -89,6 +94,7 @@ namespace FuckingAwesomeRiven
             {
                 return;
             }
+
             Interrupter2.DangerLevel a;
             switch (MenuHandler.Config.Item("minChannel").GetValue<StringList>().SelectedValue)
             {
@@ -103,26 +109,30 @@ namespace FuckingAwesomeRiven
                     break;
             }
 
-            if (args.DangerLevel == Interrupter2.DangerLevel.High ||
-                args.DangerLevel == Interrupter2.DangerLevel.Medium && a != Interrupter2.DangerLevel.High ||
-                args.DangerLevel == Interrupter2.DangerLevel.Medium && a != Interrupter2.DangerLevel.Medium &&
-                a != Interrupter2.DangerLevel.High)
+            if (args.DangerLevel != Interrupter2.DangerLevel.High &&
+                (args.DangerLevel != Interrupter2.DangerLevel.Medium || a == Interrupter2.DangerLevel.High) &&
+                (args.DangerLevel != Interrupter2.DangerLevel.Medium || a == Interrupter2.DangerLevel.Medium ||
+                 a == Interrupter2.DangerLevel.High))
             {
-                if (sender.Distance(ObjectManager.Player) < SpellHandler.WRange)
-                {
-                    Queuer.add("W");
-                    return;
-                }
-                if (sender.Distance(ObjectManager.Player) < 250 + 325)
-                {
-                    Queuer.add("E", sender.Position);
-                    Queuer.add("W");
-                    return;
-                }
-                if (sender.Distance(ObjectManager.Player) < SpellHandler.QRange && CheckHandler.QCount == 2)
-                {
-                    Queuer.add("Q");
-                }
+                return;
+            }
+
+            if (sender.Distance(ObjectManager.Player) < SpellHandler.WRange)
+            {
+                Queuer.Add("W");
+                return;
+            }
+
+            if (sender.Distance(ObjectManager.Player) < 250 + 325)
+            {
+                Queuer.Add("E", sender.Position);
+                Queuer.Add("W");
+                return;
+            }
+
+            if (sender.Distance(ObjectManager.Player) < SpellHandler.QRange && CheckHandler.QCount == 2)
+            {
+                Queuer.Add("Q");
             }
         }
     }

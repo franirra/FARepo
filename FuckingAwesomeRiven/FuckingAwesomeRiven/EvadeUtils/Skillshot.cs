@@ -16,13 +16,6 @@
 
 #region
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Color = System.Drawing.Color;
 using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 #endregion
@@ -36,12 +29,12 @@ namespace FuckingAwesomeRiven.EvadeUtils
         SkillshotMissileLine,
         SkillshotCone,
         SkillshotMissileCone,
-        SkillshotRing,
+        SkillshotRing
     }
 
     public enum DetectionType
     {
         RecvPacket,
-        ProcessSpell,
+        ProcessSpell
     }
 }

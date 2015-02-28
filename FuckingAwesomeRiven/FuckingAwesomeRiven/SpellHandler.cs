@@ -10,26 +10,26 @@ namespace FuckingAwesomeRiven
 {
     public static class SpellHandler
     {
-        public enum summonerSpell
+        public enum SummonerSpell
         {
             Flash,
             Ignite,
             Smite
         }
 
-        public static Dictionary<SpellSlot, Spell> _spells = new Dictionary<SpellSlot, Spell>
+        public static Dictionary<SpellSlot, Spell> Spells = new Dictionary<SpellSlot, Spell>
         {
-            { SpellSlot.Q, new Spell(SpellSlot.Q, 300) },
-            { SpellSlot.W, new Spell(SpellSlot.W, 250) },
-            { SpellSlot.E, new Spell(SpellSlot.E, 325) },
-            { SpellSlot.R, new Spell(SpellSlot.R, 900) }
+            {SpellSlot.Q, new Spell(SpellSlot.Q, 300)},
+            {SpellSlot.W, new Spell(SpellSlot.W, 250)},
+            {SpellSlot.E, new Spell(SpellSlot.E, 325)},
+            {SpellSlot.R, new Spell(SpellSlot.R, 900)}
         };
 
-        public static Dictionary<summonerSpell, SpellSlot> SummonerDictionary =
-            new Dictionary<summonerSpell, SpellSlot>
+        public static Dictionary<SummonerSpell, SpellSlot> SummonerDictionary =
+            new Dictionary<SummonerSpell, SpellSlot>
             {
-                { summonerSpell.Flash, Player.GetSpellSlot("SummonerFlash") },
-                { summonerSpell.Ignite, Player.GetSpellSlot("SummonerDot") }
+                {SummonerSpell.Flash, Player.GetSpellSlot("SummonerFlash")},
+                {SummonerSpell.Ignite, Player.GetSpellSlot("SummonerDot")}
             };
 
         public static Obj_AI_Hero Player
@@ -49,49 +49,46 @@ namespace FuckingAwesomeRiven
 
         public static void CastQ(Obj_AI_Base target = null)
         {
-            if (!_spells[SpellSlot.Q].IsReady())
+            if (!Spells[SpellSlot.Q].IsReady())
             {
                 return;
             }
-            if (target != null)
-            {
-                _spells[SpellSlot.Q].Cast(target.Position, true);
-            }
-            else
-            {
-                _spells[SpellSlot.Q].Cast(Game.CursorPos, true);
-            }
+
+            Spells[SpellSlot.Q].Cast(target != null ? target.Position : Game.CursorPos, true);
         }
 
         public static void CastW(Obj_AI_Hero target = null)
         {
-            if (!_spells[SpellSlot.W].IsReady())
+            if (!Spells[SpellSlot.W].IsReady())
             {
                 return;
             }
+
             if (target.IsValidTarget(WRange))
             {
-                castItems(target);
-                _spells[SpellSlot.W].Cast();
+                CastItems(target);
+                Spells[SpellSlot.W].Cast();
             }
+
             if (target == null)
             {
-                _spells[SpellSlot.W].Cast();
+                Spells[SpellSlot.W].Cast();
             }
         }
 
         public static void CastE(Vector3 pos)
         {
-            if (!_spells[SpellSlot.E].IsReady())
+            if (!Spells[SpellSlot.E].IsReady())
             {
                 return;
             }
-            _spells[SpellSlot.E].Cast(pos);
+
+            Spells[SpellSlot.E].Cast(pos);
         }
 
         public static void CastR()
         {
-            _spells[SpellSlot.R].Cast();
+            Spells[SpellSlot.R].Cast();
         }
 
         public static void CastR2(Obj_AI_Base target)
@@ -101,36 +98,40 @@ namespace FuckingAwesomeRiven
             r2.Cast(target);
         }
 
-        public static void castFlash(Vector3 pos)
+        public static void CastFlash(Vector3 pos)
         {
-            if (!SummonerDictionary[summonerSpell.Flash].IsReady())
+            if (!SummonerDictionary[SummonerSpell.Flash].IsReady())
             {
                 return;
             }
-            Player.Spellbook.CastSpell(SummonerDictionary[summonerSpell.Flash], pos);
+
+            Player.Spellbook.CastSpell(SummonerDictionary[SummonerSpell.Flash], pos);
         }
 
-        public static void castIgnite(Obj_AI_Hero target)
+        public static void CastIgnite(Obj_AI_Hero target)
         {
-            if (!SummonerDictionary[summonerSpell.Ignite].IsReady())
+            if (!SummonerDictionary[SummonerSpell.Ignite].IsReady())
             {
                 return;
             }
-            Player.Spellbook.CastSpell(SummonerDictionary[summonerSpell.Ignite], target);
+
+            Player.Spellbook.CastSpell(SummonerDictionary[SummonerSpell.Ignite], target);
         }
 
-        public static void castItems(Obj_AI_Base target)
+        public static void CastItems(Obj_AI_Base target)
         {
             if (!target.IsValidTarget())
             {
                 return;
             }
+
             if (!target.IsValid<Obj_AI_Hero>() && target.IsValidTarget(300))
             {
                 if (ItemData.Tiamat_Melee_Only.GetItem().IsReady())
                 {
                     ItemData.Tiamat_Melee_Only.GetItem().Cast();
                 }
+
                 if (ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsReady())
                 {
                     ItemData.Ravenous_Hydra_Melee_Only.GetItem().Cast();
@@ -144,11 +145,13 @@ namespace FuckingAwesomeRiven
                     {
                         ItemData.Tiamat_Melee_Only.GetItem().Cast();
                     }
+
                     if (ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsReady())
                     {
                         ItemData.Ravenous_Hydra_Melee_Only.GetItem().Cast();
                     }
                 }
+
                 if (ItemData.Youmuus_Ghostblade.GetItem().IsReady())
                 {
                     ItemData.Youmuus_Ghostblade.GetItem().Cast();
@@ -156,18 +159,20 @@ namespace FuckingAwesomeRiven
             }
         }
 
-        public static void animCancel(Obj_AI_Base target)
+        public static void AnimCancel(Obj_AI_Base target)
         {
             if (!CheckHandler.CanMove || MenuHandler.Config.Item("flee").GetValue<KeyBind>().Active ||
                 MenuHandler.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)
             {
                 return;
             }
+
             var pos2 = Player.Position.Extend(Game.CursorPos, 100);
             if (target.IsValidTarget())
             {
                 pos2 = Player.Position.Extend(target.Position, 100);
             }
+
             Player.IssueOrder(GameObjectOrder.MoveTo, pos2);
         }
 
@@ -183,23 +188,26 @@ namespace FuckingAwesomeRiven
                 MenuHandler.Orbwalker.SetMovement(true);
                 MenuHandler.Orbwalker.SetAttack(true);
             }
+
             if (CH.CanMove)
             {
                 Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 MenuHandler.Orbwalker.SetMovement(true);
             }
 
-            if (target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && CH.CanAa)
+            if (!target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) || !CH.CanAa)
             {
-                MenuHandler.Orbwalker.SetAttack(true);
-                CH.CanMove = false;
-                Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-                CH.CanQ = false;
-                CH.CanW = false;
-                CH.CanE = false;
-                CH.CanSr = false;
-                CH.LastAa = Environment.TickCount;
+                return;
             }
+
+            MenuHandler.Orbwalker.SetAttack(true);
+            CH.CanMove = false;
+            Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+            CH.CanQ = false;
+            CH.CanW = false;
+            CH.CanE = false;
+            CH.CanSr = false;
+            CH.LastAa = Environment.TickCount;
         }
     }
 }

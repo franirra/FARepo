@@ -1069,14 +1069,8 @@ namespace FuckingAwesomeRiven.EvadeUtils
         public static TargetSpellData GetByName(string spellName)
         {
             spellName = spellName.ToLower();
-            if (Spells.FirstOrDefault(spell => spell.Name == spellName) != null)
-            {
-                return Spells.FirstOrDefault(spell => spell.Name == spellName);
-            }
-            else
-            {
-                return null;
-            }
+            var first = Spells.FirstOrDefault(spell => spell.Name == spellName);
+            return Spells.FirstOrDefault(spell => spell.Name == spellName) != null ? first : null;
         }
     }
 }
