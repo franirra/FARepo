@@ -200,7 +200,7 @@ namespace FuckingAwesomeRiven
             }
 
             if (!CanQ &&
-                Environment.TickCount + Game.Ping / 2 + 25 >= LastAa + ObjectManager.Player.AttackCastDelay * 1000)
+                Environment.TickCount + Game.Ping / 2 >= LastAa + ObjectManager.Player.AttackCastDelay * 1000)
             {
                 CanQ = true;
             }
