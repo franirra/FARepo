@@ -20,6 +20,49 @@ namespace FuckingAwesomeRiven
             Player = ObjectManager.Player;
         }
 
+        public static void Harass()
+        {
+            SH.Orbwalk(Target);
+            if (Queuer.Queue.Count > 0 || !Target.IsValidTarget()) return;
+
+            if (MenuHandler.GetMenuBool("HQ3AAWE") && CH.QCount == 2 && SH.Spells[SpellSlot.Q].IsReady() && SH.Spells[SpellSlot.W].IsReady() &&
+                SH.Spells[SpellSlot.E].IsReady() && Target.IsValidTarget(SH.QRange))
+            {
+                Queuer.Add("Q");
+                Queuer.Add("AA");
+                Queuer.Add("W");
+                return;
+            }
+
+            if (MenuHandler.GetMenuBool("HQAA3WE") && SH.Spells[SpellSlot.Q].IsReady() && SH.Spells[SpellSlot.W].IsReady() && SH.Spells[SpellSlot.E].IsReady() &&
+                Target.IsValidTarget(SH.QRange))
+            {
+                for (int i = 0; i < 3- CH.QCount; i++)
+                {
+                    AddQaa();
+                }
+                Queuer.Add("W");
+            }
+
+            if (MenuHandler.GetMenuBool("HW") && SH.Spells[SpellSlot.W].IsReady() && Target.IsValidTarget(SH.WRange))
+            {
+                Queuer.Add("W");
+                Queuer.Add("Hydra");
+                return;
+            }
+
+            if (MenuHandler.GetMenuBool("HQ") && SH.Spells[SpellSlot.Q].IsReady() && Target.IsValidTarget(SH.QRange))
+            {
+                AddQaa();
+                return;
+            }
+
+            if (false && MenuHandler.GetMenuBool("HE") && !SH.Spells[SpellSlot.Q].IsReady() && !SH.Spells[SpellSlot.W].IsReady())
+            {
+                Queuer.Add("E", Player.Position.Extend(Target.Position, -SH.Spells[SpellSlot.E].Range));
+            }
+        }
+
         public static void LastHit()
         {
             var minion = MinionManager.GetMinions(Player.Position, SH.QRange).FirstOrDefault();

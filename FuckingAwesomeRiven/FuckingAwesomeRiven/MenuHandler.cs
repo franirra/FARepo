@@ -49,6 +49,15 @@ namespace FuckingAwesomeRiven
             combo.AddItem(new MenuItem("CR", "Use R").SetValue(true));
             combo.AddItem(new MenuItem("CR2", "Use R2").SetValue(true));
 
+            var harass = Config.AddSubMenu(new Menu("Harass", "Harass"));
+            harass.AddItem(new MenuItem("fdsf", "Harass Combos"));
+            harass.AddItem(new MenuItem("HQ3AAWE", "Q3->AA->W->E Back").SetValue(true));
+            harass.AddItem(new MenuItem("HQAA3WE", "(Q->AA)x3->W->E Back").SetValue(true));
+            harass.AddItem(new MenuItem("sdffsdf", ""));
+            harass.AddItem(new MenuItem("HQ", "Use Q").SetValue(true));
+            harass.AddItem(new MenuItem("HW", "Use W").SetValue(true));
+            harass.AddItem(new MenuItem("HE", "Use E Back | disabled").SetValue(false));
+
             var burst = Config.AddSubMenu(new Menu("Burst Combos", "Burst Combos"));
             burst.AddItem(new MenuItem("shyCombo", "-- ShyCombo").SetValue(true));
             burst.AddItem(new MenuItem("shyComboinfo1", "E->R->Flash->AA->Hydra->W->R2->Q3"));
@@ -97,6 +106,7 @@ namespace FuckingAwesomeRiven
                 new MenuItem("jungleCombo", "Jungle Clear").SetValue(new KeyBind('C', KeyBindType.Press)));
             keyBindings.AddItem(new MenuItem("waveClear", "WaveClear").SetValue(new KeyBind('C', KeyBindType.Press)));
             keyBindings.AddItem(new MenuItem("lastHit", "LastHit").SetValue(new KeyBind('X', KeyBindType.Press)));
+            keyBindings.AddItem(new MenuItem("harass", "Harass").SetValue(new KeyBind('V', KeyBindType.Press)));
             keyBindings.AddItem(new MenuItem("flee", "Flee").SetValue(new KeyBind('Z', KeyBindType.Press)));
             keyBindings.AddItem(
                 new MenuItem("forcedR", "Forced R Enabled in Combo").SetValue(
@@ -119,7 +129,7 @@ namespace FuckingAwesomeRiven
             info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
             info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.7-3 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.8-0 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();

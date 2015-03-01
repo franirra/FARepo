@@ -84,7 +84,10 @@ namespace FuckingAwesomeRiven
             {
                 SH.CastQ();
             }
-
+            if (config.Item("harass").GetValue<KeyBind>().Active)
+            {
+                StateHandler.Harass();
+            }
             if (config.Item("normalCombo").GetValue<KeyBind>().Active)
             {
                 StateHandler.MainCombo();
