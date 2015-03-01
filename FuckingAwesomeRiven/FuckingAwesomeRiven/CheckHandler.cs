@@ -170,8 +170,7 @@ namespace FuckingAwesomeRiven
 
         public static void Checks()
         {
-            if (MidQ &&
-                Environment.TickCount - LastQ >= (ObjectManager.Player.AttackCastDelay*1000) - Game.Ping*0.5 - 25)
+            if (MidQ)
             {
                 MidQ = false;
                 CanMove = true;
@@ -200,6 +199,12 @@ namespace FuckingAwesomeRiven
                 QCount = 0;
             }
 
+            if (!CanQ &&
+                Environment.TickCount + Game.Ping / 2 + 25 >= LastAa + ObjectManager.Player.AttackCastDelay * 1000)
+            {
+                CanQ = true;
+            }
+
             if (!CanW && !(MidAa || MidQ || MidE) && SH.Spells[SpellSlot.W].IsReady())
             {
                 CanW = true;
@@ -217,7 +222,7 @@ namespace FuckingAwesomeRiven
 
             if (MidAa &&
                 Environment.TickCount >=
-                LastAa + ObjectManager.Player.AttackCastDelay*1000 + Game.Ping/3 +
+                LastAa + (ObjectManager.Player.AttackDelay * 1000) - (Game.Ping * 0.5) +
                 MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)
             {
                 CanMove = true;
@@ -229,13 +234,13 @@ namespace FuckingAwesomeRiven
             }
 
             if (!(MidAa || MidQ || MidE || MidW) &&
-                Environment.TickCount + Game.Ping/2 >= LastAa + ObjectManager.Player.AttackCastDelay*1000)
+                Environment.TickCount + Game.Ping / 2 >= LastAa + ObjectManager.Player.AttackCastDelay * 1000)
             {
                 CanMove = true;
             }
 
             if (!CanAa && !(MidQ || MidE || MidW) &&
-                Environment.TickCount + Game.Ping/2 + 25 >= LastAa + ObjectManager.Player.AttackDelay*1000)
+                Environment.TickCount + Game.Ping / 2 + 25 >= LastAa + ObjectManager.Player.AttackDelay * 1000)
             {
                 CanAa = true;
             }

@@ -17,8 +17,7 @@ namespace FuckingAwesomeRiven
         public static Vector3 FlashPos;
         private static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
-        private static readonly int QDelay =
-            (int) (ObjectManager.Player.AttackCastDelay*1000 - (Game.Ping*0.5) - 25);
+        private static readonly int QDelay = (int)(ObjectManager.Player.AttackCastDelay * 1000 - (Game.Ping * 0.5));
 
         public static void DoQueue()
         {
@@ -91,7 +90,7 @@ namespace FuckingAwesomeRiven
 
         private static void Aa()
         {
-            if (StateHandler.Target == null || R2Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 40))
+            if (StateHandler.Target == null || StateHandler.Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 40))
             {
                 Remove("AA");
                 return;
@@ -108,7 +107,7 @@ namespace FuckingAwesomeRiven
                 return;
             }
 
-            if (!S.Spells[SpellSlot.Q].IsReady() && Environment.TickCount > C.LastQ + 300)
+            if (!S.Spells[SpellSlot.Q].IsReady())
             {
                 Queue.Remove("Q");
                 return;
