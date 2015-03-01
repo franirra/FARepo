@@ -119,7 +119,7 @@ namespace FuckingAwesomeRiven
             info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
             info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.7-2 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.7-3 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();
