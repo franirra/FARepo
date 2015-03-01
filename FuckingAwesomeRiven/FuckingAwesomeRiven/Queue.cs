@@ -15,6 +15,7 @@ namespace FuckingAwesomeRiven
         public static Obj_AI_Base R2Target;
         public static Vector3 EPos;
         public static Vector3 FlashPos;
+        private static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         private static readonly int QDelay =
             (int) (ObjectManager.Player.AttackCastDelay*1000 - (Game.Ping*0.5) - 25);
@@ -29,6 +30,7 @@ namespace FuckingAwesomeRiven
             switch (Queue[0])
             {
                 case "AA":
+                    Aa();
                     break;
                 case "Q":
                     Qq();
@@ -87,15 +89,17 @@ namespace FuckingAwesomeRiven
             Queue.RemoveAt(0);
         }
 
-        public static void Aa()
+        private static void Aa()
         {
-            if (StateHandler.Target == null || !Orbwalking.InAutoAttackRange(StateHandler.Target))
+            if (StateHandler.Target == null || R2Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 40))
             {
                 Remove("AA");
+                return;
             }
+            Player.IssueOrder(GameObjectOrder.AttackUnit, StateHandler.Target);
         }
 
-        public static void Qq()
+        private static void Qq()
         {
             if (
                 !(Environment.TickCount >=
@@ -116,7 +120,7 @@ namespace FuckingAwesomeRiven
             }
         }
 
-        public static void Qw()
+        private static void Qw()
         {
             if (
                 !(Environment.TickCount >=
@@ -137,7 +141,7 @@ namespace FuckingAwesomeRiven
             }
         }
 
-        public static void Qe()
+        private static void Qe()
         {
             if (
                 !(Environment.TickCount >=
@@ -158,7 +162,7 @@ namespace FuckingAwesomeRiven
             }
         }
 
-        public static void Qr()
+        private static void Qr()
         {
             if (
                 !(Environment.TickCount >=
@@ -179,7 +183,7 @@ namespace FuckingAwesomeRiven
             }
         }
 
-        public static void Qr2()
+        private static void Qr2()
         {
             if (
                 !(Environment.TickCount >=
@@ -204,7 +208,7 @@ namespace FuckingAwesomeRiven
             r2.Cast(R2Target);
         }
 
-        public static void Hydra()
+        private static void Hydra()
         {
             if (
                 !(Environment.TickCount >=
@@ -230,7 +234,7 @@ namespace FuckingAwesomeRiven
             ItemData.Ravenous_Hydra_Melee_Only.GetItem().Cast();
         }
 
-        public static void Flash()
+        private static void Flash()
         {
             if (!S.SummonerDictionary[SpellHandler.SummonerSpell.Flash].IsReady() || !FlashPos.IsValid())
             {

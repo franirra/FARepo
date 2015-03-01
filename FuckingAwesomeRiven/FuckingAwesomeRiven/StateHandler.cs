@@ -195,8 +195,10 @@ namespace FuckingAwesomeRiven
                 {
                     Queuer.Add("R");
                     Queuer.Add("E", Target.Position);
+                    Queuer.Add("AA");
                     Queuer.Add("W");
                     Queuer.Add("Hydra");
+                    Queuer.Add("AA");
                     AddQaa(true);
                     return;
                 }
@@ -206,6 +208,7 @@ namespace FuckingAwesomeRiven
                 {
                     Queuer.Add("R");
                     Queuer.Add("E", Target.Position);
+                    Queuer.Add("AA");
                     Queuer.Add("W");
                     Queuer.Add("Hydra");
                     return;
@@ -404,6 +407,7 @@ namespace FuckingAwesomeRiven
                 Queuer.Add("W");
                 Queuer.Add("R2", Target);
                 Queuer.Add("Q");
+                Queuer.Add("AA");
                 return;
             }
 

@@ -33,7 +33,7 @@ namespace FuckingAwesomeRiven.EvadeUtils
         {
             if (!sender.IsValidTarget() || !sender.IsChampion(sender.BaseSkinName) ||
                 sender.Distance(ObjectManager.Player) > 1500 || !SpellHandler.Spells[LeagueSharp.SpellSlot.E].IsReady() ||
-                args.SData.IsAutoAttack())
+                args.SData.IsAutoAttack() || !MenuHandler.Config.Item("EnabledautoE").GetValue<bool>())
             {
                 return;
             }
