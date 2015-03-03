@@ -57,6 +57,7 @@ namespace FuckingAwesomeRiven
                 return;
             }
 
+
             if (false && MenuHandler.GetMenuBool("HE") && !SH.Spells[SpellSlot.Q].IsReady() && !SH.Spells[SpellSlot.W].IsReady())
             {
                 Queuer.Add("E", Player.Position.Extend(Target.Position, -SH.Spells[SpellSlot.E].Range));
@@ -186,14 +187,14 @@ namespace FuckingAwesomeRiven
             if (SH.Spells[SpellSlot.Q].IsReady() && Environment.TickCount - CH.LastE >= 250 &&
                 MenuHandler.GetMenuBool("QJ"))
             {
-                if (minion.IsValidTarget(SH.QRange) && CH.CanQ)
+                if (minion.IsValidTarget(SH.QRange) && CH.CanMove)
                 {
                     SH.CastQ(minion);
                 }
             }
         }
 
-        public static void AddQaa(bool qFirst = false)
+        private static void AddQaa(bool qFirst = false)
         {
             var qAa = MenuHandler.Config.Item("QAA").GetValue<StringList>().SelectedIndex == 1;
             if (qFirst)

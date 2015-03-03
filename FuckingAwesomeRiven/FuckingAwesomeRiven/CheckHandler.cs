@@ -8,6 +8,7 @@ namespace FuckingAwesomeRiven
 {
     internal class CheckHandler
     {
+        public static Obj_AI_Base Player { get { return ObjectManager.Player; } }
         public static int LastQ,
             LastQ2,
             LastW,
@@ -57,7 +58,6 @@ namespace FuckingAwesomeRiven
 
             if (!MidQ && spell.Name.Contains("RivenBasicAttack"))
             {
-                Queuer.Remove("AA");
                 LastAa = Environment.TickCount;
                 LastTiamatCancel = Environment.TickCount + (int) ObjectManager.Player.AttackCastDelay;
                 LastPassive = Environment.TickCount;
@@ -170,7 +170,7 @@ namespace FuckingAwesomeRiven
 
         public static void Checks()
         {
-            if (MidQ)
+            if (MidQ && LastQ + 50 < Environment.TickCount)
             {
                 MidQ = false;
                 CanMove = true;
@@ -199,12 +199,6 @@ namespace FuckingAwesomeRiven
                 QCount = 0;
             }
 
-            if (!CanQ &&
-                Environment.TickCount + Game.Ping / 2 >= LastAa + ObjectManager.Player.AttackCastDelay * 1000)
-            {
-                CanQ = true;
-            }
-
             if (!CanW && !(MidAa || MidQ || MidE) && SH.Spells[SpellSlot.W].IsReady())
             {
                 CanW = true;
@@ -221,9 +215,7 @@ namespace FuckingAwesomeRiven
             }
 
             if (MidAa &&
-                Environment.TickCount >=
-                LastAa + (ObjectManager.Player.AttackDelay * 1000) - (Game.Ping * 0.5) +
-                MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)
+                !Player.IsWindingUp && Environment.TickCount > LastAa + Game.Ping + 80)
             {
                 CanMove = true;
                 CanQ = true;
@@ -233,8 +225,7 @@ namespace FuckingAwesomeRiven
                 MidAa = false;
             }
 
-            if (!(MidAa || MidQ || MidE || MidW) &&
-                Environment.TickCount + Game.Ping / 2 >= LastAa + ObjectManager.Player.AttackCastDelay * 1000)
+            if (!Player.IsWindingUp && Environment.TickCount > LastAa + Game.Ping + 80)
             {
                 CanMove = true;
             }

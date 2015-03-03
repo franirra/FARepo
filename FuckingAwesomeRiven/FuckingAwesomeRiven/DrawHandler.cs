@@ -54,6 +54,12 @@ namespace FuckingAwesomeRiven
                     ObjectManager.Player.Position, 400 + SpellHandler.Spells[SpellSlot.E].Range, drawR.Color);
             }
 
+            if (MenuHandler.Config.Item("DER").GetValue<Circle>().Active)
+            {
+                Render.Circle.DrawCircle(
+                    ObjectManager.Player.Position, SpellHandler.Spells[SpellSlot.W].IsReady() ? SpellHandler.Spells[SpellSlot.E].Range + SpellHandler.Spells[SpellSlot.W].Range : SpellHandler.Spells[SpellSlot.E].Range, MenuHandler.Config.Item("DER").GetValue<Circle>().Color);
+            }
+
             if (!MenuHandler.Config.Item("debug").GetValue<bool>())
             {
                 return;
@@ -74,6 +80,7 @@ namespace FuckingAwesomeRiven
             Drawing.DrawText(100, 100 + (20*13), Color.White, "lastQ" + ": " + CheckHandler.LastQ);
             Drawing.DrawText(100, 100 + (20*14), Color.White, "lastAA" + ": " + CheckHandler.LastAa);
             Drawing.DrawText(100, 100 + (20*15), Color.White, "lastE" + ": " + CheckHandler.LastE);
+            Drawing.DrawText(100, 100 + (20 * 17), Color.White, "windingup" + ": " + ObjectManager.Player.IsWindingUp);
 
             var text2 = Queuer.Queue.Aggregate(string.Empty, (current, q) => current + q + "->");
             Drawing.DrawText(100, 100 + (20*16), Color.White, "queue" + ": " + text2);

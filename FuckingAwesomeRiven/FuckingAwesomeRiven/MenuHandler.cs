@@ -90,6 +90,7 @@ namespace FuckingAwesomeRiven
             draw.AddItem(new MenuItem("DE", "Draw E Range").SetValue(new Circle(false, Color.White)));
             draw.AddItem(new MenuItem("DR", "Draw R Range").SetValue(new Circle(false, Color.White)));
             draw.AddItem(new MenuItem("DBC", "Draw Burst Combo Range").SetValue(new Circle(false, Color.White)));
+            draw.AddItem(new MenuItem("DER", "Draw Engage Range").SetValue(new Circle(true, Color.White)));
             draw.AddItem(new MenuItem("DD", "Draw Damage [soon]").SetValue(new Circle(false, Color.White)));
 
             var misc = Config.AddSubMenu(new Menu("Misc", "Misc"));
@@ -129,7 +130,7 @@ namespace FuckingAwesomeRiven
             info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
             info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.8-0 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.8-2 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();
