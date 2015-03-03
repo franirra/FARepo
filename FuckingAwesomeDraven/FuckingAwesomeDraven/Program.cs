@@ -123,7 +123,7 @@ namespace FuckingAwesomeDraven
 
         static void Game_OnGameUpdate(EventArgs args)
         {
-            if (TargetSelector.GetTarget(3000, TargetSelector.DamageType.Physical).IsValidTarget() && Config.Item("forceR").GetValue<KeyBind>().Active) spells[Spells.R].Cast(TargetSelector.GetTarget(3000, TargetSelector.DamageType.Physical));
+            if (Config.Item("forceR").GetValue<KeyBind>().Active && TargetSelector.GetTarget(3000, TargetSelector.DamageType.Physical).IsValidTarget()) spells[Spells.R].Cast(TargetSelector.GetTarget(3000, TargetSelector.DamageType.Physical));
 
             AxeCatcher.catchAxes();
 
@@ -164,15 +164,18 @@ namespace FuckingAwesomeDraven
             {
                 spells[Spells.Q].Cast();
             }
+
             if (W && !ObjectManager.Player.HasBuff("dravenfurybuff", true) && !ObjectManager.Player.HasBuff("dravenfurybuff") &&
                 spells[Spells.W].IsReady() && Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
             {
                 spells[Spells.W].Cast();
             }
+
             if (E && spells[Spells.E].IsReady() && AxeCatcher.CanMakeIt(500) && Target.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast(Target);
             }
+
             var t2 = TargetSelector.GetTarget(3000, TargetSelector.DamageType.Physical);
             if (R && spells[Spells.R].IsReady() && t2.IsValidTarget(spells[Spells.R].Range))
             {
@@ -255,6 +258,7 @@ namespace FuckingAwesomeDraven
 
         public static bool getRCalc(Obj_AI_Hero target)
         {
+            return false;
             int totalUnits =
                 spells[Spells.R].GetPrediction(target)
                     .CollisionObjects.Count(a => a.IsValidTarget());

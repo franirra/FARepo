@@ -211,9 +211,7 @@ namespace FuckingAwesomeDraven
             else if(selectedAxe != null && Player.Distance(selectedAxe.AxeObj.Position) < 100 && InCatchRadius(selectedAxe))
             {
                 Orbwalker.ForceTarget(null);
-                 if (AxeSpots.Count == 2 && Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() &&
-                    selectedAxe.AxeObj.Position.Distance(Player.Position) >
-                    ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) * (Player.MoveSpeed)) &&
+                 if (!CanMakeIt((int) (((selectedAxe.EndTick / 1000) - (Environment.TickCount / 1000)) * Player.MoveSpeed)) &&
                     (selectedAxe.AxeObj.Position.Distance(Player.Position) <
                      ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) *
                       (Player.MoveSpeed *
@@ -236,7 +234,7 @@ namespace FuckingAwesomeDraven
                 {
                     Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                     Orbwalker.SetAttack(true);
-                    if (Player.Distance(selectedAxe.AxeObj.Position) < 100)
+                    if (selectedAxe != null && Player.Distance(selectedAxe.AxeObj.Position) < 100)
                         return;
                     Orbwalker.SetMovement(true);
                     return;
