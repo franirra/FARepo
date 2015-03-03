@@ -208,10 +208,14 @@ namespace FuckingAwesomeDraven
             {
                 Orbwalker.ForceTarget(GetTarget() as Obj_AI_Base);
             }
+                
             else if(selectedAxe != null && Player.Distance(selectedAxe.AxeObj.Position) < 100 && InCatchRadius(selectedAxe))
             {
                 Orbwalker.ForceTarget(null);
-                 if (!CanMakeIt((int) (((selectedAxe.EndTick / 1000) - (Environment.TickCount / 1000)) * Player.MoveSpeed)) &&
+                Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
+                return;
+
+                 if (AxeSpots.Count == 2 && Program.Config.Item("useWCatch").GetValue<bool>() && Program.spells[Spells.W].IsReady() && !CanMakeIt((int) (((selectedAxe.EndTick / 1000) - (Environment.TickCount / 1000)) * Player.MoveSpeed)) &&
                     (selectedAxe.AxeObj.Position.Distance(Player.Position) <
                      ((selectedAxe.EndTick / 1000 - Environment.TickCount / 1000) *
                       (Player.MoveSpeed *
@@ -221,9 +225,8 @@ namespace FuckingAwesomeDraven
                     Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
                     return;
                 }
-                Player.IssueOrder(GameObjectOrder.MoveTo, selectedAxe.AxeObj.Position.Extend(Game.CursorPos, 95));
-                return;
             }
+                  
 
             if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
             {
