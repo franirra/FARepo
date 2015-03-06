@@ -84,14 +84,14 @@ namespace FuckingAwesomeLeeSinReborn
                     CheckHandler.spells[SpellSlot.R].CastOnUnit(_selectedEnemy);
                     return;
                 }
-                if (Player.Distance(InsecPos()) < (Items.GetWardSlot() == null ? 400 : 600) && CheckHandler.WState && CheckHandler.spells[SpellSlot.W].IsReady())
+                if (Player.Distance(InsecPos()) < 600)
                 {
-                    if (Items.GetWardSlot() != null)
+                    if (CheckHandler.WState && CheckHandler.spells[SpellSlot.W].IsReady())
                     {
                         WardjumpHandler.Jump(InsecPos(), false, false, true);
                         return;
                     }
-                    if (!Program.Config.Item("flashInsec").GetValue<bool>()) return;
+                    if (!Program.Config.Item("flashInsec").GetValue<bool>() || CheckHandler.WState && CheckHandler.spells[SpellSlot.W].IsReady() && Items.GetWardSlot() != null) return;
                     if (_selectedEnemy.Distance(Player) < CheckHandler.spells[SpellSlot.R].Range)
                     {
                         CheckHandler.spells[SpellSlot.R].CastOnUnit(_selectedEnemy);
