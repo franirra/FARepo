@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -8,8 +9,12 @@ namespace FuckingAwesomeRiven
 {
     internal class DrawHandler
     {
+        public static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         public static void Draw(EventArgs args)
         {
+
+            
+
             if (MenuHandler.Config.Item("drawCirclesforTest").GetValue<bool>())
             {
                 JumpHandler.DrawCircles();

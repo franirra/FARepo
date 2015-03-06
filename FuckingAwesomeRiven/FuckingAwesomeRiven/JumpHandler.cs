@@ -20,7 +20,7 @@ namespace FuckingAwesomeRiven
         }
     }
 
-    internal class JumpHandler
+    internal static class JumpHandler
     {
         public static List<Vector3> JumpPositionsList2 = new List<Vector3>();
         public static List<JumpPosition> AllJumpPos = new List<JumpPosition>();
@@ -163,6 +163,17 @@ namespace FuckingAwesomeRiven
                     "new jumpPosition(new Vector3({0}f, {1}f, {2}f), new Vector3({3}f, {4}f, {5}f)), ", j.DirectionPos.X,
                     j.DirectionPos.Y, j.DirectionPos.Z, j.JumpPos.X, j.JumpPos.Y, j.JumpPos.Z);
             }
+        }
+
+        public static bool IsFacing(this Vector3 source, Vector3 target)
+        {
+            if (!source.IsValid() || !target.IsValid())
+            {
+                return false;
+            }
+
+            const float angle = 90;
+            return source.To2D().AngleBetween((target - source).To2D()) < angle;
         }
     }
 }
