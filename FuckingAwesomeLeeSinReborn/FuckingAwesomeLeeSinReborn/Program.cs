@@ -79,6 +79,8 @@ namespace FuckingAwesomeLeeSinReborn
             farm.AddItem(new MenuItem("EWC", "Use E").SetValue(true));
 
             var draw = Config.AddSubMenu(new Menu("Draw", "Draw"));
+            draw.AddItem(new MenuItem("LowFPS", "Low Fps Mode").SetValue(false));
+            draw.AddItem(new MenuItem("LowFPSMode", "Low FPS Settings").SetValue(new StringList(new []{"EXTREME", "MEDIUM", "LOW"})));
             draw.AddItem(new MenuItem("DQ", "Draw Q Range").SetValue(new Circle(false, Color.White)));
             draw.AddItem(new MenuItem("DW", "Draw W Range").SetValue(new Circle(false, Color.White)));
             draw.AddItem(new MenuItem("DE", "Draw E Range").SetValue(new Circle(false, Color.White)));
@@ -100,7 +102,7 @@ namespace FuckingAwesomeLeeSinReborn
             info.AddItem(new MenuItem("Msdsddsd", "you can do so by sending money to:"));
             info.AddItem(new MenuItem("Msdsadfdsd", "jayyeditsdude@gmail.com"));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.1-2 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.1-3 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
 
@@ -122,21 +124,24 @@ namespace FuckingAwesomeLeeSinReborn
 
         static void Drawing_OnDraw(EventArgs args)
         {
+            var lowFps = Config.Item("LowFPS").GetValue<bool>();
+            var lowFpsMode = Config.Item("LowFPSMode").GetValue<StringList>().SelectedIndex + 1;
+            
             if (Config.Item("DQ").GetValue<Circle>().Active)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, CheckHandler.spells[SpellSlot.Q].Range, Config.Item("DQ").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, CheckHandler.spells[SpellSlot.Q].Range, Config.Item("DQ").GetValue<Circle>().Color, lowFps ? lowFpsMode : 5);
             }
             if (Config.Item("DW").GetValue<Circle>().Active)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, CheckHandler.spells[SpellSlot.W].Range, Config.Item("DW").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, CheckHandler.spells[SpellSlot.W].Range, Config.Item("DW").GetValue<Circle>().Color , lowFps ? lowFpsMode : 5);
             }
             if (Config.Item("DE").GetValue<Circle>().Active)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, CheckHandler.spells[SpellSlot.E].Range, Config.Item("DE").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, CheckHandler.spells[SpellSlot.E].Range, Config.Item("DE").GetValue<Circle>().Color , lowFps ? lowFpsMode : 5);
             }
             if (Config.Item("DR").GetValue<Circle>().Active)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, CheckHandler.spells[SpellSlot.R].Range, Config.Item("DR").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, CheckHandler.spells[SpellSlot.R].Range, Config.Item("DR").GetValue<Circle>().Color , lowFps ? lowFpsMode : 5);
             }
             WardjumpHandler.Draw();
             InsecHandler.Draw();

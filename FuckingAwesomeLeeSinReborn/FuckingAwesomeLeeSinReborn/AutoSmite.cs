@@ -63,7 +63,9 @@ namespace FuckingAwesomeLeeSinReborn
         {
             if (!Program.Config.Item("smiteEnabled").GetValue<KeyBind>().Active || !Program.Config.Item("DS").GetValue<Circle>().Active)
                 return;
-            Render.Circle.DrawCircle(Player.Position, 700, Program.Config.Item("DS").GetValue<Circle>().Color);
+            var lowFps = Program.Config.Item("LowFPS").GetValue<bool>();
+            var lowFpsMode = Program.Config.Item("LowFPSMode").GetValue<StringList>().SelectedIndex + 1;
+            Render.Circle.DrawCircle(Player.Position, 700, Program.Config.Item("DS").GetValue<Circle>().Color, lowFps ? lowFpsMode : 5);
         }
     }
 }

@@ -68,7 +68,9 @@ namespace FuckingAwesomeLeeSinReborn
         {
             if (!Program.Config.Item("escapeMode").GetValue<bool>() || !Program.Config.Item("DES").GetValue<bool>())
                 return;
-            if (_active && CheckHandler.spells[SpellSlot.Q].IsReady())
+            var lowFps = Program.Config.Item("LowFPS").GetValue<bool>();
+            var lowFpsMode = Program.Config.Item("LowFPSMode").GetValue<StringList>().SelectedIndex + 1;
+            if (_active && CheckHandler.spells[SpellSlot.Q].IsReady() && !lowFps)
             {
                 _rect.Draw(Color.White);
             }
@@ -78,13 +80,13 @@ namespace FuckingAwesomeLeeSinReborn
                 {
                     if (pos.Distance(Player.Position) < 2000)
                         Render.Circle.DrawCircle(
-                            pos, 100, (_rect.IsOutside(pos.To2D()) ? Color.White : Color.DeepSkyBlue));
+                            pos, 100, (_rect.IsOutside(pos.To2D()) ? Color.White : Color.DeepSkyBlue), lowFps ? lowFpsMode : 5);
                 }
                 else
                 {
                     if (pos.Distance(Player.Position) < 2000)
                         Render.Circle.DrawCircle(
-                            pos, 100, Color.White);
+                            pos, 100, Color.White, lowFps ? lowFpsMode : 5);
                 }
             }
         }

@@ -23,10 +23,12 @@ namespace FuckingAwesomeLeeSinReborn
                 return;
             if (!DrawEnabled)
                 return;
+            var lowFps = Program.Config.Item("LowFPS").GetValue<bool>();
+            var lowFpsMode = Program.Config.Item("LowFPSMode").GetValue<StringList>().SelectedIndex + 1;
             if (_drawPos.IsValid())
             {
-                Render.Circle.DrawCircle(_drawPos, 70, Color.RoyalBlue);
-                Render.Circle.DrawCircle(Player.Position, 600, Color.White);
+                Render.Circle.DrawCircle(_drawPos, 70, Color.RoyalBlue, lowFps ? lowFpsMode : 5);
+                Render.Circle.DrawCircle(Player.Position, 600, Color.White, lowFps ? lowFpsMode : 5);
             }
         }
 

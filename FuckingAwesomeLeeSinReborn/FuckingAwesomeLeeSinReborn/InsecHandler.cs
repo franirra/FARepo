@@ -36,17 +36,20 @@ namespace FuckingAwesomeLeeSinReborn
 
         public static void Draw()
         {
+            var lowFps = Program.Config.Item("LowFPS").GetValue<bool>();
+            var lowFpsMode = Program.Config.Item("LowFPSMode").GetValue<StringList>().SelectedIndex + 1;
             if (_selectedUnit != null)
             {
-                Render.Circle.DrawCircle(_selectedUnit.Position, _selectedUnit.BoundingRadius + 50, Color.White);
+                if (lowFpsMode != 1) Render.Circle.DrawCircle(_selectedUnit.Position, _selectedUnit.BoundingRadius + 50, Color.White, lowFps ? lowFpsMode : 5);
+                if (lowFpsMode == 1) Drawing.DrawText(Drawing.WorldToScreen(_selectedUnit.Position).X - 40, Drawing.WorldToScreen(_selectedUnit.Position).Y + 10, Color.White, "Selected Ally");
             }
             if (_selectedEnemy.IsValidTarget() && _selectedEnemy.IsVisible && !_selectedEnemy.IsDead)
             {
-                Render.Circle.DrawCircle(_selectedEnemy.Position, _selectedEnemy.BoundingRadius + 50, Color.SteelBlue);
                 Drawing.DrawText(Drawing.WorldToScreen(_selectedEnemy.Position).X - 40, Drawing.WorldToScreen(_selectedEnemy.Position).Y + 10, Color.White, "Insec Target");
-                if (InsecPos().IsValid())
+                if (lowFpsMode != 1) Render.Circle.DrawCircle(_selectedEnemy.Position, _selectedEnemy.BoundingRadius + 50, Color.SteelBlue, lowFps ? lowFpsMode : 5);
+                if (InsecPos().IsValid() && lowFpsMode != 1)
                 {
-                    Render.Circle.DrawCircle(InsecPos(), 110, Color.SteelBlue);
+                    Render.Circle.DrawCircle(InsecPos(), 110, Color.SteelBlue, lowFps ? lowFpsMode : 5);
                 }
             }
         }
