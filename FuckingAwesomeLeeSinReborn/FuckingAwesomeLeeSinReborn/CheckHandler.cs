@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
+using LeagueSharp.Common.Data;
 using SharpDX;
 
 namespace FuckingAwesomeLeeSinReborn
@@ -148,5 +149,30 @@ namespace FuckingAwesomeLeeSinReborn
         {
             return ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(unit => unit.IsEnemy && unit.HasQBuff());
         } }
+
+        public static void UseItems(Obj_AI_Base target, bool minions = false)
+        {
+            if (ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsReady() &&
+                ItemData.Ravenous_Hydra_Melee_Only.Range > Player.Distance(target))
+            {
+                ItemData.Ravenous_Hydra_Melee_Only.GetItem().Cast();
+            }
+            if (ItemData.Tiamat_Melee_Only.GetItem().IsReady() &&
+                ItemData.Tiamat_Melee_Only.Range > Player.Distance(target))
+            {
+                ItemData.Tiamat_Melee_Only.GetItem().Cast();
+            }
+            if(minions) return;
+            if (ItemData.Blade_of_the_Ruined_King.GetItem().IsReady() &&
+                ItemData.Blade_of_the_Ruined_King.Range > Player.Distance(target))
+            {
+                ItemData.Blade_of_the_Ruined_King.GetItem().Cast(target);
+            }
+            if (ItemData.Youmuus_Ghostblade.GetItem().IsReady() &&
+                Orbwalking.GetRealAutoAttackRange(Player) > Player.Distance(target))
+            {
+                ItemData.Youmuus_Ghostblade.GetItem().Cast();
+            }
+        }
     }
 }

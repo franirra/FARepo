@@ -26,6 +26,8 @@ namespace FuckingAwesomeLeeSinReborn
             var forcePassive = Program.Config.Item("CpassiveCheck").GetValue<bool>();
             var minPassive = Program.Config.Item("CpassiveCheckCount").GetValue<Slider>().Value;
 
+            CheckHandler.UseItems(target);
+
             if (useR && useQ && CheckHandler.spells[SpellSlot.R].IsReady() && CheckHandler.spells[SpellSlot.Q].IsReady() && (CheckHandler.QState || target.HasQBuff()) &&
                 CheckHandler.spells[SpellSlot.R].GetDamage(target) + (CheckHandler.QState ? CheckHandler.spells[SpellSlot.Q].GetDamage(target) : 0) +
                 CheckHandler.Q2Damage(target, CheckHandler.spells[SpellSlot.R].GetDamage(target) + (CheckHandler.QState ? CheckHandler.spells[SpellSlot.Q].GetDamage(target) : 0)) > target.Health)
@@ -89,6 +91,8 @@ namespace FuckingAwesomeLeeSinReborn
 
             Orbwalking.Orbwalk(Orbwalking.InAutoAttackRange(target) ? target : null, Game.CursorPos);
 
+            CheckHandler.UseItems(target);
+
             if (!target.IsValidTarget()) return;
 
             if (target.HasBuffOfType(BuffType.Knockback) && target.Distance(Player) > 300 && target.HasQBuff() && !CheckHandler.QState)
@@ -129,6 +133,7 @@ namespace FuckingAwesomeLeeSinReborn
             var useE = Program.Config.Item("HE").GetValue<bool>();
             var forcePassive = Program.Config.Item("HpassiveCheck").GetValue<bool>();
             var minPassive = Program.Config.Item("HpassiveCheckCount").GetValue<Slider>().Value;
+
 
             if (!CheckHandler.QState && CheckHandler.LastQ + 200 < Environment.TickCount && useQ && !CheckHandler.QState && CheckHandler.spells[SpellSlot.Q].IsReady() && target.HasQBuff() && (CheckHandler.LastQ + 2700 < Environment.TickCount || CheckHandler.spells[SpellSlot.Q].GetDamage(target, 1) > target.Health || target.Distance(Player) > Orbwalking.GetRealAutoAttackRange(Player) + 50))
             {
@@ -173,6 +178,9 @@ namespace FuckingAwesomeLeeSinReborn
                 return;
             }
 
+
+            CheckHandler.UseItems(target, true);
+
             var useQ = Program.Config.Item("QWC").GetValue<bool>();
             var useE = Program.Config.Item("EWC").GetValue<bool>();
 
@@ -215,6 +223,8 @@ namespace FuckingAwesomeLeeSinReborn
             var useQ = Program.Config.Item("QJ").GetValue<bool>();
             var useW = Program.Config.Item("WJ").GetValue<bool>();
             var useE = Program.Config.Item("EJ").GetValue<bool>();
+
+            CheckHandler.UseItems(target, true);
 
             if (CheckHandler.PassiveStacks > 0 || CheckHandler.LastSpell + 300 < Environment.TickCount)
                 return;
