@@ -25,6 +25,11 @@ namespace FuckingAwesomeLeeSinReborn
         public static void Init()
         {
             GameObject.OnDelete += Obj_AI_Hero_OnCreate;
+            GameObject.OnCreate += GameObject_OnCreate;
+        }
+
+        static void GameObject_OnCreate(GameObject sender, EventArgs args)
+        {
         }
 
         public static readonly int[] SmitePurple = { 3713, 3726, 3725, 3726, 3723 };
@@ -104,11 +109,11 @@ namespace FuckingAwesomeLeeSinReborn
                     LastR = Environment.TickCount;
                     LastSpell = Environment.TickCount;
                     PassiveStacks = 2;
-                    if (InsecHandler.flashR)
+                    if (InsecHandler.FlashR)
                     {
-                        Player.Spellbook.CastSpell(Player.GetSpellSlot("summonerflash"), InsecHandler.flashPos);
-                        InsecHandler.flashPos = new Vector3();
-                        InsecHandler.flashR = false;
+                        Player.Spellbook.CastSpell(Player.GetSpellSlot("summonerflash"), InsecHandler.FlashPos);
+                        InsecHandler.FlashPos = new Vector3();
+                        InsecHandler.FlashR = false;
                     }
                     break;
             }
@@ -133,6 +138,10 @@ namespace FuckingAwesomeLeeSinReborn
         public static bool HasQBuff(this Obj_AI_Base unit)
         {
             return (unit.HasBuff("BlindMonkQOne", true) || unit.HasBuff("blindmonkqonechaos", true));
+        }
+        public static bool HasEBuff(this Obj_AI_Base unit)
+        {
+            return (unit.HasBuff("BlindMonkEOne", true) || unit.HasBuff("BlindMonkEOne"));
         }
 
         public static Obj_AI_Base BuffedEnemy { get

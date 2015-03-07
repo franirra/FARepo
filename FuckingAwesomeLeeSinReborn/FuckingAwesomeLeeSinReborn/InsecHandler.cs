@@ -14,8 +14,8 @@ namespace FuckingAwesomeLeeSinReborn
     {
         private static Obj_AI_Base _selectedUnit;
         private static Obj_AI_Base _selectedEnemy;
-        public static bool flashR;
-        public static Vector3 flashPos;
+        public static bool FlashR;
+        public static Vector3 FlashPos;
         private static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         public static void OnClick(WndEventArgs args)
@@ -51,7 +51,7 @@ namespace FuckingAwesomeLeeSinReborn
             }
         }
 
-        private static Vector3 InsecPos()
+        public static Vector3 InsecPos()
         {
             if (_selectedUnit != null && _selectedEnemy.IsValidTarget() && Program.Config.Item("clickInsec").GetValue<bool>())
             {
@@ -79,24 +79,32 @@ namespace FuckingAwesomeLeeSinReborn
             }
             if (!InsecPos().IsValid() || !_selectedEnemy.IsValidTarget() || !CheckHandler.spells[SpellSlot.R].IsReady())
                     return;
-                if (Player.Distance(InsecPos()) < 120)
+                if (Player.Distance(InsecPos()) <= 120)
                 {
                     CheckHandler.spells[SpellSlot.R].CastOnUnit(_selectedEnemy);
                     return;
                 }
                 if (Player.Distance(InsecPos()) < 600)
                 {
-                    if (CheckHandler.WState && CheckHandler.spells[SpellSlot.W].IsReady())
+                    if (CheckHandler.WState && CheckHandler.spells[SpellSlot.W].IsReady() && CheckHandler.CheckQ)
                     {
-                        WardjumpHandler.Jump(InsecPos(), false, false, true);
+                        Obj_AI_Base unit = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(a => a.IsAlly && a.Distance(InsecPos()) < 120);
+                        if (unit != null)
+                        {
+                            CheckHandler.spells[SpellSlot.W].CastOnUnit(unit);
+                        }
+                        else if (CheckHandler.LastWard + 500 < Environment.TickCount && Items.GetWardSlot() != null)
+                        {
+                            Player.Spellbook.CastSpell(Items.GetWardSlot().SpellSlot, InsecPos());
+                        }
                         return;
                     }
                     if (!Program.Config.Item("flashInsec").GetValue<bool>() || CheckHandler.WState && CheckHandler.spells[SpellSlot.W].IsReady() && Items.GetWardSlot() != null) return;
                     if (_selectedEnemy.Distance(Player) < CheckHandler.spells[SpellSlot.R].Range)
                     {
                         CheckHandler.spells[SpellSlot.R].CastOnUnit(_selectedEnemy);
-                        flashPos = InsecPos();
-                        flashR = true;
+                        FlashPos = InsecPos();
+                        FlashR = true;
                     }
                     else
                     {

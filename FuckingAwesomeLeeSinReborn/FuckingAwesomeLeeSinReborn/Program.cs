@@ -108,6 +108,7 @@ namespace FuckingAwesomeLeeSinReborn
             
             CheckHandler.spells[SpellSlot.Q].SetSkillshot(0.25f, 65f, 1800f, true, SkillshotType.SkillshotLine);
 
+            CheckHandler.Init();
             JumpHandler.Load();
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -157,8 +158,8 @@ namespace FuckingAwesomeLeeSinReborn
                 InsecHandler.DoInsec();
                 return;
             }
-                InsecHandler.flashPos = new Vector3();
-                InsecHandler.flashR = false;
+                InsecHandler.FlashPos = new Vector3();
+                InsecHandler.FlashR = false;
 
             if (Config.Item("Wardjump").GetValue<KeyBind>().Active)
             {
@@ -183,3 +184,4 @@ namespace FuckingAwesomeLeeSinReborn
         }
     }
 }
+ 

@@ -26,6 +26,19 @@ namespace FuckingAwesomeLeeSinReborn
             var forcePassive = Program.Config.Item("CpassiveCheck").GetValue<bool>();
             var minPassive = Program.Config.Item("CpassiveCheckCount").GetValue<Slider>().Value;
 
+            if (useR && useQ && CheckHandler.spells[SpellSlot.R].IsReady() && CheckHandler.spells[SpellSlot.Q].IsReady() && (CheckHandler.QState || target.HasQBuff()) &&
+                CheckHandler.spells[SpellSlot.R].GetDamage(target) + (CheckHandler.QState ? CheckHandler.spells[SpellSlot.Q].GetDamage(target) : 0) +
+                CheckHandler.Q2Damage(target, CheckHandler.spells[SpellSlot.R].GetDamage(target) + (CheckHandler.QState ? CheckHandler.spells[SpellSlot.Q].GetDamage(target) : 0)) > target.Health)
+            {
+                if (CheckHandler.QState)
+                {
+                    CheckHandler.spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
+                    return;
+                }
+                CheckHandler.spells[SpellSlot.R].CastOnUnit(target);
+                Utility.DelayAction.Add(300, () => CheckHandler.spells[SpellSlot.Q].Cast());
+            }
+
             if (useR && CheckHandler.spells[SpellSlot.R].IsReady() &&
                 CheckHandler.spells[SpellSlot.R].GetDamage(target) > target.Health)
             {
@@ -203,13 +216,7 @@ namespace FuckingAwesomeLeeSinReborn
             var useW = Program.Config.Item("WJ").GetValue<bool>();
             var useE = Program.Config.Item("EJ").GetValue<bool>();
 
-            if (useQ && !CheckHandler.QState && CheckHandler.spells[SpellSlot.Q].IsReady() && target.HasQBuff() && (CheckHandler.LastQ + 2700 < Environment.TickCount || CheckHandler.spells[SpellSlot.Q].GetDamage(target, 1) > target.Health || target.Distance(Player) > Orbwalking.GetRealAutoAttackRange(Player) + 50))
-            {
-                CheckHandler.spells[SpellSlot.Q].Cast();
-                return;
-            }
-
-            if (CheckHandler.PassiveStacks > 0)
+            if (CheckHandler.PassiveStacks > 0 || CheckHandler.LastSpell + 300 < Environment.TickCount)
                 return;
 
             if (CheckHandler.spells[SpellSlot.Q].IsReady() && useQ)
@@ -219,6 +226,8 @@ namespace FuckingAwesomeLeeSinReborn
                     CheckHandler.spells[SpellSlot.Q].Cast(target);
                     return;
                 }
+                CheckHandler.spells[SpellSlot.Q].Cast();
+                return;
             }
 
             if (CheckHandler.spells[SpellSlot.W].IsReady() && useW && CheckHandler.LastW + 400 < Environment.TickCount)
