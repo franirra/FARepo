@@ -226,7 +226,7 @@ namespace FuckingAwesomeLeeSinReborn
 
             CheckHandler.UseItems(target, true);
 
-            if (CheckHandler.PassiveStacks > 0 || CheckHandler.LastSpell + 300 < Environment.TickCount)
+            if (CheckHandler.PassiveStacks > 0 || CheckHandler.LastSpell + 300 > Environment.TickCount)
                 return;
 
             if (CheckHandler.spells[SpellSlot.Q].IsReady() && useQ)
