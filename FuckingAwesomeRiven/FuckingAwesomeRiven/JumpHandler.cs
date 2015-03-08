@@ -54,10 +54,11 @@ namespace FuckingAwesomeRiven
                 Jumping = true;
                 if (!SpellHandler.Spells[SpellSlot.E].IsReady())
                 {
+                    SmoothMouse.addMouseEvent(SelectedPos.DirectionPos, true);
                     ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, SelectedPos.DirectionPos);
                     Utility.DelayAction.Add(
                         100 + Game.Ping/2,
-                        () => ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, SelectedPos.JumpPos));
+                        () => { SmoothMouse.addMouseEvent(SelectedPos.JumpPos, true); ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, SelectedPos.JumpPos); });
                     Utility.DelayAction.Add(
                         300 + Game.Ping/2, () =>
                         {
@@ -67,8 +68,9 @@ namespace FuckingAwesomeRiven
                 }
                 else
                 {
+                    SmoothMouse.addMouseEvent(SelectedPos.DirectionPos);
                     ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, SelectedPos.DirectionPos);
-                    Utility.DelayAction.Add(100 + Game.Ping/2, () => SpellHandler.CastE(SelectedPos.JumpPos));
+                    Utility.DelayAction.Add(100 + Game.Ping / 2, () => { SpellHandler.CastE(SelectedPos.JumpPos); });
                     Utility.DelayAction.Add(
                         200 + Game.Ping/2, () =>
                         {

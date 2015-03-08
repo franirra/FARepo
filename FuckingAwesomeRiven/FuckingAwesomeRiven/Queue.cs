@@ -98,6 +98,7 @@ namespace FuckingAwesomeRiven
                 return;
             }
             Player.IssueOrder(GameObjectOrder.AttackUnit, StateHandler.Target);
+            SmoothMouse.addMouseEvent(Game.CursorPos, true);
         }
 
         private static void Qq()
@@ -115,7 +116,9 @@ namespace FuckingAwesomeRiven
 
             if (S.Spells[SpellSlot.Q].IsReady())
             {
+
                 S.CastQ(StateHandler.Target);
+                SmoothMouse.addMouseEvent(Player.Position.Extend(Game.CursorPos,300), false);
             }
         }
 
@@ -135,6 +138,7 @@ namespace FuckingAwesomeRiven
             if (S.Spells[SpellSlot.W].IsReady())
             {
                 S.CastW(StateHandler.Target);
+                SmoothMouse.addMouseEvent(Game.CursorPos, false);
             }
         }
 
@@ -154,6 +158,7 @@ namespace FuckingAwesomeRiven
             if (S.Spells[SpellSlot.E].IsReady())
             {
                 S.CastE(StateHandler.Target.IsValidTarget() ? StateHandler.Target.Position : EPos);
+                SmoothMouse.addMouseEvent(StateHandler.Target.IsValidTarget() ? StateHandler.Target.Position : EPos, false);
             }
         }
 
@@ -173,6 +178,7 @@ namespace FuckingAwesomeRiven
             if (S.Spells[SpellSlot.R].IsReady())
             {
                 S.CastR();
+                SmoothMouse.addMouseEvent(Player.Position.Extend(Game.CursorPos,300), false);
             }
         }
 
@@ -197,6 +203,8 @@ namespace FuckingAwesomeRiven
             var r2 = new Spell(SpellSlot.R, 900);
             r2.SetSkillshot(0.25f, 45, 1200, false, SkillshotType.SkillshotCone);
             r2.Cast(R2Target);
+
+            SmoothMouse.addMouseEvent(R2Target.Position, false);
         }
 
         private static void Hydra()
@@ -232,6 +240,7 @@ namespace FuckingAwesomeRiven
             }
 
             SpellHandler.CastFlash(FlashPos);
+            SmoothMouse.addMouseEvent(FlashPos, false);
         }
     }
 }

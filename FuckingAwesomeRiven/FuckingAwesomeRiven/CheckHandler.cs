@@ -69,6 +69,7 @@ namespace FuckingAwesomeRiven
                 MidAa = true;
                 CanMove = false;
                 CanAa = false;
+                SmoothMouse.addMouseEvent(args.Target.Position, true);
             }
 
             if (spell.Name.Contains("RivenTriCleave"))

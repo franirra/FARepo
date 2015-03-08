@@ -53,7 +53,8 @@ namespace FuckingAwesomeRiven
             {
                 return;
             }
-
+            if (target != null)
+            SmoothMouse.addMouseEvent(target.Position);
             Spells[SpellSlot.Q].Cast(target != null ? target.Position : Game.CursorPos, true);
         }
 
@@ -83,6 +84,8 @@ namespace FuckingAwesomeRiven
                 return;
             }
 
+            SmoothMouse.addMouseEvent(pos);
+
             Spells[SpellSlot.E].Cast(pos);
         }
 
@@ -95,6 +98,7 @@ namespace FuckingAwesomeRiven
         {
             var r2 = new Spell(SpellSlot.R, 900);
             r2.SetSkillshot(0.25f, 45, 1200, false, SkillshotType.SkillshotCone);
+            SmoothMouse.addMouseEvent(target.Position);
             r2.Cast(target);
         }
 
@@ -104,7 +108,7 @@ namespace FuckingAwesomeRiven
             {
                 return;
             }
-
+            SmoothMouse.addMouseEvent(pos);
             Player.Spellbook.CastSpell(SummonerDictionary[SummonerSpell.Flash], pos);
         }
 
@@ -115,6 +119,7 @@ namespace FuckingAwesomeRiven
                 return;
             }
 
+            SmoothMouse.addMouseEvent(target.Position);
             Player.Spellbook.CastSpell(SummonerDictionary[SummonerSpell.Ignite], target);
         }
 
@@ -167,14 +172,18 @@ namespace FuckingAwesomeRiven
                 return;
             }
 
-            var pos2 = Player.Position.Extend(Game.CursorPos, 100);
+            var pos2 = Player.Position.Extend(Game.CursorPos, 400);
             if (target.IsValidTarget())
             {
-                pos2 = Player.Position.Extend(target.Position, 100);
+                pos2 = Player.Position.Extend(target.ServerPosition, 540);
+                SmoothMouse.addMouseEvent(pos2, true);
             }
 
+            
             Player.IssueOrder(GameObjectOrder.MoveTo, pos2);
         }
+
+        public static int LastMove;
 
         public static void Orbwalk(Obj_AI_Base target = null)
         {
@@ -193,6 +202,11 @@ namespace FuckingAwesomeRiven
             {
                 Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 MenuHandler.Orbwalker.SetMovement(true);
+                if (SpellHandler.LastMove + 200 < Environment.TickCount)
+                {
+                    LastMove = Environment.TickCount;
+                    SmoothMouse.addMouseEvent(Player.Position.Extend(Game.CursorPos, 300), false);
+                }
             }
 
             if (!target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) || !CH.CanAa)
@@ -202,6 +216,7 @@ namespace FuckingAwesomeRiven
 
             MenuHandler.Orbwalker.SetAttack(true);
             CH.CanMove = false;
+            SmoothMouse.addMouseEvent(target.Position, false);
             Player.IssueOrder(GameObjectOrder.AttackUnit, target);
             CH.CanQ = false;
             CH.CanW = false;

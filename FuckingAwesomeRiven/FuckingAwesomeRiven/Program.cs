@@ -29,7 +29,7 @@ namespace FuckingAwesomeRiven
             {
                 return;
             }
-
+            
             MenuHandler.InitMenu();
             CheckHandler.Init();
             Player = ObjectManager.Player;
@@ -39,6 +39,7 @@ namespace FuckingAwesomeRiven
             Obj_AI_Base.OnProcessSpellCast += AutoE.autoE;
             Drawing.OnDraw += DrawHandler.Draw;
             JumpHandler.Load();
+            SmoothMouse.start();
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
@@ -74,26 +75,27 @@ namespace FuckingAwesomeRiven
 
             CheckHandler.Checks();
             var config = MenuHandler.Config;
-            if (config.Item("jungleCombo").GetValue<KeyBind>().Active)
-            {
-                StateHandler.JungleFarm();
-            }
+            
 
             if (MenuHandler.GetMenuBool("keepQAlive") && SH.Spells[SpellSlot.Q].IsReady() && CheckHandler.QCount >= 1 &&
                 Environment.TickCount - CheckHandler.LastQ > 3650 && !Player.IsRecalling())
             {
                 SH.CastQ();
+            } 
+            if (config.Item("jungleCombo").GetValue<KeyBind>().Active)
+            {
+                StateHandler.JungleFarm();
             }
             if (config.Item("harass").GetValue<KeyBind>().Active)
             {
                 StateHandler.Harass();
             }
-            if (config.Item("normalCombo").GetValue<KeyBind>().Active)
+            else if (config.Item("normalCombo").GetValue<KeyBind>().Active)
             {
                 StateHandler.MainCombo();
             }
 
-            if (config.Item("burstCombo").GetValue<KeyBind>().Active)
+            else if (config.Item("burstCombo").GetValue<KeyBind>().Active)
             {
                 StateHandler.BurstCombo();
             }
@@ -113,6 +115,7 @@ namespace FuckingAwesomeRiven
             {
                 MenuHandler.Orbwalker.SetAttack(true);
                 MenuHandler.Orbwalker.SetMovement(true);
+                SmoothMouse.queuePos.Clear();
                 Utility.DelayAction.Add(
                     2000, () =>
                     {

@@ -93,11 +93,16 @@ namespace FuckingAwesomeLeeSinReborn
 
         private static void Escape()
         {
+            if (CheckHandler.BuffedEnemy.IsValidTarget() && CheckHandler.BuffedEnemy.IsValid<Obj_AI_Hero>())
+            {
+                InitQ = false;
+                return;
+            }
             if (InitQ)
             {
                 foreach (var point in JunglePos)
                 {
-                    if (Player.Distance(point) < 100 || CheckHandler.LastQ2 + 2000 < Environment.TickCount && CheckHandler.LastQ + 2000 < Environment.TickCount)
+                    if (Player.Distance(point) < 100 || CheckHandler.LastQ2 + 2000 < Environment.TickCount)
                         InitQ = false;
                 }
             }

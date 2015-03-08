@@ -130,7 +130,8 @@ namespace FuckingAwesomeRiven
             info.AddItem(new MenuItem("clearCurrent", "Clear Current").SetValue(false));
             info.AddItem(new MenuItem("drawCirclesforTest", "Draw Circles").SetValue(false));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.8-2 BETA"));
+            Config.AddItem(new MenuItem("streamMouse", "Stream Mouse Mode").SetValue(false));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.9.0 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
             Config.AddToMainMenu();

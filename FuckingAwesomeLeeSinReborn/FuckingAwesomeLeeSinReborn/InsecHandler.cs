@@ -96,7 +96,7 @@ namespace FuckingAwesomeLeeSinReborn
                         {
                             CheckHandler.spells[SpellSlot.W].CastOnUnit(unit);
                         }
-                        else if (CheckHandler.LastWard + 500 < Environment.TickCount && Items.GetWardSlot() != null)
+                        else if (CheckHandler.LastWard + 500 < Environment.TickCount && Items.GetWardSlot() != null && Player.Distance(InsecPos()) < 600)
                         {
                             Player.Spellbook.CastSpell(Items.GetWardSlot().SpellSlot, InsecPos());
                         }

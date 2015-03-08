@@ -38,7 +38,7 @@ namespace FuckingAwesomeLeeSinReborn
             var champions = Program.Config.Item("jumpChampions").GetValue<bool>();
             var wards = Program.Config.Item("jumpWards").GetValue<bool>();
 
-            var poly = new Geometry.Rectangle(Player.Position.To2D(), Player.Position.To2D().Extend(pos.To2D(), 700), 60).ToPolygon();
+            var poly = new Geometry.Rectangle(Player.Position.To2D().Extend(pos.To2D(), 200), Player.Position.To2D().Extend(pos.To2D(), 700), 60).ToPolygon();
 
             if (minions)
             {
@@ -86,7 +86,7 @@ namespace FuckingAwesomeLeeSinReborn
                 Console.WriteLine("casting W for WJ");
                 return;
             }
-            if (pos.Distance(Player.Position) > 600 || pos.IsWall())
+            if (pos.Distance(Player.Position) > 600)
             {
                 Console.WriteLine("too far for wardjump");
                 return;
