@@ -13,7 +13,8 @@ namespace FuckingAwesomeRiven
         public static void Draw(EventArgs args)
         {
 
-            
+            if (MenuHandler.Config.Item("DALL").GetValue<bool>())
+                return;
 
             if (MenuHandler.Config.Item("drawCirclesforTest").GetValue<bool>())
             {

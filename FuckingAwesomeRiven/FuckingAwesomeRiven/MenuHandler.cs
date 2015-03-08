@@ -84,7 +84,7 @@ namespace FuckingAwesomeRiven
             farm.AddItem(new MenuItem("WWC", "Use W").SetValue(true));
 
             var draw = Config.AddSubMenu(new Menu("Draw", "Draw"));
-
+            draw.AddItem(new MenuItem("DALL", "Disable All").SetValue(false));
             draw.AddItem(new MenuItem("DQ", "Draw Q Range").SetValue(new Circle(false, Color.White)));
             draw.AddItem(new MenuItem("DW", "Draw W Range").SetValue(new Circle(false, Color.White)));
             draw.AddItem(new MenuItem("DE", "Draw E Range").SetValue(new Circle(false, Color.White)));
