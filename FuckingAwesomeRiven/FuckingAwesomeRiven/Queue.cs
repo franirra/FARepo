@@ -90,7 +90,7 @@ namespace FuckingAwesomeRiven
 
         private static void Aa()
         {
-            if (Environment.TickCount - CheckHandler.LastAa < Game.Ping + 80 || Player.IsWindingUp)
+            if (Environment.TickCount - CheckHandler.LastAa < Game.Ping + 80 + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value || Player.IsWindingUp)
                 return;
             if (StateHandler.Target == null || StateHandler.Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 40) || !Player.IsWindingUp && CheckHandler.LastAa + 80 < Environment.TickCount)
             {
@@ -103,7 +103,7 @@ namespace FuckingAwesomeRiven
 
         private static void Qq()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping > Environment.TickCount)
+            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
             {
                 return;
             }
@@ -124,7 +124,7 @@ namespace FuckingAwesomeRiven
 
         private static void Qw()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping > Environment.TickCount)
+            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
             {
                 return;
             }
@@ -144,7 +144,7 @@ namespace FuckingAwesomeRiven
 
         private static void Qe()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping > Environment.TickCount)
+            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
             {
                 return;
             }
@@ -164,7 +164,7 @@ namespace FuckingAwesomeRiven
 
         private static void Qr()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping > Environment.TickCount)
+            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
             {
                 return;
             }
@@ -184,7 +184,7 @@ namespace FuckingAwesomeRiven
 
         private static void Qr2()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping > Environment.TickCount)
+            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
             {
                 return;
             }
@@ -209,7 +209,7 @@ namespace FuckingAwesomeRiven
 
         private static void Hydra()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping > Environment.TickCount)
+            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
             {
                 return;
             }

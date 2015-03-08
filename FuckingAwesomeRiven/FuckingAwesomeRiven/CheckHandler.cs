@@ -216,7 +216,7 @@ namespace FuckingAwesomeRiven
             }
 
             if (MidAa &&
-                !Player.IsWindingUp && Environment.TickCount > LastAa + Game.Ping + 80)
+                !Player.IsWindingUp && Environment.TickCount > LastAa + Game.Ping + 80 + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)
             {
                 CanMove = true;
                 CanQ = true;
@@ -226,7 +226,7 @@ namespace FuckingAwesomeRiven
                 MidAa = false;
             }
 
-            if (!Player.IsWindingUp && Environment.TickCount > LastAa + Game.Ping + 80)
+            if (!Player.IsWindingUp && Environment.TickCount > LastAa + Game.Ping + 80 + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value)
             {
                 CanMove = true;
             }
