@@ -44,6 +44,15 @@ namespace FuckingAwesomeRiven
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
+            if (MenuHandler.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None && MenuHandler.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && MenuHandler.Config.Item("streamMouse").GetValue<bool>())
+            {
+                var random = new Random().Next(500);
+                if (SpellHandler.LastMove + 200 + random < Environment.TickCount && CheckHandler.CanMove)
+                {
+                    SpellHandler.LastMove = Environment.TickCount;
+                    SmoothMouse.doMouseClick();
+                }
+            }
             if (Queuer.Queue.Count > 0)
             {
                 Queuer.DoQueue();

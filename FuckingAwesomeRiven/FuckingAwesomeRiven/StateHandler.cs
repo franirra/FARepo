@@ -461,10 +461,12 @@ namespace FuckingAwesomeRiven
         public static void Flee()
         {
             Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-            if (SpellHandler.LastMove + 200 < Environment.TickCount)
+
+            var random = new Random().Next(500);
+            if (SpellHandler.LastMove + 200 + random < Environment.TickCount && MenuHandler.Config.Item("streamMouse").GetValue<bool>())
             {
                 SpellHandler.LastMove = Environment.TickCount;
-                SmoothMouse.addMouseEvent(Game.CursorPos, true);
+                SmoothMouse.doMouseClick();
             }
 
             if (SH.Spells[SpellSlot.E].IsReady() && CH.LastQ + 250 < Environment.TickCount &&

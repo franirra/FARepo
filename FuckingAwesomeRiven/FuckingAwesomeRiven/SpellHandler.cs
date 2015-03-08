@@ -205,7 +205,7 @@ namespace FuckingAwesomeRiven
                 if (SpellHandler.LastMove + 200 < Environment.TickCount)
                 {
                     LastMove = Environment.TickCount;
-                    SmoothMouse.addMouseEvent(Game.CursorPos, false);
+                    SmoothMouse.doMouseClick();
                 }
             }
 
