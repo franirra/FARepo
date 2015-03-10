@@ -69,7 +69,7 @@ namespace FuckingAwesomeLeeSinReborn
             }
             if (args.SData.IsAutoAttack())
             {
-                if (PassiveStacks != 0)
+                if (PassiveStacks == 0)
                     return;
                 PassiveStacks = PassiveStacks - 1;
             }
