@@ -226,7 +226,7 @@ namespace FuckingAwesomeLeeSinReborn
 
             CheckHandler.UseItems(target, true);
 
-            if (CheckHandler.PassiveStacks > 0 || CheckHandler.LastSpell + 300 > Environment.TickCount)
+            if (CheckHandler.PassiveStacks > 0 || CheckHandler.LastSpell + 400 > Environment.TickCount)
                 return;
 
             if (CheckHandler.spells[SpellSlot.Q].IsReady() && useQ)
@@ -240,7 +240,7 @@ namespace FuckingAwesomeLeeSinReborn
                 return;
             }
 
-            if (CheckHandler.spells[SpellSlot.W].IsReady() && useW && CheckHandler.LastW + 400 < Environment.TickCount)
+            if (CheckHandler.spells[SpellSlot.W].IsReady() && useW)
             {
                 if (CheckHandler.WState && target.Distance(Player) < Orbwalking.GetRealAutoAttackRange(Player))
                 {
@@ -254,7 +254,7 @@ namespace FuckingAwesomeLeeSinReborn
                 return;
             }
 
-            if (CheckHandler.spells[SpellSlot.E].IsReady() && useE && CheckHandler.LastE + 200 < Environment.TickCount)
+            if (CheckHandler.spells[SpellSlot.E].IsReady() && useE)
             {
                 if (CheckHandler.EState && target.Distance(Player) < CheckHandler.spells[SpellSlot.E].Range)
                 {

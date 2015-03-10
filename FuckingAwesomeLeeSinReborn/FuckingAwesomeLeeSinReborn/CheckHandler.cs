@@ -27,10 +27,21 @@ namespace FuckingAwesomeLeeSinReborn
         {
             GameObject.OnDelete += Obj_AI_Hero_OnCreate;
             GameObject.OnCreate += GameObject_OnCreate;
+            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
         }
 
         static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
+        }
+
+        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            if (unit.IsMe)
+            {
+                if (PassiveStacks == 0)
+                    return;
+                PassiveStacks = PassiveStacks - 1;
+            }
         }
 
         public static readonly int[] SmitePurple = { 3713, 3726, 3725, 3726, 3723 };
@@ -66,12 +77,6 @@ namespace FuckingAwesomeLeeSinReborn
             if (args.SData.Name.ToLower().Contains("ward") || args.SData.Name.ToLower().Contains("totem"))
             {
                 LastWard = Environment.TickCount;
-            }
-            if (args.SData.IsAutoAttack())
-            {
-                if (PassiveStacks == 0)
-                    return;
-                PassiveStacks = PassiveStacks - 1;
             }
             switch (args.SData.Name)
             {
