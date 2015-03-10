@@ -77,7 +77,13 @@ namespace iFuckingAwesomeGraves
 
         #region ActiveModes
 
-        private static void DoCombo() {}
+        private static void DoCombo()
+        {
+            CastBuckshot();
+            CastSmokeScreen();
+            CastQuickdraw();
+            CastCollateralDamage();
+        }
 
         #endregion
 
