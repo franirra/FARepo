@@ -127,7 +127,7 @@ namespace FuckingAwesomeLeeSinReborn
         {
             var lowFps = Config.Item("LowFPS").GetValue<bool>();
             var lowFpsMode = Config.Item("LowFPSMode").GetValue<StringList>().SelectedIndex + 1;
-            
+            Drawing.DrawText(100,100, Color.White, "Passive Stacks: " + CheckHandler.PassiveStacks);
             if (Config.Item("DQ").GetValue<Circle>().Active)
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, CheckHandler.spells[SpellSlot.Q].Range, Config.Item("DQ").GetValue<Circle>().Color, lowFps ? lowFpsMode : 5);
