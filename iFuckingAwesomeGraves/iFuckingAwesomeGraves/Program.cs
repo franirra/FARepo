@@ -119,6 +119,10 @@ namespace iFuckingAwesomeGraves
             //LOL
         }
 
+        /// <summary>
+        ///     TODO: IDK if this takes into account the damage after the initial range or if a unit is hit
+        ///     TODO: if a unit is hit then the shell will explode in a 800 - range cone behind the inital unit.
+        /// </summary>
         private static void CastCollateralDamage()
         {
             var rTarget = TargetSelector.GetTarget(_spells[SpellSlot.R].Range, TargetSelector.DamageType.Physical);
