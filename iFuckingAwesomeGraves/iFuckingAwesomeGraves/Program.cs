@@ -25,7 +25,6 @@ namespace iFuckingAwesomeGraves
         private static Orbwalking.Orbwalker _orbwalker;
         private static Menu _menu;
         private static Obj_AI_Hero _player;
-
         // ReSharper disable once InconsistentNaming
         private static readonly Dictionary<SpellSlot, Spell> _spells = new Dictionary<SpellSlot, Spell>
         {
