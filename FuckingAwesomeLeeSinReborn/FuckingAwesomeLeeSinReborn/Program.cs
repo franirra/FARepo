@@ -118,19 +118,8 @@ namespace FuckingAwesomeLeeSinReborn
             Game.OnWndProc += InsecHandler.OnClick;
             AutoSmite.Init();
             Obj_AI_Base.OnProcessSpellCast += CheckHandler.Obj_AI_Hero_OnProcessSpellCast;
-            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Notifications.AddNotification(new Notification("Fucking Awesome Lee Sin:", 2));
             Notifications.AddNotification(new Notification("REBORN", 2));
-        }
-
-        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
-        {
-            if (unit.IsMe)
-            {
-                if (CheckHandler.PassiveStacks == 0)
-                    return;
-                CheckHandler.PassiveStacks = CheckHandler.PassiveStacks - 1;
-            }
         }
 
         static void Drawing_OnDraw(EventArgs args)

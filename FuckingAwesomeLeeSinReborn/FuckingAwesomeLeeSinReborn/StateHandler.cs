@@ -234,9 +234,11 @@ namespace FuckingAwesomeLeeSinReborn
                 if (CheckHandler.QState && target.Distance(Player) < CheckHandler.spells[SpellSlot.Q].Range && CheckHandler.LastQ + 200 < Environment.TickCount)
                 {
                     CheckHandler.spells[SpellSlot.Q].Cast(target);
+                    CheckHandler.LastSpell = Environment.TickCount;
                     return;
                 }
                 CheckHandler.spells[SpellSlot.Q].Cast();
+                CheckHandler.LastSpell = Environment.TickCount;
                 return;
             }
 
@@ -245,12 +247,13 @@ namespace FuckingAwesomeLeeSinReborn
                 if (CheckHandler.WState && target.Distance(Player) < Orbwalking.GetRealAutoAttackRange(Player))
                 {
                     CheckHandler.spells[SpellSlot.W].CastOnUnit(Player);
-                    CheckHandler.LastW = Environment.TickCount;
+                    CheckHandler.LastSpell = Environment.TickCount;
                     return;
                 }
                 if (CheckHandler.WState)
                     return;
                 CheckHandler.spells[SpellSlot.W].Cast();
+                CheckHandler.LastSpell = Environment.TickCount;
                 return;
             }
 
@@ -259,11 +262,13 @@ namespace FuckingAwesomeLeeSinReborn
                 if (CheckHandler.EState && target.Distance(Player) < CheckHandler.spells[SpellSlot.E].Range)
                 {
                     CheckHandler.spells[SpellSlot.E].Cast();
+                    CheckHandler.LastSpell = Environment.TickCount;
                     return;
                 }
                 if (CheckHandler.EState)
                     return;
                 CheckHandler.spells[SpellSlot.E].Cast();
+                CheckHandler.LastSpell = Environment.TickCount;
             }
         }
 
