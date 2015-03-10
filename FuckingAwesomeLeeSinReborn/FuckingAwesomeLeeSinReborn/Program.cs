@@ -103,7 +103,7 @@ namespace FuckingAwesomeLeeSinReborn
             info.AddItem(new MenuItem("Msdsddsd", "you can do so by sending money to:"));
             info.AddItem(new MenuItem("Msdsadfdsd", "jayyeditsdude@gmail.com"));
 
-            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.1-4 BETA"));
+            Config.AddItem(new MenuItem("Mgdgdfgsd", "Version: 0.0.1-5 BETA"));
             Config.AddItem(new MenuItem("Msd", "Made By FluxySenpai"));
 
 

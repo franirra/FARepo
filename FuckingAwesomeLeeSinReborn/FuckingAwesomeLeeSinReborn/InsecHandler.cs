@@ -62,11 +62,11 @@ namespace FuckingAwesomeLeeSinReborn
             }
             if (_selectedEnemy.IsValidTarget() && Program.Config.Item("easyInsec").GetValue<bool>())
             {
-                foreach (var tower in ObjectManager.Get<Obj_AI_Turret>().Where(tower => tower.IsAlly && tower.Health > 0 && tower.Distance(_selectedEnemy) < 1000))
+                foreach (var tower in ObjectManager.Get<Obj_AI_Turret>().Where(tower => tower.IsAlly && tower.Health > 0 && tower.Distance(_selectedEnemy) < 2000))
                 {
                     return tower.Position.Extend(_selectedEnemy.Position, _selectedUnit.Distance(_selectedEnemy) + 250);
                 }
-                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(ally => ally.IsAlly && ally.HealthPercent > 10 && ally.Distance(_selectedEnemy) < 1000))
+                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(ally => ally.IsAlly && ally.HealthPercent > 10 && ally.Distance(_selectedEnemy) < 2000))
                 {
                     return ally.Position.Extend(_selectedEnemy.Position, _selectedUnit.Distance(_selectedEnemy) + 250);
                 }
