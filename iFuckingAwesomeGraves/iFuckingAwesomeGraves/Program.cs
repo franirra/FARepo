@@ -115,8 +115,7 @@ namespace iFuckingAwesomeGraves
 
         private static void CastQuickdraw()
         {
-            //TODO e logic? ^^
-            //LOL
+            //TODO
         }
 
         /// <summary>
@@ -159,9 +158,9 @@ namespace iFuckingAwesomeGraves
         private static void LoadSpells()
         {
             _spells[SpellSlot.Q].SetSkillshot(
-                0.26f, 10f * 2 * (float) Math.PI / 180, 1950, false, SkillshotType.SkillshotCone);
+                0.26f, 10f * 2 * (float) Math.PI / 180, 1950f, false, SkillshotType.SkillshotCone);
             _spells[SpellSlot.W].SetSkillshot(0.30f, 250f, 1650f, false, SkillshotType.SkillshotCircle);
-            _spells[SpellSlot.R].SetSkillshot(0.22f, 150f, 2100, true, SkillshotType.SkillshotLine);
+            _spells[SpellSlot.R].SetSkillshot(0.22f, 150f, 2100f, true, SkillshotType.SkillshotLine);
         }
 
         private static void CreateMenu()
