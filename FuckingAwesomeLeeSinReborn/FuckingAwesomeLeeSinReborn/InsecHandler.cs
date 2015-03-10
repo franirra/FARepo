@@ -66,7 +66,7 @@ namespace FuckingAwesomeLeeSinReborn
                 {
                     return tower.Position.Extend(_selectedEnemy.Position, tower.Distance(_selectedEnemy) + 250);
                 }
-                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(ally => ally.IsAlly && ally.HealthPercent > 10 && ally.Distance(_selectedEnemy) < 2000))
+                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(ally => ally.IsAlly && !ally.IsMe && ally.HealthPercent > 10 && ally.Distance(_selectedEnemy) < 2000))
                 {
                     return ally.Position.Extend(_selectedEnemy.Position, ally.Distance(_selectedEnemy) + 250);
                 }
