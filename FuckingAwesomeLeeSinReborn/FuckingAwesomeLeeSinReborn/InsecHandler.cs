@@ -113,7 +113,7 @@ namespace FuckingAwesomeLeeSinReborn
                         }
                         return;
                     }
-                    if (!Program.Config.Item("flashInsec").GetValue<bool>() || CheckHandler.WState && CheckHandler.spells[SpellSlot.W].IsReady() && Items.GetWardSlot() != null) return;
+                    if (!Program.Config.Item("flashInsec").GetValue<bool>() || CheckHandler.WState && CheckHandler.spells[SpellSlot.W].IsReady() && Items.GetWardSlot() != null || CheckHandler.LastW + 2000 > Environment.TickCount) return;
                     if (_selectedEnemy.Distance(Player) < CheckHandler.spells[SpellSlot.R].Range)
                     {
                         CheckHandler.spells[SpellSlot.R].CastOnUnit(_selectedEnemy);
