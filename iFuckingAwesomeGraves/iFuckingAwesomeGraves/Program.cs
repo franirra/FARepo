@@ -87,7 +87,7 @@ namespace iFuckingAwesomeGraves
 
         #endregion
 
-        #region menu and spells
+        #region spell casting
 
         private static void CastBuckshot()
         {
@@ -147,6 +147,10 @@ namespace iFuckingAwesomeGraves
                 }
             }
         }
+
+        #endregion
+
+        #region menu and spells
 
         private static void LoadSpells()
         {
