@@ -81,7 +81,7 @@ namespace FuckingAwesomeLeeSinReborn
 
             var draw = Config.AddSubMenu(new Menu("Draw", "Draw"));
             draw.AddItem(new MenuItem("LowFPS", "Low Fps Mode").SetValue(false));
-            draw.AddItem(new MenuItem("LowFPSMode", "Low FPS Settings").SetValue(new StringList(new []{"EXTREME", "MEDIUM", "LOW"})));
+            draw.AddItem(new MenuItem("LowFPSMode", "Low FPS Settings").SetValue(new StringList(new []{"EXTREME", "MEDIUM", "LOW"}, 2)));
             draw.AddItem(new MenuItem("DQ", "Draw Q Range").SetValue(new Circle(false, Color.White)));
             draw.AddItem(new MenuItem("DW", "Draw W Range").SetValue(new Circle(false, Color.White)));
             draw.AddItem(new MenuItem("DE", "Draw E Range").SetValue(new Circle(false, Color.White)));
