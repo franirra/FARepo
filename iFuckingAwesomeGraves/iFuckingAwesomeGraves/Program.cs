@@ -15,6 +15,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -76,14 +77,70 @@ namespace iFuckingAwesomeGraves
 
         #region ActiveModes
 
-        private static void DoCombo()
-        {
-            //TODO combo
-        }
+        private static void DoCombo() {}
 
         #endregion
 
         #region menu and spells
+
+        private static void CastBuckshot()
+        {
+            var qTarget = TargetSelector.GetTarget(_spells[SpellSlot.Q].Range, TargetSelector.DamageType.Physical);
+            if (_menu.Item("useQC").GetValue<bool>() && qTarget.IsValidTarget(_spells[SpellSlot.Q].Range))
+            {
+                if (_spells[SpellSlot.Q].IsReady() && _spells[SpellSlot.Q].IsInRange(qTarget))
+                {
+                    _spells[SpellSlot.Q].CastIfHitchanceEquals(qTarget, HitChance.High); // TODO custom hitchance.
+                }
+            }
+        }
+
+        private static void CastSmokeScreen()
+        {
+            var wTarget = TargetSelector.GetTarget(_spells[SpellSlot.W].Range, TargetSelector.DamageType.Physical);
+            if (_menu.Item("useWC").GetValue<bool>() && wTarget.IsValidTarget(_spells[SpellSlot.W].Range))
+            {
+                if (_spells[SpellSlot.W].IsReady() && _spells[SpellSlot.W].IsInRange(wTarget))
+                {
+                    _spells[SpellSlot.W].CastIfHitchanceEquals(wTarget, HitChance.High); // TODO custom hitchance
+                }
+            }
+        }
+
+        private static void CastQuickdraw()
+        {
+            //TODO e logic? ^^
+            //LOL
+        }
+
+        private static void CastCollateralDamage()
+        {
+            var rTarget = TargetSelector.GetTarget(_spells[SpellSlot.R].Range, TargetSelector.DamageType.Physical);
+            if (_menu.Item("useRC").GetValue<bool>() && rTarget.IsValidTarget(_spells[SpellSlot.R].Range))
+            {
+                if (_spells[SpellSlot.R].IsReady() && _spells[SpellSlot.R].IsInRange(rTarget))
+                {
+                    if (_spells[SpellSlot.R].GetDamage(rTarget) > rTarget.Health + 10)
+                    {
+                        _spells[SpellSlot.R].CastIfHitchanceEquals(rTarget, HitChance.High); // TODO custom hitchance
+                    }
+                    else
+                    {
+                        foreach (Obj_AI_Hero source in
+                            from source in
+                                HeroManager.Enemies.Where(hero => hero.IsValidTarget(_spells[SpellSlot.R].Range))
+                            let prediction = _spells[SpellSlot.R].GetPrediction(source, true)
+                            where
+                                _player.Distance(source) <= _spells[SpellSlot.R].Range &&
+                                prediction.AoeTargetsHitCount >= 3
+                            select source)
+                        {
+                            _spells[SpellSlot.R].CastIfHitchanceEquals(source, HitChance.High);
+                        }
+                    }
+                }
+            }
+        }
 
         private static void LoadSpells()
         {
