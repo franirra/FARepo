@@ -115,7 +115,14 @@ namespace iFuckingAwesomeGraves
 
         private static void CastQuickdraw()
         {
-            //TODO
+            var positionAfterE = _player.Position.Extend(Game.CursorPos, _spells[SpellSlot.E].Range);
+            if (_menu.Item("useEC").GetValue<bool>() && _spells[SpellSlot.E].IsReady())
+            {
+                if (_menu.Item("eCheck").GetValue<bool>() && positionAfterE.UnderTurret(true))
+                {
+                    _spells[SpellSlot.E].Cast(positionAfterE);
+                }
+            }
         }
 
         /// <summary>
@@ -202,6 +209,12 @@ namespace iFuckingAwesomeGraves
                 farmMenu.AddSubMenu(laneclearMenu);
                 farmMenu.AddSubMenu(lasthitMenu);
                 _menu.AddSubMenu(farmMenu);
+            }
+
+            var miscMenu = new Menu("Graves - Misc", "com.ifag.misc");
+            {
+                miscMenu.AddItem(new MenuItem("eCheck", "Turret Safety for E"));
+                _menu.AddSubMenu(miscMenu);
             }
 
 
