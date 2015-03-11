@@ -90,9 +90,7 @@ namespace FuckingAwesomeRiven
 
         private static void Aa()
         {
-            if (Environment.TickCount - CheckHandler.LastAa < Game.Ping + 80 + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value || Player.IsWindingUp)
-                return;
-            if (StateHandler.Target == null || StateHandler.Target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 40) || !Player.IsWindingUp && CheckHandler.LastAa + 80 < Environment.TickCount)
+            if (StateHandler.Target == null || StateHandler.Target.Distance(Player) > Orbwalking.GetRealAutoAttackRange(Player) + 100 || CheckHandler.MidAa)
             {
                 Remove("AA");
                 return;
@@ -103,7 +101,7 @@ namespace FuckingAwesomeRiven
 
         private static void Qq()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
+            if (!CheckHandler.MidAa)
             {
                 return;
             }
@@ -118,13 +116,13 @@ namespace FuckingAwesomeRiven
             {
 
                 S.CastQ(StateHandler.Target);
-                SmoothMouse.addMouseEvent(Player.Position.Extend(Game.CursorPos,300), false);
+                SmoothMouse.addMouseEvent(Player.Position.Extend(Game.CursorPos,300));
             }
         }
 
         private static void Qw()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
+            if (!CheckHandler.MidAa)
             {
                 return;
             }
@@ -138,13 +136,13 @@ namespace FuckingAwesomeRiven
             if (S.Spells[SpellSlot.W].IsReady())
             {
                 S.CastW(StateHandler.Target);
-                SmoothMouse.addMouseEvent(Game.CursorPos, false);
+                SmoothMouse.addMouseEvent(Game.CursorPos);
             }
         }
 
         private static void Qe()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
+            if (!CheckHandler.MidAa)
             {
                 return;
             }
@@ -164,11 +162,6 @@ namespace FuckingAwesomeRiven
 
         private static void Qr()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
-            {
-                return;
-            }
-
             if (!S.Spells[SpellSlot.Q].IsReady() || C.RState)
             {
                 Queue.Remove("R");
@@ -184,11 +177,6 @@ namespace FuckingAwesomeRiven
 
         private static void Qr2()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
-            {
-                return;
-            }
-
             if (!S.Spells[SpellSlot.R].IsReady() || R2Target == null)
             {
                 Queue.Remove("R2");
@@ -209,7 +197,7 @@ namespace FuckingAwesomeRiven
 
         private static void Hydra()
         {
-            if (Player.IsWindingUp || CheckHandler.LastAa + 60 + Game.Ping + MenuHandler.Config.Item("bonusCancelDelay").GetValue<Slider>().Value > Environment.TickCount)
+            if (Player.IsWindingUp || !CheckHandler.MidAa)
             {
                 return;
             }
@@ -238,9 +226,8 @@ namespace FuckingAwesomeRiven
                 Queue.Remove("Flash");
                 return;
             }
-
+            SmoothMouse.addMouseEvent(FlashPos);
             SpellHandler.CastFlash(FlashPos);
-            SmoothMouse.addMouseEvent(FlashPos, false);
         }
     }
 }

@@ -65,6 +65,8 @@ namespace FuckingAwesomeRiven
 
         public static void doMouseClick()
         {
+            if (!MenuHandler.Config.Item("streamMouse").GetValue<bool>())
+                return;
             Point pos = new Point();
             GetCursorPos(ref pos);
             mouse_event(MOUSEEVENTF_RIGHTDOWN, pos.x, pos.y, 0, 0);

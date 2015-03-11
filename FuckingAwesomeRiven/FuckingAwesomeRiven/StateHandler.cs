@@ -335,7 +335,8 @@ namespace FuckingAwesomeRiven
                 Queuer.Add("E", Target.Position);
                 Queuer.Add("W");
                 Queuer.Add("Hydra");
-                AddQaa();
+                Queuer.Add("AA");
+                AddQaa(true);
                 return;
             }
 
@@ -345,7 +346,8 @@ namespace FuckingAwesomeRiven
                 Queuer.Add("Q");
                 Queuer.Add("W");
                 Queuer.Add("Hydra");
-                AddQaa();
+                Queuer.Add("AA");
+                AddQaa(true);
                 return;
             }
 
@@ -355,7 +357,8 @@ namespace FuckingAwesomeRiven
                 Queuer.Add("E", Target.Position);
                 Queuer.Add("Hydra");
                 Queuer.Add("Q");
-                AddQaa();
+                Queuer.Add("AA");
+                AddQaa(true);
                 return;
             }
 
@@ -364,6 +367,7 @@ namespace FuckingAwesomeRiven
             {
                 Queuer.Add("E", Target.Position);
                 Queuer.Add("W");
+                Queuer.Add("AA");
                 return;
             }
             // End

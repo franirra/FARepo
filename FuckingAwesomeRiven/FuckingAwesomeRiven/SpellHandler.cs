@@ -201,11 +201,11 @@ namespace FuckingAwesomeRiven
             if (CH.CanMove)
             {
                 Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-                MenuHandler.Orbwalker.SetMovement(true);
-                if (SpellHandler.LastMove + 200 < Environment.TickCount)
+                MenuHandler.Orbwalker.SetMovement(true); 
+                var random = new Random().Next(500);
+                if (LastMove + 200 + random < Environment.TickCount && MenuHandler.Config.Item("streamMouse").GetValue<bool>())
                 {
                     LastMove = Environment.TickCount;
-                    SmoothMouse.doMouseClick();
                 }
             }
 
@@ -216,7 +216,6 @@ namespace FuckingAwesomeRiven
 
             MenuHandler.Orbwalker.SetAttack(true);
             CH.CanMove = false;
-            SmoothMouse.addMouseEvent(target.Position, false);
             Player.IssueOrder(GameObjectOrder.AttackUnit, target);
             CH.CanQ = false;
             CH.CanW = false;
