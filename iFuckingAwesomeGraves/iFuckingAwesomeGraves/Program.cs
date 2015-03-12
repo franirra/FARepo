@@ -261,9 +261,9 @@ namespace iFuckingAwesomeGraves
 
         private static double R2Damage(Obj_AI_Hero target)
         {
-            if (_spells[SpellSlot.Q].Level == 0)
+            if (_spells[SpellSlot.R].Level == 0)
                 return 0;
-            return _player.CalcDamage(target, Damage.DamageType.Physical, new double[] { 200, 320, 440 }[_spells[SpellSlot.Q].Level - 1] + 1.2 * _player.FlatPhysicalDamageMod);
+            return _player.CalcDamage(target, Damage.DamageType.Physical, new double[] { 200, 320, 440 }[_spells[SpellSlot.R].Level - 1] + 1.2 * _player.FlatPhysicalDamageMod);
         }
 
         private static HitChance GetCustomHitChance()
