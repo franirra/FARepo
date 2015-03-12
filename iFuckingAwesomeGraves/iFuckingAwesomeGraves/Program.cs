@@ -26,6 +26,7 @@ namespace iFuckingAwesomeGraves
         private static Orbwalking.Orbwalker _orbwalker;
         private static Menu _menu;
         private static Obj_AI_Hero _player;
+        private static Spell _r2;
         // ReSharper disable once InconsistentNaming
         private static readonly Dictionary<SpellSlot, Spell> _spells = new Dictionary<SpellSlot, Spell>
         {
@@ -83,6 +84,7 @@ namespace iFuckingAwesomeGraves
             CastSmokeScreen();
             CastQuickdraw();
             CastCollateralDamage();
+            CollateralDamageKs();
         }
 
         #endregion
@@ -159,6 +161,36 @@ namespace iFuckingAwesomeGraves
             }
         }
 
+        public static void CollateralDamageKs()
+        {
+            foreach (var target in _player.Position.GetEnemiesInRange(1900).Where(e => e.IsValidTarget()))
+            {
+                if (target.Distance(_player) < _spells[SpellSlot.R].Range && _spells[SpellSlot.R].GetDamage(target) > target.Health)
+                {
+                    _spells[SpellSlot.R].Cast(target);
+                    return;
+                }
+                if (R2Damage(target) < target.Health)
+                    return;
+                var pred = _r2.GetPrediction(target);
+                if (pred.CollisionObjects.Count(
+                        a => a.IsEnemy && a.IsValid<Obj_AI_Hero>() && _player.Distance(a) < 1100) > 0)
+                    _r2.Cast(pred.CastPosition);
+                else
+                {
+                    foreach (var target2 in _player.Position.GetEnemiesInRange(1100).Where(e => e.IsValidTarget()))
+                    {
+                        var sector = new Geometry.Sector(
+                        _spells[SpellSlot.R].GetPrediction(target2).UnitPosition.To2D(), _player.Position.To2D().Extend(_spells[SpellSlot.R].GetPrediction(target2).UnitPosition.To2D(), _player.Distance(_spells[SpellSlot.R].GetPrediction(target2).UnitPosition) + 100), 60 * (float)Math.PI / 180, 800).ToPolygon();
+                        if (!sector.IsOutside(target2.Position.To2D()))
+                        {
+                            _r2.Cast(_r2.GetPrediction(target2).CastPosition);
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region menu and spells
@@ -169,6 +201,8 @@ namespace iFuckingAwesomeGraves
                 0.26f, 10f * 2 * (float) Math.PI / 180, 1950f, false, SkillshotType.SkillshotCone);
             _spells[SpellSlot.W].SetSkillshot(0.30f, 250f, 1650f, false, SkillshotType.SkillshotCircle);
             _spells[SpellSlot.R].SetSkillshot(0.22f, 150f, 2100f, true, SkillshotType.SkillshotLine);
+            _r2 = new Spell(SpellSlot.R, 1900);
+            _r2.SetSkillshot(0.22f, 150f, 2100f, true, SkillshotType.SkillshotLine);
         }
 
         private static void CreateMenu()
@@ -223,6 +257,13 @@ namespace iFuckingAwesomeGraves
 
 
             _menu.AddToMainMenu();
+        }
+
+        private static double R2Damage(Obj_AI_Hero target)
+        {
+            if (_spells[SpellSlot.Q].Level == 0)
+                return 0;
+            return _player.CalcDamage(target, Damage.DamageType.Physical, new double[] { 200, 320, 440 }[_spells[SpellSlot.Q].Level - 1] + 1.2 * _player.FlatPhysicalDamageMod);
         }
 
         private static HitChance GetCustomHitChance()
