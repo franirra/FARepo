@@ -96,7 +96,7 @@ namespace iFuckingAwesomeGraves
             {
                 if (_spells[SpellSlot.Q].IsReady() && _spells[SpellSlot.Q].IsInRange(qTarget))
                 {
-                    _spells[SpellSlot.Q].CastIfHitchanceEquals(qTarget, HitChance.High); // TODO custom hitchance.
+                    _spells[SpellSlot.Q].CastIfHitchanceEquals(qTarget, GetCustomHitChance()); // TODO custom hitchance.
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace iFuckingAwesomeGraves
             {
                 if (_spells[SpellSlot.W].IsReady() && _spells[SpellSlot.W].IsInRange(wTarget))
                 {
-                    _spells[SpellSlot.W].CastIfHitchanceEquals(wTarget, HitChance.High); // TODO custom hitchance
+                    _spells[SpellSlot.W].CastIfHitchanceEquals(wTarget, GetCustomHitChance()); // TODO custom hitchance
                 }
             }
         }
@@ -120,14 +120,15 @@ namespace iFuckingAwesomeGraves
             {
                 if (_menu.Item("eCheck").GetValue<bool>() && positionAfterE.UnderTurret(true))
                 {
-                    _spells[SpellSlot.E].Cast(positionAfterE);
+                    return;
                 }
+                _spells[SpellSlot.E].Cast(positionAfterE);
             }
         }
 
         /// <summary>
-        ///     TODO: IDK if this takes into account the damage after the initial range or if a unit is hit
-        ///     TODO: if a unit is hit then the shell will explode in a 800 - range cone behind the inital unit.
+        ///     Matey, If target is killable and higher then inital R Range, then take into account the extra 800 - cone range if
+        ///     the ult collides with a minion / champion / yasuo wall.
         /// </summary>
         private static void CastCollateralDamage()
         {
@@ -138,7 +139,7 @@ namespace iFuckingAwesomeGraves
                 {
                     if (_spells[SpellSlot.R].GetDamage(rTarget) > rTarget.Health + 10)
                     {
-                        _spells[SpellSlot.R].CastIfHitchanceEquals(rTarget, HitChance.High); // TODO custom hitchance
+                        _spells[SpellSlot.R].CastIfHitchanceEquals(rTarget, GetCustomHitChance()); // TODO custom hitchance
                     }
                     else
                     {
@@ -151,7 +152,7 @@ namespace iFuckingAwesomeGraves
                                 prediction.AoeTargetsHitCount >= 3
                             select source)
                         {
-                            _spells[SpellSlot.R].CastIfHitchanceEquals(source, HitChance.High);
+                            _spells[SpellSlot.R].CastIfHitchanceEquals(source, GetCustomHitChance());
                         }
                     }
                 }
@@ -214,11 +215,31 @@ namespace iFuckingAwesomeGraves
             var miscMenu = new Menu("Graves - Misc", "com.ifag.misc");
             {
                 miscMenu.AddItem(new MenuItem("eCheck", "Turret Safety for E"));
+                miscMenu.AddItem(
+                    new MenuItem("hitchance", "Hitchance").SetValue(
+                        new StringList(new[] { "Low", "Medium", "High", "Very High" }, 2)));
                 _menu.AddSubMenu(miscMenu);
             }
 
 
             _menu.AddToMainMenu();
+        }
+
+        private static HitChance GetCustomHitChance()
+        {
+            switch (_menu.Item("hitchance").GetValue<StringList>().SelectedIndex)
+            {
+                case 0:
+                    return HitChance.Low;
+                case 1:
+                    return HitChance.Medium;
+                case 2:
+                    return HitChance.High;
+                case 3:
+                    return HitChance.VeryHigh;
+                default:
+                    return HitChance.High;
+            }
         }
 
         #endregion
