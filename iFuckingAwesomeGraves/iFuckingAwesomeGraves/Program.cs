@@ -141,7 +141,8 @@ namespace iFuckingAwesomeGraves
                 {
                     if (_spells[SpellSlot.R].GetDamage(rTarget) > rTarget.Health + 10)
                     {
-                        _spells[SpellSlot.R].CastIfHitchanceEquals(rTarget, GetCustomHitChance()); // TODO custom hitchance
+                        _spells[SpellSlot.R].CastIfHitchanceEquals(rTarget, GetCustomHitChance());
+                            // TODO custom hitchance
                     }
                     else
                     {
@@ -165,23 +166,35 @@ namespace iFuckingAwesomeGraves
         {
             foreach (var target in _player.Position.GetEnemiesInRange(1900).Where(e => e.IsValidTarget()))
             {
-                if (target.Distance(_player) < _spells[SpellSlot.R].Range && _spells[SpellSlot.R].GetDamage(target) > target.Health)
+                if (target.Distance(_player) < _spells[SpellSlot.R].Range &&
+                    _spells[SpellSlot.R].GetDamage(target) > target.Health)
                 {
                     _spells[SpellSlot.R].Cast(target);
                     return;
                 }
                 if (R2Damage(target) < target.Health)
+                {
                     return;
+                }
                 var pred = _r2.GetPrediction(target);
-                if (pred.CollisionObjects.Count(
+                if (
+                    pred.CollisionObjects.Count(
                         a => a.IsEnemy && a.IsValid<Obj_AI_Hero>() && _player.Distance(a) < 1100) > 0)
+                {
                     _r2.Cast(pred.CastPosition);
+                }
                 else
                 {
                     foreach (var target2 in _player.Position.GetEnemiesInRange(1100).Where(e => e.IsValidTarget()))
                     {
-                        var sector = new Geometry.Sector(
-                        _spells[SpellSlot.R].GetPrediction(target2).UnitPosition.To2D(), _player.Position.To2D().Extend(_spells[SpellSlot.R].GetPrediction(target2).UnitPosition.To2D(), _player.Distance(_spells[SpellSlot.R].GetPrediction(target2).UnitPosition) + 100), 60 * (float)Math.PI / 180, 800).ToPolygon();
+                        var sector =
+                            new Geometry.Sector(
+                                _spells[SpellSlot.R].GetPrediction(target2).UnitPosition.To2D(),
+                                _player.Position.To2D()
+                                    .Extend(
+                                        _spells[SpellSlot.R].GetPrediction(target2).UnitPosition.To2D(),
+                                        _player.Distance(_spells[SpellSlot.R].GetPrediction(target2).UnitPosition) + 100),
+                                60 * (float) Math.PI / 180, 800).ToPolygon();
                         if (!sector.IsOutside(target2.Position.To2D()))
                         {
                             _r2.Cast(_r2.GetPrediction(target2).CastPosition);
@@ -262,8 +275,12 @@ namespace iFuckingAwesomeGraves
         private static double R2Damage(Obj_AI_Hero target)
         {
             if (_spells[SpellSlot.R].Level == 0)
+            {
                 return 0;
-            return _player.CalcDamage(target, Damage.DamageType.Physical, new double[] { 200, 320, 440 }[_spells[SpellSlot.R].Level - 1] + 1.2 * _player.FlatPhysicalDamageMod);
+            }
+            return _player.CalcDamage(
+                target, Damage.DamageType.Physical,
+                new double[] { 200, 320, 440 }[_spells[SpellSlot.R].Level - 1] + 1.2 * _player.FlatPhysicalDamageMod);
         }
 
         private static HitChance GetCustomHitChance()
